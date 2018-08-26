@@ -1,11 +1,14 @@
 ﻿using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using World;
 
 namespace Engine
 {
     [Serializable] public class LevelInfo : ZoneInfo
     {
+
+        public GameMap GameMap { get; set; } //added
 
         public float TimeDilation;
 

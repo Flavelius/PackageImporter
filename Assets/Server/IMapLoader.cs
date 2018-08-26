@@ -1,7 +1,7 @@
 ﻿using UnityEngine.SceneManagement;
 using World;
 
-public interface IMapHandler
+public interface IMapLoader
 {
     GameMap GetPersistentMap(MapIDs map);
 }

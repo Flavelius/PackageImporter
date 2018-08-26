@@ -2,7 +2,7 @@
 
 namespace Engine
 {
-    [Serializable] public class Info : UObject
+    [Serializable] public class Info : Actor
     {
         public Info()
         {

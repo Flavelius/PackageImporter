@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Engine;
 using SBBase;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace World
 {
-    public class MapHandler: IMapHandler
+    public class MapLoader: IMapLoader
     {
 
         Dictionary<MapIDs, GameMap> loadedMaps = new Dictionary<MapIDs, GameMap>();
@@ -22,7 +23,7 @@ namespace World
             return id;
         }
 
-        public MapHandler()
+        public MapLoader()
         {
             SceneManager.sceneLoaded += OnLevelLoaded;
             SceneManager.sceneUnloaded += OnLevelUnloaded;
@@ -53,6 +54,7 @@ namespace World
             var map = new GameMap(scene, mapID, world, AllocateInstanceID());
             loadedMaps.Add(map.ID, map);
             loadedScenes.Add(scene, map);
+            AwakeMap(map);
             return map;
         }
 
@@ -74,6 +76,16 @@ namespace World
         public void Update()
         {
 
+        }
+
+        void AwakeMap(GameMap map)
+        {
+            foreach (var actor in map.Iterate<Actor>())
+            {
+                actor.Initialize();
+                actor.BeginPlay();
+                actor.PostBeginPlay();
+            }
         }
     }
 }

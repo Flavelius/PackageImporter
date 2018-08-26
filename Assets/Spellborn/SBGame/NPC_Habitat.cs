@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Engine;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace SBGame
 {
@@ -31,31 +32,25 @@ namespace SBGame
         [FoldoutGroup("Habitat")]
         public float SocialAttraction;
 
-        public NPC_Habitat()
-        {
-        }
-
         [Serializable] public struct WanderObstacle
         {
             public Actor Obstacle;
-
             public Vector Offset;
-
             public float Size;
-
             public float Range;
         }
 
         [Serializable] public struct WanderSmell
         {
             public Vector Location;
-
             public float Strength;
-
             public float Size;
+        }
+
+        public virtual bool CheckHabitat(Vector aLocation)
+        {
+            Debug.LogWarning("TODO implement CheckHabitat", this);
+            return true;
         }
     }
 }
-/*
-final native function bool CheckHabitat(Vector aLocation);
-*/

@@ -101,6 +101,12 @@ namespace SBGame
             if (questLog != null) questLog.Initialize(this);
         }
 
+        public override void BeginPlay()
+        {
+            base.BeginPlay();
+            SetInitialState();
+        }
+
         public override int GetCharacterID()
         {
             return (Controller as Game_PlayerController).DBCharacter.Id;

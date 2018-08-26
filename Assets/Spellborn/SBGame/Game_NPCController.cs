@@ -29,8 +29,10 @@ namespace SBGame
         }
 
         public void sv_Despawn() { throw new NotImplementedException(); }
+
+        public void sv_InitInternal()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
-/*
-function sv_InitInternal();
-*/

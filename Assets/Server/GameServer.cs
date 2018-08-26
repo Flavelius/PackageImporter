@@ -15,7 +15,7 @@ public class GameServer : MonoBehaviour
 
     public static readonly UniverseInfo UniverseInfo = new UniverseInfo("TCoSReborn", "Any", "PVE");
     static SessionHandler sessionHandler;
-    static MapHandler mapHandler;
+    static MapLoader mapHandler;
 
     WorldServer worldServer;
     LoginServer loginServer;
@@ -27,8 +27,8 @@ public class GameServer : MonoBehaviour
         ServiceContainer.AddService<IDatabase>(database);
         sessionHandler = new SessionHandler();
         ServiceContainer.AddService<ISessionHandler>(sessionHandler);
-        mapHandler = new MapHandler();
-        ServiceContainer.AddService<IMapHandler>(mapHandler);
+        mapHandler = new MapLoader();
+        ServiceContainer.AddService<IMapLoader>(mapHandler);
         worldServer = new WorldServer(worldIP, worldPort);
         ServiceContainer.AddService<IWorldServer>(worldServer);
         loginServer = new LoginServer(loginPort);

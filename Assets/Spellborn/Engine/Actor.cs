@@ -259,6 +259,8 @@ namespace Engine
 
         public virtual void BeginPlay() { }
 
+        public virtual void PostBeginPlay() { }
+
         public virtual void Tick(float deltaTime) { }
 
         protected virtual void GotoState(string state)

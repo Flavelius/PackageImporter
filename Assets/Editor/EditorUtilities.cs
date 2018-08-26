@@ -13,6 +13,9 @@ using UnityEngine;
 
 namespace Assets.Editor
 {
+    /// <summary>
+    /// Requires Odin Inspector to function properly
+    /// </summary>
     class EditorUtilities : OdinEditorWindow
     {
 
@@ -33,6 +36,7 @@ namespace Assets.Editor
         public List<Type> unusedTypes = new List<Type>();
 
         [Button]
+        [InfoBox("Doesn't work correctly, TODO fix")]
         [PropertyOrder(4)]
         void FindUnusedTypes()
         {

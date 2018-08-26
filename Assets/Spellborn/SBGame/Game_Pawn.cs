@@ -222,7 +222,6 @@ namespace SBGame
         public override void Initialize()
         {
             base.Initialize();
-            SetInitialState();
             if (Appearance != null) Appearance.Initialize(this);
             if (CharacterStats != null) CharacterStats.Initialize(this);
             if (Character != null) Character.Initialize(this);

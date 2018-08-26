@@ -219,6 +219,16 @@ namespace SBGame
             throw new NotImplementedException();
         }
 
+        public virtual bool IsDespawned()
+        {
+            return false;
+        }
+
+        public virtual bool IsDead()
+        {
+            return mCurrentState == EControllerStates.CPS_PAWN_DEAD;
+        }
+
     }
 }
 /*
@@ -254,8 +264,6 @@ return mCurrentState == 8;
 event bool IsSitting() {
 return mCurrentState == 10;                                                 
 }
-native function bool IsDespawned();
-native function bool IsDead();
 event bool IsIdle() {
 return mCurrentState == 1;                                                  
 }

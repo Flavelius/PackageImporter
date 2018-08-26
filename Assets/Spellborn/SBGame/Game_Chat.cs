@@ -24,7 +24,7 @@ namespace SBGame
 
         public void cl2sv_SendMessage(byte aRange, string aReceiver, string aMessage)
         {
-            Game_PlayerController PlayerController;
+            //Game_PlayerController PlayerController;
             if (((Outer as Game_Controller).Pawn as Game_Pawn).IsMuted((EGameChatRanges)aRange))
             {
                 //sv2cl_OnMessage_CallStub("", "You are muted on this channel!", 0);
@@ -37,7 +37,7 @@ namespace SBGame
             switch ((EGameChatRanges)aRange)
             {
                 case EGameChatRanges.GCR_LOCAL:
-                    var pp = (Outer as Game_Controller).Pawn as Game_PlayerPawn;
+                    //var pp = (Outer as Game_Controller).Pawn as Game_PlayerPawn;
                     //pp.sv2rel_SendMessage_CallStub(Game_PlayerPawn(Outer.Pawn).Character.sv_GetName(), aMessage, Class'Game_Desktop'.0);
                     break;
                 case EGameChatRanges.GCR_WORLD:

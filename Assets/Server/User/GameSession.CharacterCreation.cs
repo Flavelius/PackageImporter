@@ -34,7 +34,7 @@ namespace User
 		    var db = ServiceContainer.GetService<IDatabase>();
 		    var ccItems = GameResources.Instance.CCItemSets;
 		    var universe = GameResources.Instance.Universe;
-		    var map = ServiceContainer.GetService<IMapHandler>().GetPersistentMap(universe.EntryWorld.worldID);
+		    var map = ServiceContainer.GetService<IMapLoader>().GetPersistentMap(universe.EntryWorld.worldID);
 		    var start = map.Find<PlayerStart>(playerStart => playerStart.NavigationTag.Equals(universe.EntryPortal.Tag));
 		    if (start == null) throw new NullReferenceException("Entry portal is null");
 
@@ -225,7 +225,7 @@ namespace User
             }
             else
             {
-                ActiveCharacterMap = ServiceContainer.GetService<IMapHandler>().GetPersistentMap((MapIDs)character.worldID); //TODO change to instanceID / handle instances when needed
+                ActiveCharacterMap = ServiceContainer.GetService<IMapLoader>().GetPersistentMap((MapIDs)character.worldID); //TODO change to instanceID / handle instances when needed
                 ActiveController = ActiveCharacterMap.Spawn(GameResources.Instance.PlayerPrefab, character.Location, character.Rotation, controller => 
                 {
                     controller.AccountID = Account.UID;

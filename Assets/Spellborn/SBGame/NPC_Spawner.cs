@@ -6,7 +6,8 @@ using UnityEngine;
 
 namespace SBGame
 {
-    [Serializable] public class NPC_Spawner : NPC_Habitat
+    [Serializable]
+    public class NPC_Spawner: NPC_Habitat
     {
         [FoldoutGroup("Type")]
         [FieldConst()]
@@ -75,51 +76,58 @@ namespace SBGame
         {
             Gizmos.DrawIcon(transform.position, "NpcSpawner.psd", true);
         }
+
+        public void Trigger(Actor Other, Pawn EventInstigator)
+        {
+            var triggerer = EventInstigator != null ? EventInstigator : Other;
+            if (TriggeredSpawn)
+            {
+                if (!TriggeredRespawn || Triggerers == 0)
+                {
+                    sv_TriggeredSpawn(triggerer);
+                }
+            }
+            if (TriggeredRespawn && Triggerers != 0)
+            {
+                Triggerers++;
+            }
+        }
+
+        public void UnTrigger(Actor Other, Pawn EventInstigator)
+        {
+            var triggerer = EventInstigator ?? Other;
+            if (TriggeredRespawn)
+            {
+                Triggerers--;
+                if (Triggerers != 0)
+                {
+                    if (Triggerers < 0)
+                    {
+                        Triggerers = 0;
+                    }
+                }
+            }
+            if (TriggeredDespawn)
+            {
+                if (!TriggeredRespawn || Triggerers == 0)
+                {
+                    sv_Despawn();
+                }
+            }
+        }
+
+        protected virtual int GetSpawnsLeft()
+        {
+            return 0;
+        }
+
+        protected virtual void sv_TriggeredSpawn(Actor aTriggerer)
+        {
+
+        }
+
+        protected virtual void sv_Despawn()
+        {
+        }
     }
 }
-/*
-final native function int GetSpawnsLeft();
-event UnTrigger(Actor Other,Pawn EventInstigator) {
-local Actor triggerer;
-if (EventInstigator != None) {                                              
-triggerer = EventInstigator;                                              
-} else {                                                                    
-triggerer = Other;                                                        
-}
-if (TriggeredRespawn) {                                                     
-Triggerers--;                                                             
-if (Triggerers == 0) {                                                    
-} else {                                                                  
-if (Triggerers < 0) {                                                   
-Triggerers = 0;                                                       
-}
-}
-}
-if (TriggeredDespawn) {                                                     
-if (!TriggeredRespawn || Triggerers == 0) {                               
-sv_Despawn();                                                           
-}
-}
-}
-event Trigger(Actor Other,Pawn EventInstigator) {
-local Actor triggerer;
-if (EventInstigator != None) {                                              
-triggerer = EventInstigator;                                              
-} else {                                                                    
-triggerer = Other;                                                        
-}
-if (TriggeredSpawn) {                                                       
-if (!TriggeredRespawn || Triggerers == 0) {                               
-sv_TriggeredSpawn(triggerer);                                           
-}
-}
-if (TriggeredRespawn) {                                                     
-if (Triggerers == 0) {                                                    
-}
-Triggerers++;                                                             
-}
-}
-event sv_Despawn() {
-}
-native function sv_TriggeredSpawn(Actor aTriggerer);
-*/

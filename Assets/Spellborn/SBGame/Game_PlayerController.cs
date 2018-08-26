@@ -79,7 +79,6 @@ namespace SBGame
 
         public override void Initialize()
         {
-            SetInitialState();
             if (Chat != null) Chat.Initialize(this);
             if (Travel != null) Travel.Initialize(this);
             if (Mail != null) Mail.Initialize(this);
@@ -94,6 +93,7 @@ namespace SBGame
         {
             base.BeginPlay();
             Pawn.BeginPlay();
+            SetInitialState();
         }
 
         public override void WriteLoginStream(IPacketWriter writer)
