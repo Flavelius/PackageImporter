@@ -3,7 +3,8 @@ using Sirenix.OdinInspector;
 
 namespace Engine
 {
-    [Serializable] public class Trigger : Triggers
+    [Serializable]
+    public class Trigger: Triggers
     {
         [FoldoutGroup("Trigger")]
         public ETriggerType TriggerType;
@@ -19,7 +20,7 @@ namespace Engine
 
         [FoldoutGroup("Trigger")]
         [TypeProxyDefinition(TypeName = "Actor")]
-        public Type ClassProximityType;
+        public TypeDescription ClassProximityType;
 
         [FoldoutGroup("Trigger")]
         public float RepeatTriggerTime;
@@ -27,24 +28,14 @@ namespace Engine
         [FoldoutGroup("Trigger")]
         public float ReTriggerDelay;
 
-        public Trigger()
-        {
-        }
-
         public enum ETriggerType
         {
             TT_PlayerProximity,
-
             TT_PawnProximity,
-
             TT_ClassProximity,
-
             TT_AnyProximity,
-
             TT_Shoot,
-
             TT_HumanPlayerProximity,
-
             TT_LivePlayerProximity,
         }
     }

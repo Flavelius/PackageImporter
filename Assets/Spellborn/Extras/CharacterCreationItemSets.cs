@@ -55,7 +55,36 @@ namespace Database
         [ListDrawerSettings(ShowIndexLabels = true)]
         public List<Item_Type> OffhandSheathSet = new List<Item_Type>();
 
-        [InfoBox("(Main scene must be loaded for this to work and packages loaded in GameResources)\nShoulder_Left_001_a may be missing (developer mistake), can be manually fixed by assigning the specific appearance to the corresponding item in its package")]
+        [Button]
+        void FixMissingShoulderAssignment()
+        {
+            const int itemID = 106002;
+            var item = GameResources.Instance.GetResource<Item_ArmorLeftShoulder>(itemID);
+            if (item == null)
+            {
+                Debug.LogError("Item to fix not found");
+                return;
+            }
+            var appearanceSet = GameResources.Instance.FindResource<Appearance_Set>(_ => true);
+            var appIC = item.GetItemComponent<IC_Equipment>();
+            if (appIC != null)
+            {
+                if (appIC.Appearance == null) //then this is the missing one
+                {
+                    appIC.Appearance = appearanceSet.LeftShoulderSet[9];
+#if UNITY_EDITOR
+                    UnityEditor.EditorUtility.SetDirty(item);
+#endif
+                    Debug.Log("Fixed missing reference");
+                }
+            }
+            else
+            {
+                Debug.Log("Item " + item + " has no equipment component?", item);
+            }
+        }
+
+        [InfoBox("(Packages must be loaded in GameResources)\nShoulder_Left_001_a may be missing (developer mistake), can be fixed by assigning the missing reference")]
         [Button()]
         void Load()
         {
@@ -78,6 +107,7 @@ namespace Database
                     if (i > 0 && item == null) Debug.LogError(string.Format("Item not found: {0} - {1}", appList[i].name, appList[i].transform.root));
                 }
             }
+            Debug.Log("ItemSets loaded");
         }
 
         T ResolveItem<T>(Appearance_Base app, GameResources res) where T: Item_Type

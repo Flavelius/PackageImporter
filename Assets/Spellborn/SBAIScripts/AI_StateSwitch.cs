@@ -4,15 +4,12 @@ using Sirenix.OdinInspector;
 
 namespace SBAIScripts
 {
-    [Serializable] public class AI_StateSwitch : AIRegistered
+    [Serializable]
+    public class AI_StateSwitch: AIRegistered
     {
         [FoldoutGroup("AI_StateSwitch")]
         [TypeProxyDefinition(TypeName = "AIStateMachine")]
-        public Type TriggeredStateMachine;
-
-        public AI_StateSwitch()
-        {
-        }
+        public TypeDescription TriggeredStateMachine;
     }
 }
 /*

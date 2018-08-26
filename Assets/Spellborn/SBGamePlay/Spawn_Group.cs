@@ -36,11 +36,11 @@ namespace SBGamePlay
 
         [Sirenix.OdinInspector.FoldoutGroup("aI")]
         [TypeProxyDefinition(TypeName = "AIStateMachine")]
-        public System.Type StateMachine;
+        public TypeDescription StateMachine;
 
         [Sirenix.OdinInspector.FoldoutGroup("aI")]
         [TypeProxyDefinition(TypeName = "NPC_AI")]
-        public System.Type GroupMind;
+        public TypeDescription GroupMind;
 
         [System.NonSerialized, UnityEngine.HideInInspector]
         [FieldTransient()]

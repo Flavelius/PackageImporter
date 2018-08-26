@@ -25,10 +25,10 @@ namespace Engine
         public NavigationPoint home;
 
         [TypeProxyDefinition(TypeName = "Pawn")]
-        public Type PawnClass;
+        public TypeDescription PawnClass;
 
         [TypeProxyDefinition(TypeName = "Pawn")]
-        public Type PreviousPawnClass;
+        public TypeDescription PreviousPawnClass;
 
         [NonSerialized, HideInInspector]
         public NavigationPoint StartSpot;

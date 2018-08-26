@@ -34,7 +34,7 @@ namespace SBGamePlay
 
         [Sirenix.OdinInspector.FoldoutGroup("aI")]
         [TypeProxyDefinition(TypeName = "AIStateMachine")]
-        public Type StateMachine;
+        public TypeDescription StateMachine;
 
         [NonSerialized, UnityEngine.HideInInspector]
         [FieldTransient()]

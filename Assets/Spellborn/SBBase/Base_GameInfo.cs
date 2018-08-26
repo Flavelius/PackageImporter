@@ -12,19 +12,16 @@ namespace SBBase
 
         [FoldoutGroup("Base_GameInfo")]
         [TypeProxyDefinition(TypeName = "Base_Controller")]
-        public Type mPlayerControllerClass;
+        public TypeDescription mPlayerControllerClass;
 
         [FoldoutGroup("Base_GameInfo")]
         [TypeProxyDefinition(TypeName = "Base_Controller")]
-        public Type mTestBotControllerClass;
+        public TypeDescription mTestBotControllerClass;
 
         [FoldoutGroup("Base_GameInfo")]
         [TypeProxyDefinition(TypeName = "Base_Controller")]
-        public Type mGameMasterControllerClass;
+        public TypeDescription mGameMasterControllerClass;
 
-        public Base_GameInfo()
-        {
-        }
     }
 }
 /*

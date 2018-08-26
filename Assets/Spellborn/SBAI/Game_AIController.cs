@@ -12,76 +12,41 @@ namespace SBAI
         public const float cSpawnInTimer = 2F;
 
         private MetaControllerManagerComponent mMetaControl;
-
         public MovementComponent mMovement;
-
         public TargetComponent mTargeting;
-
         public HormoneComponent mHypothalamus;
-
         public float ChaseRange;
-
         public float VisualRange;
-
         public float LineOfSightRange;
-
         public float ThreatRange;
-
         public float FollowRange;
-
         public float AggressionFactor;
-
         public float FearFactor;
-
         public float SocialFactor;
-
         public float BoredomFactor;
-
         public Vector HomeLocation;
-
         public NPC_Habitat Habitat;
-
         public AIPoint ControlPoint;
-
         private List<AITimerStruct> mTimer = new List<AITimerStruct>();
-
         public float mSpawnInTimer;
-
         public AIStateMachine mAbortedMachine;
-
         public AIStateMachine mStateMachine;
-
         [TypeProxyDefinition(TypeName = "AIStateMachine")]
-        public Type mMachineClass;
-
+        public TypeDescription mMachineClass;
         public byte mTickResult;
-
         [FieldConfig()]
         public bool bProfileStateMachines;
-
         [FieldConfig()]
         public bool bProfileMovementModes;
-
         public List<UObject> mPausers = new List<UObject>();
-
         public Game_Pawn mLastAttackPawn;
-
         public FSkill_EffectClass mLastAttackEffect;
-
-        //public delegate<FollowFunction> @__FollowFunction__Delegate;
-
-        public Game_AIController()
-        {
-        }
 
         [Serializable] public struct AITimerStruct
         {
             public Actor Instigator;
-
             public float Time;
-
             public float Timeout;
-
             public NameProperty Tag;
         }
     }

@@ -14,7 +14,7 @@ namespace SBAIScripts
         [FoldoutGroup("AI_ConditionalDespawn")]
         [FieldConst()]
         [TypeProxyDefinition(TypeName = "AIState")]
-        public List<Type> ResettingStates = new List<Type>();
+        public List<TypeDescription> ResettingStates = new List<TypeDescription>();
 
         [FoldoutGroup("AI_ConditionalDespawn")]
         [FieldConst()]
@@ -22,10 +22,6 @@ namespace SBAIScripts
 
         [FieldConst()]
         public NameProperty DespawnTag;
-
-        public AI_ConditionalDespawn()
-        {
-        }
     }
 }
 /*

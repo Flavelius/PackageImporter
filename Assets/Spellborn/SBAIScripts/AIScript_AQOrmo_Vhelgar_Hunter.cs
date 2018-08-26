@@ -10,7 +10,7 @@ namespace SBAIScripts
         [FoldoutGroup("VhelgarHunter")]
         [FieldConst()]
         [TypeProxyDefinition(TypeName = "AIStateMachine")]
-        public Type ActiveMachineClass;
+        public TypeDescription ActiveMachineClass;
 
         [FoldoutGroup("VhelgarHunter")]
         [FieldConst()]
@@ -19,12 +19,8 @@ namespace SBAIScripts
         [FoldoutGroup("VhelgarHunter")]
         [FieldConst()]
         public List<Actor> EscapePoints = new List<Actor>();
-
         public bool Active;
 
-        public AIScript_AQOrmo_Vhelgar_Hunter()
-        {
-        }
     }
 }
 /*

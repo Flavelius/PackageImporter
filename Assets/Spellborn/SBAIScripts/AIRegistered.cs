@@ -12,11 +12,7 @@ namespace SBAIScripts
         private List<RegisteredAI> Registered = new List<RegisteredAI>();
 
         [TypeProxyDefinition(TypeName = "RegisteredAI")]
-        public Type RegistrationClass;
-
-        public AIRegistered()
-        {
-        }
+        public TypeDescription RegistrationClass;
     }
 }
 /*

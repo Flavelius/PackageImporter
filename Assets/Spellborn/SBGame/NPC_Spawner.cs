@@ -12,7 +12,7 @@ namespace SBGame
         [FoldoutGroup("Type")]
         [FieldConst()]
         [TypeProxyDefinition(TypeName = "Game_NPCController")]
-        public Type controllerType;
+        public TypeDescription controllerType;
 
         [FoldoutGroup("Policy")]
         [FieldConst()]
@@ -95,7 +95,7 @@ namespace SBGame
 
         public void UnTrigger(Actor Other, Pawn EventInstigator)
         {
-            var triggerer = EventInstigator ?? Other;
+            //var triggerer = EventInstigator ?? Other;
             if (TriggeredRespawn)
             {
                 Triggerers--;

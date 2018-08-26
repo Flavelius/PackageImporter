@@ -46,15 +46,11 @@ namespace SBGame
         [NonSerialized, HideInInspector]
         [FieldTransient()]
         [TypeProxyDefinition(TypeName = "Emitter")]
-        public Type EmitterClass;
+        public TypeDescription EmitterClass;
 
         [NonSerialized, HideInInspector]
         [FieldTransient()]
         public bool ReportedMissingEmitter;
-
-        public FSkill_EffectClass_AudioVisual_Emitter()
-        {
-        }
     }
 }
 /*

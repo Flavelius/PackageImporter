@@ -97,6 +97,7 @@
     <Compile Include="Assets\Server\World\MapLoader.cs" />
     <Compile Include="Assets\Server\World\WorldServer.cs" />
     <Compile Include="Assets\Shared\IActorPacketStream.cs" />
+    <Compile Include="Assets\Shared\TypeDescription.cs" />
     <Compile Include="Assets\Shared\UnitConversion.cs" />
     <Compile Include="Assets\Spellborn\Engine\ActionMoveCamera.cs" />
     <Compile Include="Assets\Spellborn\Engine\ActionPause.cs" />

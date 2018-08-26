@@ -168,16 +168,16 @@ namespace Framework.PackageExtractor
                     link.Assign(subject);
                     return;
                 }
-                if (link.FieldReference.FieldType == typeof(Type) || 
-                    (link.FieldReference.FieldType.IsArray && link.FieldReference.FieldType.GetElementType() == typeof(Type)) ||
-                    (link.FieldReference.FieldType.IsGenericType && link.FieldReference.FieldType.GetGenericTypeDefinition() == typeof(List<>) && link.FieldReference.FieldType.GetGenericArguments()[0] == typeof(Type))
+                if (link.FieldReference.FieldType == typeof(TypeDescription) || 
+                    (link.FieldReference.FieldType.IsArray && link.FieldReference.FieldType.GetElementType() == typeof(TypeDescription)) ||
+                    (link.FieldReference.FieldType.IsGenericType && link.FieldReference.FieldType.GetGenericTypeDefinition() == typeof(List<>) && link.FieldReference.FieldType.GetGenericArguments()[0] == typeof(TypeDescription))
                     )
                 {
                     if (CanSkip(link.AbsoluteObjectReference)) return;
                     var t = GetTypeFromName(link.AbsoluteObjectReference);
                     if (t != null)
                     {
-                        link.Assign(t);
+                        link.Assign(new TypeDescription(link.AbsoluteObjectReference.Trim()));
                         return;
                     }
                     Debug.LogWarning("Couldn't find type: " + link.AbsoluteObjectReference);

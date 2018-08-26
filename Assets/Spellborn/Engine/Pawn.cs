@@ -73,7 +73,7 @@ namespace Engine
         public string OwnerName = string.Empty;
 
         [TypeProxyDefinition(TypeName = "AIController")]
-        public Type ControllerClass;
+        public TypeDescription ControllerClass;
 
         [NonSerialized, HideInInspector]
         [FieldTransient()]

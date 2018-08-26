@@ -6,46 +6,32 @@ using Sirenix.OdinInspector;
 
 namespace SBAIScripts
 {
-    [Serializable] public class AIScript_Trial25_Graidlon : AI_Script
+    [Serializable]
+    public class AIScript_Trial25_Graidlon: AI_Script
     {
         [FoldoutGroup("Graidlon_Script")]
         public FSkill_Type Skill;
-
         [FoldoutGroup("Graidlon_Script")]
         public NPC_Type BossNPCType;
-
         [FoldoutGroup("Graidlon_Script")]
         public int MinAttackRange;
-
         [FoldoutGroup("Graidlon_Script")]
         public float AttackTimeOut;
-
         [FoldoutGroup("Graidlon_Script")]
         public AIScript_Trial25_End_Boss CloudScript;
-
         [FoldoutGroup("Graidlon_Script")]
         public string ArrivedEvent = string.Empty;
-
         [FoldoutGroup("Graidlon_Script")]
         [TypeProxyDefinition(TypeName = "AIStateMachine")]
-        public Type FightAIStateMachineClass;
-
+        public TypeDescription FightAIStateMachineClass;
         [FoldoutGroup("Graidlon_Script")]
         public NavigationPoint Waitpoint;
-
         public Game_Pawn targetPawn;
-
         public Game_AIController Controller;
-
         public AIStateMachine OldMachine;
-
         public AIStateMachine FightAIStateMachine;
-
         public bool SkillStarted;
 
-        public AIScript_Trial25_Graidlon()
-        {
-        }
     }
 }
 /*

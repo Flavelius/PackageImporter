@@ -10,166 +10,97 @@ namespace SBAI
     [Serializable] public class TargetComponent : Base_Component
     {
         public bool Initialized;
-
         public byte Mode;
-
         public Vector TargetLocation;
-
         public Actor TargetActor;
-
         [TypeProxyDefinition(TypeName = "Object")]
-        public Type TargetClass;
-
+        public TypeDescription TargetClass;
         public float TargetRange;
-
         public bool Detection;
-
         public float VisualRange;
-
         public float LineOfSightRange;
-
         public List<UnreachableStruct> Unreachable = new List<UnreachableStruct>();
-
         public bool AllEnemiesUnreachable;
-
         public bool HadTarget;
-
         public Actor Target;
-
         public Vector Location;
-
         public List<DetectedStruct> Detected = new List<DetectedStruct>();
-
         public List<DetectedStruct> OldDetected = new List<DetectedStruct>();
-
         [NonSerialized, HideInInspector]
         [FieldTransient()]
         public int VisualMemory;
-
         public int Enemies;
-
         public int Allies;
-
         public int UnreachableEnemies;
-
         public int UnreachableAllies;
-
         public int DetectedEnemies;
-
         public int DetectedAllies;
-
         public float AimedTime;
-
         public FSkill_Type Skill;
-
         public float MinBattleZone;
-
         public float MaxBattleZone;
-
         public float NoTargetCombatTime;
-
         public float RetargetSlack;
-
         public float DistanceSlack;
-
         public float UnreachableSlack;
-
         public float VisualMemoryTime;
-
         public float RecomputeTimer;
-
         public float PreviousDistance;
-
         public List<TargetConfigStruct> ConfigStack = new List<TargetConfigStruct>();
-
         public bool AnalyzePrediction;
-
         public List<PredictionStruct> PredictionResults = new List<PredictionStruct>();
-
         [NonSerialized, HideInInspector]
         [FieldTransient()]
         public int FilterFunction;
 
-        //public delegate<FilterTarget> @__FilterTarget__Delegate;
-
-        public TargetComponent()
-        {
-        }
-
         [Serializable] public struct VisualMemoryStruct
         {
             public float LastSeen;
-
             public bool CurrentlyDetected;
         }
 
         [Serializable] public struct PredictionStruct
         {
             public byte Method;
-
             public Game_Pawn Pawn;
-
             public float ServerTime;
-
             public float DeltaTime;
-
             public float Certainty;
-
             public Vector Result;
         }
 
         [Serializable] public struct UnreachableStruct
         {
             public Game_Pawn Pawn;
-
             public float Range;
-
             public float Area;
-
             public Vector Location;
-
             public float Time;
         }
 
         [Serializable] public struct TargetConfigStruct
         {
             public UObject mOwner;
-
             public byte Mode;
-
             public Vector TargetLocation;
-
             public Actor TargetActor;
-
             public Type TargetClass;
-
             public float TargetRange;
-
             public bool Detection;
-
             public float RetargetSlack;
-
             public float DistanceSlack;
-
             public float UnreachableSlack;
-
             public int FilterFunction;
-
             public UObject FilterDelegateObject;
-
             public NameProperty FilterDelegateName;
         }
 
         [Serializable] public struct DetectedStruct
         {
             public Actor Detected;
-
             public float SqrDistance;
-
             public byte Status;
-
             public bool Enemy;
-
             public bool Ally;
         }
 

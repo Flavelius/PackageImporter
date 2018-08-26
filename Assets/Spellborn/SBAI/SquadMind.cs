@@ -4,21 +4,15 @@ using Sirenix.OdinInspector;
 
 namespace SBAI
 {
-    [Serializable] public class SquadMind : GroupMind
+    [Serializable]
+    public class SquadMind: GroupMind
     {
         private Game_AIController mLeader;
-
         private AIStateMachine mLeaderOldMachine;
-
         private Vector mLeaderOldHome;
-
         [FoldoutGroup("SquadMind")]
         [TypeProxyDefinition(TypeName = "AIStateMachine")]
-        public Type LeaderMachineClass;
-
-        public SquadMind()
-        {
-        }
+        public TypeDescription LeaderMachineClass;
     }
 }
 /*

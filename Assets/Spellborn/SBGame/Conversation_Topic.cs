@@ -50,17 +50,13 @@ namespace SBGame
 
         [FoldoutGroup("Banner")]
         [TypeProxyDefinition(TypeName = "Emitter")]
-        public Type EmitterClass;
+        public TypeDescription EmitterClass;
 
         [FoldoutGroup("Banner")]
         public float BannerTime;
 
         [FoldoutGroup("Minimap")]
         public float MinimapRange;
-
-        public Conversation_Topic()
-        {
-        }
 
         public enum EConversationType
         {

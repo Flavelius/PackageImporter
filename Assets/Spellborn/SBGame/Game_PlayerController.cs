@@ -12,6 +12,19 @@ namespace SBGame
         public const string MUTE_ALL = "\"all\"";
         public const float SERVER_SYNC_TIME = 1F;
 
+        [TypeProxyDefinition(TypeName = "Game_Chat")]
+        public TypeDescription ChatClass;
+        [TypeProxyDefinition(TypeName = "Game_Travel")]
+        public TypeDescription TravelClass;
+        [TypeProxyDefinition(TypeName = "Game_Mail")]
+        public TypeDescription MailClass;
+        [TypeProxyDefinition(TypeName = "Game_PlayerFriends")]
+        public TypeDescription mGroupingFriendsClass;
+        [TypeProxyDefinition(TypeName = "Game_PlayerTeams")]
+        public TypeDescription mGroupingTeamsClass;
+        [TypeProxyDefinition(TypeName = "Game_PlayerGuilds")]
+        public TypeDescription mGroupingGuildsClass;
+
         public Game_Chat Chat;
         public Game_Travel Travel;
         public Game_Mail Mail;
@@ -135,7 +148,7 @@ namespace SBGame
 
         public void TickMovement(float aDeltaTime)
         {
-            
+
         }
 
         public virtual void OnSitDown(bool aSitDown) { throw new NotImplementedException(); }

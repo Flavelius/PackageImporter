@@ -3,22 +3,16 @@ using Sirenix.OdinInspector;
 
 namespace Engine
 {
-    [Serializable] public class AIScript : Keypoint
+    [Serializable]
+    public class AIScript: Keypoint
     {
         [FoldoutGroup("AIScript")]
         [TypeProxyDefinition(TypeName = "AIController")]
-        public Type ControllerClass;
-
+        public TypeDescription ControllerClass;
         public bool bNavigate;
-
         [FoldoutGroup("AIScript")]
         public bool bLoggingEnabled;
-
         public AIMarker myMarker;
-
-        public AIScript()
-        {
-        }
     }
 }
 /*

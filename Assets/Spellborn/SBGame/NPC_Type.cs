@@ -148,7 +148,7 @@ namespace SBGame
         [FoldoutGroup("Spawning")]
         [FieldConst()]
         [TypeProxyDefinition(TypeName = "Game_NPCPawn")]
-        public Type PawnType;
+        public TypeDescription PawnType;
 
         [FoldoutGroup("Spawning")]
         [FieldConst()]

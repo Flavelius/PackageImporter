@@ -19,7 +19,7 @@ namespace Framework.PackageExtractor
         ExportEntry[] ExportTable { get; set; }
         ImportEntry[] ImportTable { get; set; }
 
-        public string PackageName { get; }
+        public string PackageName { get; private set; }
 
         const string NULL = "null";
         const string NONE = "none";
@@ -393,7 +393,7 @@ namespace Framework.PackageExtractor
                 {
                     ReflectionHelper.TrySetValue(activeObject.Instance, targetField, propValue, activeProperty.ArrayIndex, resourceLocator);
                 }
-            } while (true/*fileReader.Position < activeObject.SerialOffset + activeObject.SerialSize*/);
+            } while (true);
             if (allPropsSize == activeObject.SerialSize) return;
             var diff = (activeObject.SerialOffset + activeObject.SerialSize) - fileReader.Position;
             //if (diff > 17)
@@ -548,6 +548,7 @@ namespace Framework.PackageExtractor
                     return GetName(fileReader.ReadIndex(out propValueBytesRead));
                 case PropertyType.StringProperty:
                 case PropertyType.StrProperty:
+                    //TODO catch type proxy
                     var stringSize = fileReader.ReadIndex(out readIndexBytes);
                     propValueBytesRead = readIndexBytes;
                     var stringBytes = fileReader.ReadBytes(stringSize);
@@ -651,7 +652,7 @@ namespace Framework.PackageExtractor
                                 {
                                     ReflectionHelper.TrySetValue(realStruct, targetField, propValue, structProp.ArrayIndex, resourceLocator);
                                 }
-                            } while (true/*structBytesRead < activeProperty.SerialSize*/);
+                            } while (true);
                             propValueBytesRead = structBytesRead;
                             return realStruct;
                     }

@@ -18,7 +18,7 @@ namespace SBAIScripts
 
         [FoldoutGroup("Escort")]
         [TypeProxyDefinition(TypeName = "AIStateMachine")]
-        public Type EscortMachine;
+        public TypeDescription EscortMachine;
 
         [FoldoutGroup("Escort")]
         public bool Invulnerable;
@@ -65,16 +65,10 @@ namespace SBAIScripts
         [FieldTransient()]
         public bool TriggeredByPusher;
 
-        public AIEscortFramework()
-        {
-        }
-
         [Serializable] public struct EscortStruct
         {
             public Game_Pawn Pawn;
-
             public int CharacterID;
-
             public bool Active;
         }
     }

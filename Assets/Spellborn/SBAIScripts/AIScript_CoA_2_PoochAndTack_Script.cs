@@ -10,21 +10,13 @@ namespace SBAIScripts
     {
         [FoldoutGroup("AIScript_CoA_2_PoochAndTack_Script")]
         public FSkill_Type MourningHowlSkill;
-
         [FoldoutGroup("AIScript_CoA_2_PoochAndTack_Script")]
         public string DoorTag = string.Empty;
-
         [FoldoutGroup("AIScript_CoA_2_PoochAndTack_Script")]
         [TypeProxyDefinition(TypeName = "AIStateMachine")]
-        public Type ActiveStateMachine;
-
+        public TypeDescription ActiveStateMachine;
         public bool IsActive;
-
         public AIStateMachine OldMachine;
-
-        public AIScript_CoA_2_PoochAndTack_Script()
-        {
-        }
     }
 }
 /*
