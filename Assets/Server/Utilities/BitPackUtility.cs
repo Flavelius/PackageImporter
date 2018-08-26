@@ -5,11 +5,11 @@ namespace Utilities
     /// <summary>
     /// TODO inefficient, uses array copying
     /// </summary>
-    public class LODPackUtility
+    public class BitPackUtility
     {
         byte[] output;
 
-        public LODPackUtility(int sizeInBytes)
+        public BitPackUtility(int sizeInBytes)
         {
             output = new byte[sizeInBytes];
         }

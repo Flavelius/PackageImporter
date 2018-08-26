@@ -1,18 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using SBBase;
+using UnityEngine;
 
 namespace SBGame
 {
-    [Serializable] public class Game_Emotes : Base_Component
+    [Serializable]
+    public class Game_Emotes: Base_Component
     {
         public List<Game_Emote> EmoteMappings = new List<Game_Emote>();
 
-        [Serializable] public struct EmoteMapping
+        [Serializable]
+        public struct EmoteMapping
         {
             public string Command;
             public int AnimIndex;
             public byte SoundIndex;
+        }
+
+        public void cl2sv_Emote(byte aEmote)
+        {
+            if ((Outer as Game_Pawn).IsDead()) return;
+            //sv2rel_Emote_CallStub(aEmote);
+            sv_Emote(aEmote);
+        }
+
+        void sv_Emote(byte aEmote)
+        {
+            if ((Outer as Game_Pawn).IsDead()) return;
+            if (EmoteMappings.Count < aEmote)
+            {
+                Debug.LogWarning("Emote mappings not initialized correctly, TODO find out how");
+            }
+            EmoteMappings[aEmote].OnServerExecute(Outer as Game_Pawn);
         }
     }
 }
@@ -31,20 +51,7 @@ protected native function sv2rel_Emote_CallStub();
 protected final event sv2rel_Emote(byte aEmote) {
 PlayLocalEmote(aEmote);                                                     
 }
-protected final event sv_Emote(byte aEmote) {
-if (Outer.IsDead()) {                                                       
-return;                                                                   
-}
-EmoteMappings[aEmote].OnServerExecute(Outer);                               
-}
 protected native function cl2sv_Emote_CallStub();
-protected final event cl2sv_Emote(byte aEmote) {
-if (Outer.IsDead()) {                                                       
-return;                                                                   
-}
-sv2rel_Emote_CallStub(aEmote);                                              
-sv_Emote(aEmote);                                                           
-}
 final event PlayLocalEmote(byte aEmote) {
 if (Outer.IsDead()) {                                                       
 return;                                                                   

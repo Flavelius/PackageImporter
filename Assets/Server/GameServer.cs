@@ -65,7 +65,7 @@ public class GameServer : MonoBehaviour
         {
             if (sbWorld.WorldFile.Contains("\\")) continue;
             if (devLoadHawksmouthOnly && sbWorld.worldID != MapIDs.PT_HAWKSMOUTH) continue;
-            if (sbWorld.WorldType == SBWorld.eZoneWorldTypes.ZWT_PERSISTENT) mapHandler.LoadPersistentMap(sbWorld);
+            if (sbWorld.WorldType == SBWorld.eZoneWorldTypes.ZWT_PERSISTENT) mapHandler.LoadPersistentMap(sbWorld.worldID);
         }
         Debug.Log("Loading persistent worlds finished in " + (Time.realtimeSinceStartup - loadingStartTime).ToString("0.0") + "s");
     }

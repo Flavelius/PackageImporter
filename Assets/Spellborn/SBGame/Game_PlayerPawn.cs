@@ -66,6 +66,11 @@ namespace SBGame
         [NonSerialized, HideInInspector]
         public float mPvPTimer;
 
+        void OnDrawGizmos()
+        {
+            Gizmos.DrawIcon(transform.position, "Player.psd", true);
+        }
+
         public void SetMovementUpdateFrequency(int aFrequency)
         {
             if (aFrequency > 0 && aFrequency <= 16)
@@ -99,6 +104,26 @@ namespace SBGame
         public override int GetCharacterID()
         {
             return (Controller as Game_PlayerController).DBCharacter.Id;
+        }
+
+        public void cl2sv_UpdateMovement(Vector aLocation,Vector aVelocity,byte aFrameID)
+        {
+            transform.position = aLocation;
+            Velocity = aVelocity;
+            mMoveFrameID = aFrameID;
+        }
+
+        public void cl2sv_UpdateMovementWithPhysics(Vector aLocation,Vector aVelocity,byte aPhysics,byte aFrameID)
+        {
+            transform.position = aLocation;
+            Velocity = aVelocity;
+            mMoveFrameID = aFrameID;
+            Physics = (EPhysics)aPhysics;
+        }
+
+        public void cl2sv_UpdateRotation(int aYaw)
+        {
+            transform.rotation = new Rotator(0, aYaw, 0);
         }
 
     }
@@ -138,25 +163,7 @@ protected native function cl2sv_Resurrect_CallStub();
 event cl2sv_Resurrect() {
 sv_Resurrect();                                                             
 }
-protected native function sv2cl_FreeToPlayLevelCapped_CallStub();
-event sv2cl_FreeToPlayLevelCapped() {
-local export editinline Help_Article Article;
-Article = Help_Article(Class'SBDBSync'.GetResourceObject(156527));          
-Game_PlayerStats(CharacterStats).mFreeToPlayLimitReached = True;            
-Game_Desktop(Game_PlayerController(Controller).Player.GUIDesktop).UpdateStdWindow(1,0,None,"");
-Game_Desktop(Game_PlayerController(Controller).Player.GUIDesktop).ShowMessageBox(Article.Title.Text,Article.Body.Text);
-}
-protected native function sv2cl_FreeToPlayPortalForbidden_CallStub();
-event sv2cl_FreeToPlayPortalForbidden() {
-local export editinline Help_Article Article;
-Article = Help_Article(Class'SBDBSync'.GetResourceObject(156527));          
-Game_Desktop(Game_PlayerController(Controller).Player.GUIDesktop).ShowMessageBox(Article.Title.Text,Article.Body.Text);
-}
-final native function bool sv_IsFreeToPlayCapped();
-final native function bool sv_IsPayingPlayer();
-exec function ShakeCombat() {
-Game_PlayerCombatStats(CombatStats).cl2sv_ShakeCombat_CallStub();           
-}
+
 function cl_SetPet(Game_PetPawn aPET) {
 Super.cl_SetPet(aPET);                                                      
 if (aPET == None) {                                                         
@@ -288,11 +295,8 @@ return False;
 protected native function sv2cl_ForceMovement_CallStub();
 private final native event sv2cl_ForceMovement(Vector aLocation,Vector aVelocity,byte aPhysics);
 protected native function cl2sv_UpdateMovement_CallStub();
-private final native event cl2sv_UpdateMovement(Vector aLocation,Vector aVelocity,byte aFrameID);
 protected native function cl2sv_UpdateMovementWithPhysics_CallStub();
-private final native event cl2sv_UpdateMovementWithPhysics(Vector aLocation,Vector aVelocity,byte aPhysics,byte aFrameID);
 protected native function cl2sv_UpdateRotation_CallStub();
-private final native event cl2sv_UpdateRotation(int aYaw);
 private final native function cl_UpdateToServer();
 event cl_OnShutdown() {
 if (questLog != None) {                                                     

@@ -6,6 +6,7 @@ using UnityEngine;
 using System.Linq;
 using World;
 using SBBase;
+using Engine;
 
 namespace User
 {
@@ -14,7 +15,8 @@ namespace User
         PacketDispatcher<GameHeader> dispatcher;
         public MapIDs ActiveClientMap { get; private set; }
         public GameMap ActiveCharacterMap { get; private set; }
-        public Game_PlayerController ActiveCharacter { get; private set; }
+        public Game_PlayerController ActiveController { get; private set; }
+        public Game_PlayerPawn ActivePawn { get; private set; }
 
         public GameSession(NetConnection connection, UserAccount account) : base(connection, account)
         {
@@ -26,7 +28,7 @@ namespace User
         {
             if (!dispatcher.Dispatch(packet))
             {
-                Debug.LogWarning("Unhandled packet: " + (GameHeader) packet.Header);
+                Debug.LogWarning("Unhandled packet: " + (GameHeader)packet.Header);
             }
         }
 
@@ -60,8 +62,8 @@ namespace User
         public void LoadClientMap(MapIDs newMap)
         {
             var m = GameHeader.S2C_WORLD_PRE_LOGIN.CreatePacket();
-            m.WriteInt32((int) PacketStatusCode.NO_ERROR);
-            m.WriteInt32((int) newMap);
+            m.WriteInt32((int)PacketStatusCode.NO_ERROR);
+            m.WriteInt32((int)newMap);
             Connection.SendMessage(m);
             ActiveClientMap = newMap;
         }
@@ -74,11 +76,13 @@ namespace User
 
         public override void OnEnd()
         {
-            if (ActiveCharacter != null)
+            if (ActiveController != null)
             {
                 Debug.LogWarning("TODO save character after logout");
-                ActiveCharacterMap.Remove(ActiveCharacter);
-                GameObject.Destroy(ActiveCharacter.gameObject);
+                ActiveCharacterMap.Remove(ActiveController);
+                ActiveCharacterMap = null;
+                GameObject.Destroy(ActiveController.gameObject);
+                ActiveController = null;
             }
             Log("Ended");
         }
@@ -93,7 +97,8 @@ namespace User
         [HandlesPacket(GameHeader.C2S_WORLD_PRE_LOGIN_ACK)]
         void C2S_WORLD_PRE_LOGIN_ACK(NetworkPacket packet)
         {
-            /*var status = */packet.ReadInt32();
+            /*var status = */
+            packet.ReadInt32();
             if (ActiveClientMap == MapIDs.CHARACTER_SELECTION)
             {
                 var charDB = ServiceContainer.GetService<IDatabase>().Characters;
@@ -117,16 +122,71 @@ namespace User
             }
             else
             {
-                if (ActiveCharacter == null)
+                if (ActiveController == null)
                 {
                     Connection.Disconnect();//character must exist
                     return;
                 }
                 var msg = GameHeader.S2C_WORLD_LOGIN.CreatePacket();
                 msg.WriteInt32((int)PacketStatusCode.NO_ERROR);
-                msg.WriteLoginStream(ActiveCharacter);
+                msg.WriteLoginStream(ActiveController);
                 Connection.SendMessage(msg);
             }
         }
+
+        #region Movement
+
+        [HandlesPacket(GameHeader.C2S_GAME_PLAYERPAWN_CL2SV_UPDATEMOVEMENT)]
+        void C2S_GAME_PLAYERPAWN_UPDATEMOVEMENT(NetworkPacket packet)
+        {
+            packet.ReadInt32();
+            var position = packet.ReadVector();
+            var velocity = packet.ReadVector();
+            var frameNumber = packet.ReadByte();
+            ActivePawn.cl2sv_UpdateMovement(position, velocity, frameNumber);
+        }
+
+        [HandlesPacket(GameHeader.C2S_GAME_PLAYERPAWN_CL2SV_UPDATEMOVEMENTWITHPHYSICS)]
+        void C2S_GAME_PLAYERPAWN_UPDATEMOVEMENTWITHPHYSICS(NetworkPacket packet)
+        {
+            packet.ReadInt32();
+            var position = packet.ReadVector();
+            var velocity = packet.ReadVector();
+            var physics = packet.ReadByte();
+            var frameNumber = packet.ReadByte();
+            ActivePawn.cl2sv_UpdateMovementWithPhysics(position, velocity, physics, frameNumber);
+        }
+
+        [HandlesPacket(GameHeader.C2S_GAME_PLAYERPAWN_CL2SV_UPDATEROTATION)]
+        void C2S_GAME_PLAYERPAWN_UPDATEROTATION(NetworkPacket packet)
+        {
+            packet.ReadInt32(); //characterID
+            var rot = packet.ReadInt32(); //yaw
+            ActivePawn.cl2sv_UpdateRotation(rot);
+        }
+
+        #endregion
+
+        #region Chat
+        [HandlesPacket(GameHeader.C2S_GAME_CHAT_SEND_TEXTMESSAGE)]
+        void C2S_GAME_CHAT_SEND_TEXTMESSAGE(NetworkPacket packet)
+        {
+            packet.ReadInt32();
+            var channelID = packet.ReadByte();
+            var target = packet.ReadString();
+            var message = packet.ReadString();
+            ActiveController.Chat.cl2sv_SendMessage(channelID, target, message);
+        }
+        #endregion
+
+        #region Emotes
+        [HandlesPacket(GameHeader.C2S_GAME_EMOTES_CL2SV_EMOTE)]
+        void C2S_GAME_EMOTES_CL2SV_EMOTE(NetworkPacket packet)
+        {
+            packet.ReadInt32();
+            var emote = packet.ReadByte();
+            ActivePawn.Emotes.cl2sv_Emote(emote);
+        }
+        #endregion
     }
 }

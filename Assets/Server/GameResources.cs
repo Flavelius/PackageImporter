@@ -33,7 +33,7 @@ public class GameResources : ScriptableObject
         get
         {
             if (instance != null) return instance;
-            instance = Resources.FindObjectsOfTypeAll<GameResources>()[0];
+            instance = Resources.Load<GameResources>("GameResources");
             return instance;
         }
     }
@@ -107,7 +107,7 @@ public class GameResources : ScriptableObject
     /// </summary>
     public T FindResource<T>(Predicate<T> predicate) where T : UObject
     {
-        if (resourceCache.Count == 0) LoadResourceCache();
+        //if (resourceCache.Count == 0) LoadResourceCache();
         var objs = new List<T>();
         for (var i = 0; i < packages.Count; i++)
         {

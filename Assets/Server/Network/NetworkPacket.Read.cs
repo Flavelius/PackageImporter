@@ -7,7 +7,7 @@ namespace Network
 {
     public partial class NetworkPacket
     {
-        //HACK try bitshifting
+        //TODO try bitshifting
 
         void LogOverflow()
         {
@@ -141,9 +141,9 @@ namespace Network
             return Encoding.Unicode.GetString(str);
         }
 
-        public Vector3 ReadVector3()
+        public Vector ReadVector()
         {
-            var vec = new Vector3(ReadFloat(), ReadFloat(), ReadFloat());
+            var vec = new Vector(ReadFloat(), ReadFloat(), ReadFloat());
             return vec;
         }
 

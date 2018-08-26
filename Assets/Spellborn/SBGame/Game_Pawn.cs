@@ -298,6 +298,29 @@ namespace SBGame
             throw new NotImplementedException();
         }
         #endregion
+
+        public bool IsMuted(Game_Chat.EGameChatRanges aRange = Game_Chat.EGameChatRanges.GCR_LOCAL)
+        {
+            Game_PlayerController gc = (Controller as Game_PlayerController);
+            if (gc != null)
+            {
+                if (gc.DBMutedScope == Game_PlayerController.MUTE_ALL)
+                {
+                    return true;
+                }
+                if (aRange == Game_Chat.EGameChatRanges.GCR_WORLD)
+                {
+                    return gc.DBMutedScope == Game_PlayerController.MUTE_GLOBAL;
+                }
+                return gc.DBMutedScope != "";
+            }
+            return false;
+        }
+
+        public bool IsDead()
+        {
+            return mCurrentState == EPawnStates.PS_DEAD;
+        }
     }
 }
 /*
@@ -956,7 +979,6 @@ return Class'SBAnimationFlags'.0;
 }
 }
 }
-final native event bool IsDead();
 event sv2clrel_UpdateNetState(byte aState) {
 if (aState != mNetState) {                                                  
 mNetState = aState;                                                       
@@ -1309,21 +1331,6 @@ return False;
 protected native function sv2clrel_TeleportTo_CallStub();
 event sv2clrel_TeleportTo(Vector NewLocation,Rotator NewRotation) {
 TeleportTo(NewLocation,NewRotation);                                        
-}
-function bool IsMuted(optional byte aRange) {
-local Game_PlayerController gc;
-gc = Game_PlayerController(Controller);                                     
-if (gc != None) {                                                           
-if (gc.DBMutedScope == Class'Game_PlayerController'."all") {              
-return True;                                                            
-}
-if (aRange == 1) {                                                        
-return gc.DBMutedScope == Class'Game_PlayerController'."global";        
-}
-return gc.DBMutedScope != "";                                             
-} else {                                                                    
-return False;                                                             
-}
 }
 protected native function sv2cl_UpdateMuted_CallStub();
 event sv2cl_UpdateMuted(bool aMuted,string aMutedScope) {

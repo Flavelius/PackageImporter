@@ -28,9 +28,9 @@ namespace World
             SceneManager.sceneUnloaded += OnLevelUnloaded;
         }
 
-        public void LoadPersistentMap(SBWorld map)
+        public void LoadPersistentMap(MapIDs map)
         {
-            SceneManager.LoadScene(map.worldID.ToString(), LoadSceneMode.Additive);
+            SceneManager.LoadScene(map.ToString(), LoadSceneMode.Additive);
         }
 
         public void UnloadPersistentMap(MapIDs map)
@@ -44,10 +44,8 @@ namespace World
             return loadedMaps.TryGetValue(map, out scene) ? scene : null;
         }
 
-        void OnLevelLoaded(Scene scene, LoadSceneMode mode)
+        GameMap RegisterSceneAsMap(Scene scene)
         {
-            if (scene.name == "Main") return; //ignore
-            Debug.Log(string.Format("Map loaded: {0}", scene.name));
             var mapID = (MapIDs) Enum.Parse(typeof(MapIDs), scene.name, true);
             var universe = GameResources.Instance.Universe;
             var world = universe.Worlds.FirstOrDefault(sbWorld => sbWorld.worldID == mapID);
@@ -55,6 +53,14 @@ namespace World
             var map = new GameMap(scene, mapID, world, AllocateInstanceID());
             loadedMaps.Add(map.ID, map);
             loadedScenes.Add(scene, map);
+            return map;
+        }
+
+        void OnLevelLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (scene.name == "Main") return; //ignore
+            Debug.Log(string.Format("Map loaded: {0}", scene.name));
+            RegisterSceneAsMap(scene);
         }
 
         void OnLevelUnloaded(Scene scene)

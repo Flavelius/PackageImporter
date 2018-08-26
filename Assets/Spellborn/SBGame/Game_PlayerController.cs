@@ -135,7 +135,7 @@ namespace SBGame
 
         public void TickMovement(float aDeltaTime)
         {
-            throw new NotImplementedException();
+            
         }
 
         public virtual void OnSitDown(bool aSitDown) { throw new NotImplementedException(); }

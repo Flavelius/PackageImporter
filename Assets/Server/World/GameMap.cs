@@ -10,7 +10,7 @@ namespace World
 {
     public class GameMap
     {
-        //Scene scene;
+        Scene scene;
         List<Actor> actors = new List<Actor>();
 
         public MapIDs ID { get; private set; }
@@ -19,7 +19,7 @@ namespace World
 
         public GameMap(Scene scene, MapIDs id, SBWorld sbWorld, int instanceID)
         {
-            //this.scene = scene;
+            this.scene = scene;
             ID = id;
             InstanceID = instanceID;
             SBWorld = sbWorld;
@@ -51,6 +51,7 @@ namespace World
         public T Spawn<T>(T prefab, Vector3 location, Quaternion rotation, Action<T> preSpawnInitCallback = null, Actor owner=null, string spawnTag="") where T:Game_Controller
         {
             var t = UnityEngine.Object.Instantiate(prefab);
+            SceneManager.MoveGameObjectToScene(t.gameObject, scene);
             t.transform.SetPositionAndRotation(location, rotation);
             if (preSpawnInitCallback != null) preSpawnInitCallback(t);
             actors.Add(t);

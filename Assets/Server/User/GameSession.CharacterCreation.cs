@@ -226,7 +226,7 @@ namespace User
             else
             {
                 ActiveCharacterMap = ServiceContainer.GetService<IMapHandler>().GetPersistentMap((MapIDs)character.worldID); //TODO change to instanceID / handle instances when needed
-                ActiveCharacter = ActiveCharacterMap.Spawn(GameResources.Instance.PlayerPrefab, character.Location, character.Rotation, controller => 
+                ActiveController = ActiveCharacterMap.Spawn(GameResources.Instance.PlayerPrefab, character.Location, character.Rotation, controller => 
                 {
                     controller.AccountID = Account.UID;
                     controller.DBCharacter = character;
@@ -243,6 +243,7 @@ namespace User
                     //controller.DBPersistentVariables = TODO
                     controller.DBItems = db.GetItems(character.Id);   
                 });
+                ActivePawn = ActiveController.Pawn as Game_PlayerPawn;
                 LoadClientMap(ActiveCharacterMap.ID);
             }
         }
