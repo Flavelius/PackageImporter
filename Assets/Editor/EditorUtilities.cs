@@ -16,7 +16,7 @@ namespace Assets.Editor
     /// <summary>
     /// Requires Odin Inspector to function properly
     /// </summary>
-    class EditorUtilities : OdinEditorWindow
+    class EditorUtilities: OdinEditorWindow
     {
 
         [MenuItem("Spellborn/Editor Utilities")]
@@ -94,6 +94,47 @@ namespace Assets.Editor
             {
                 references.Add(refs[i].gameObject);
             }
+        }
+
+        [Button]
+        void FindNonEmptyTypeDescription()
+        {
+            var emptyFields = 0;
+            foreach (var item in GameResources.Instance.Packages)
+            {
+                foreach (var actor in item.GetComponentsInChildren<UObject>())
+                {
+                    foreach (var field in actor.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy))
+                    {
+                        if (field.FieldType == typeof(TypeDescription))
+                        {
+                            var val = field.GetValue(actor);
+                            if (val != null) Debug.Log(val);
+                            else emptyFields++;
+                        }
+                    }
+                }
+            }
+            Debug.Log(emptyFields + " empty fields");
+        }
+
+        [Button]
+        void FindNonEmptyTypeDescriptionsInScene()
+        {
+            var emptyFields = 0;
+            foreach (var item in GameObject.FindObjectsOfType<UObject>())
+            {
+                foreach (var field in item.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy))
+                {
+                    if (field.FieldType == typeof(TypeDescription))
+                    {
+                        var val = field.Get(item);
+                        if (val != null) Debug.Log(val, item);
+                        else emptyFields++;
+                    }
+                }
+            }
+            Debug.Log(emptyFields + " empty fields");
         }
 
         [Button]

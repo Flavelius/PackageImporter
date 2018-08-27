@@ -39,6 +39,11 @@ namespace SBGame
             throw new NotImplementedException();
         }
 
+        public int GetTargetProgress(Quest_Type aQuest,int TargetNr)
+        {
+            throw new NotImplementedException();
+        }
+
         [Serializable]
         public struct CompleteQuest
         {
@@ -80,7 +85,6 @@ final native function bool HasQuest(export editinline Quest_Type aQuest);
 final native function bool IsTargetVisible(export editinline Quest_Type aQuest,int TargetNr);
 final native function bool GetActivation(export editinline Quest_Target aTarget);
 final native function int GetProgress(export editinline Quest_Target aTarget);
-final native function int GetTargetProgress(export editinline Quest_Type aQuest,int TargetNr);
 final native function bool FailedQuest(export editinline Quest_Type aQuest);
 final native function bool CompletedQuest(export editinline Quest_Type aQuest,optional bool aNearly);
 final native function bool sv_AbandonQuest(export editinline Quest_Type aQuest);

@@ -347,6 +347,21 @@ namespace SBGame
         {
             return mCurrentState == EPawnStates.PS_DEAD;
         }
+
+        public bool sv_TeleportTo(Vector aNewLocation, Rotator aNewRotation)
+        {
+            if (TeleportTo(aNewLocation, aNewRotation))
+            {
+                //sv2clrel_TeleportTo_CallStub(aNewLocation, aNewRotation);
+                return true;
+            }
+            return false;
+        }
+
+        public bool TeleportTo(Vector aNewLocation,Rotator aNewRotation)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 /*
@@ -1336,7 +1351,6 @@ Effects.cl_SetInteractionEffect(Class'Game_Effects'.0);
 }
 }
 }
-protected final native function bool TeleportTo(Vector aNewLocation,Rotator aNewRotation);
 final native function Submerge();
 protected native function sv2clrel_Submerge_CallStub();
 protected event sv2clrel_Submerge() {
@@ -1346,13 +1360,6 @@ final native function Emerge();
 protected native function sv2clrel_Emerge_CallStub();
 protected event sv2clrel_Emerge() {
 Emerge();                                                                   
-}
-event bool sv_TeleportTo(Vector aNewLocation,Rotator aNewRotation) {
-if (TeleportTo(aNewLocation,aNewRotation)) {                                
-sv2clrel_TeleportTo_CallStub(aNewLocation,aNewRotation);                  
-return True;                                                              
-}
-return False;                                                               
 }
 protected native function sv2clrel_TeleportTo_CallStub();
 event sv2clrel_TeleportTo(Vector NewLocation,Rotator NewRotation) {

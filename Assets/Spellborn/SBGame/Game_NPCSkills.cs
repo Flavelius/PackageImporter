@@ -6,30 +6,22 @@ namespace SBGame
     [Serializable] public class Game_NPCSkills : Game_Skills
     {
         public NPC_SkillDeck CurrentNPCSkillDeck;
-
         public float LongestAttack;
-
         public float LongestDebuff;
-
         public float LongestBuff;
-
         public bool CanHeal;
-
         public bool mQueueSkillAnimation;
-
         private Vector mSkillLocation;
-
         private Rotator mSkillRotation;
-
         public int mQueueAnimVariation;
-
         public Item_Type mQueueTracerItem;
-
         public float mQueueTime;
 
-        public Game_NPCSkills()
+        public void sv_SetSkilldeck(NPC_SkillDeck aSkilldeck,NPC_Equipment aEquipment)
         {
+            throw new NotImplementedException();
         }
+
     }
 }
 /*
@@ -58,5 +50,4 @@ return CurrentNPCSkillDeck.Tiers.Length;
 return 0;                                                                 
 }
 }
-final native function sv_SetSkilldeck(export editinline NPC_SkillDeck aSkilldeck,NPC_Equipment aEquipment);
 */

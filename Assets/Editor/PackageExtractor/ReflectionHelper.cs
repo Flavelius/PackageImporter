@@ -173,11 +173,10 @@ namespace Framework.PackageExtractor
                     (link.FieldReference.FieldType.IsGenericType && link.FieldReference.FieldType.GetGenericTypeDefinition() == typeof(List<>) && link.FieldReference.FieldType.GetGenericArguments()[0] == typeof(TypeDescription))
                     )
                 {
-                    if (CanSkip(link.AbsoluteObjectReference)) return;
                     var t = GetTypeFromName(link.AbsoluteObjectReference);
                     if (t != null)
                     {
-                        link.Assign(new TypeDescription(link.AbsoluteObjectReference.Trim()));
+                        link.Assign(new TypeDescription(link.AbsoluteObjectReference));
                         return;
                     }
                     Debug.LogWarning("Couldn't find type: " + link.AbsoluteObjectReference);

@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+[Serializable]
 public class TypeDescription
 {
     [SerializeField] string name;
@@ -24,5 +25,10 @@ public class TypeDescription
     {
         if (!string.IsNullOrEmpty(type.Namespace)) return new TypeDescription(string.Format("{0}.{1}", type.Namespace, type.Name));
         return new TypeDescription(type.Name);
+    }
+
+    public override string ToString()
+    {
+        return "TypeDescription: " + name;
     }
 }

@@ -26,6 +26,11 @@ public class GameResources : ScriptableObject
 
     [SerializeField] LevelProgression levelProgression;
 
+    public IEnumerable<SBResourcePackage> Packages
+    {
+        get { return packages; }
+    }
+
     static GameResources instance;
 
     public static GameResources Instance

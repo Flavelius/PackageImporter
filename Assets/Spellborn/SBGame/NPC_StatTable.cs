@@ -6,7 +6,8 @@ using UnityEngine;
 
 namespace SBGame
 {
-    [Serializable] public class NPC_StatTable : Content_Type
+    [Serializable]
+    public class NPC_StatTable: Content_Type
     {
         [FoldoutGroup("Preview")]
         [NonSerialized, HideInInspector]
@@ -28,17 +29,42 @@ namespace SBGame
         [FoldoutGroup("stat")]
         public int PointsMultiplier;
 
-        public NPC_StatTable()
-        {
-        }
-
-        [Serializable] public struct StatPreview
+        [Serializable]
+        public struct StatPreview
         {
             public int B;
-
             public int M;
-
             public int F;
+        }
+
+        protected int PointsAtLevel(int aLevel)
+        {
+            return BasePoints + aLevel / LevelPerPoints;
+        }
+
+        public int GetFocus(int aLevel)
+        {
+            return 0;
+        }
+
+        public int GetMind(int aLevel)
+        {
+            return 0;
+        }
+
+        public int GetBody(int aLevel)
+        {
+            return 0;
+        }
+
+        public int GetHitpointsPerLevel(int aLevel)
+        {
+            return 10;
+        }
+
+        public int GetBaseHitpoints(int aLevel)
+        {
+            return 100;
         }
     }
 }
@@ -53,23 +79,5 @@ Preview[i].M = GetMind(i);
 Preview[i].F = GetFocus(i);                                               
 i++;                                                                      
 }
-}
-protected function int PointsAtLevel(int aLevel) {
-return BasePoints + aLevel / LevelPerPoints;                                
-}
-function int GetFocus(int aLevel) {
-return 0;                                                                   
-}
-function int GetMind(int aLevel) {
-return 0;                                                                   
-}
-function int GetBody(int aLevel) {
-return 0;                                                                   
-}
-function int GetHitpointsPerLevel(int aLevel) {
-return 10;                                                                  
-}
-function int GetBaseHitpoints(int aLevel) {
-return 100;                                                                 
 }
 */

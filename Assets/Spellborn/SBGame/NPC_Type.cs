@@ -6,7 +6,8 @@ using UnityEngine;
 
 namespace SBGame
 {
-    [Serializable] public class NPC_Type : Content_Type
+    [Serializable]
+    public class NPC_Type: Content_Type
     {
         [FoldoutGroup("Basics")]
         [FieldConst()]
@@ -29,7 +30,7 @@ namespace SBGame
 
         [FoldoutGroup("Basics")]
         [FieldConst()]
-        public byte Category;
+        public ENPC_Category Category;
 
         [FoldoutGroup("Basics")]
         [FieldConst()]
@@ -52,7 +53,7 @@ namespace SBGame
         public float CreditMultiplier;
 
         [FoldoutGroup("Combat")]
-        public byte NPCClassClassification;
+        public ENPCClassType NPCClassClassification;
 
         [FoldoutGroup("Combat")]
         public NPC_SkillDeck SkillDeck;
@@ -65,7 +66,7 @@ namespace SBGame
 
         [FoldoutGroup("Movement")]
         [FieldConst()]
-        public byte Movement;
+        public Actor.EPhysics Movement;
 
         [FoldoutGroup("Movement")]
         [FieldConst()]
@@ -204,40 +205,128 @@ namespace SBGame
         [FieldConst()]
         public Shop_Base Shop;
 
-        public NPC_Type()
-        {
-        }
-
         public enum ENPC_Category
         {
             ENPC_Human,
-
             ENPC_Wildlife,
-
             ENPC_Boss,
+        }
+
+        public void InitializeStats(int aFameLevel, int aPePRank, out int oMaxHp, out int oLevelHp, out int oBody, out int oMind, out int oFocus, ref float oRuneResistance, ref float oSpiritResistance, ref float oSoulResistance)
+        {
+            if (Stats != null)
+            {
+                oMaxHp = Stats.GetBaseHitpoints(aFameLevel);
+                oLevelHp = Stats.GetHitpointsPerLevel(aFameLevel);
+                oBody = Stats.GetBody(aFameLevel);
+                oMind = Stats.GetMind(aFameLevel);
+                oFocus = Stats.GetFocus(aFameLevel);
+            }
+            else
+            {
+                oMaxHp = 100;
+                oLevelHp = 10;
+                oBody = 7 + aFameLevel / 9;
+                oMind = 7 + aFameLevel / 9;
+                oFocus = 7 + aFameLevel / 9;
+            }
+        }
+
+        public void cl_OnInit(Game_NPCPawn aPawn)
+        {
+            aPawn.Appearance.InstallBaseAppearance(this);
+            if (Effects != null)
+            {
+                Effects.Apply(aPawn);
+            }
+            InitMovement(aPawn);
+        }
+
+        public void sv_OnInit(Game_NPCPawn aPawn)
+        {
+            aPawn.Appearance.InstallBaseAppearance(this);
+            aPawn.bInvulnerable = Invulnerable;
+            InitMovement(aPawn);
+            if (SkillDeck != null)
+            {
+                (aPawn.Skills as Game_NPCSkills).sv_SetSkilldeck(SkillDeck, Equipment);
+            }
+            if (Inventory != null)
+            {
+                GiveItems(aPawn, Inventory);
+            }
+        }
+
+        NPC_Taxonomy GetFaction()
+        {
+            return TaxonomyFaction;
+        }
+
+        float GetCollisionRadius()
+        {
+            Debug.LogWarning("GetCollisionRadius not implemented");
+            return 0.5f;
+        }
+        float GetCollisionHeight()
+        {
+            Debug.LogWarning("GetCollisionHeight not implemented");
+            return 1.75f;
+        }
+
+        void InitMovement(Game_Pawn aPawn)
+        {
+            aPawn.SetPhysics(Movement);
+            aPawn.GroundSpeed = GroundSpeed;
+            //aPawn.bCanWalk = GroundSpeed > 0.00000000;
+            aPawn.AirSpeed = AirSpeed;
+            //aPawn.bCanFly = AirSpeed > 0.00000000;
+            //aPawn.MinFlySpeed = AirMinSpeed;
+            aPawn.AirControl = AirControl;
+            //aPawn.bCanStrafe = CanStrafe;
+            //aPawn.bCanRest = CanRest;
+            //aPawn.bCanWalkBackwards = CanWalkBackwards;
+            //if (aPawn.bCanFly)
+            //{
+            //    aPawn.CharacterStats.mBaseMovementSpeed = (int)AirSpeed;
+            //}
+            //else
+            {
+                aPawn.CharacterStats.mBaseMovementSpeed = (int)GroundSpeed;
+            }
+            if (CombatSpeed >= 0)
+            {
+                aPawn.CharacterStats.mMovementSpeedMultiplier[1] = CombatSpeed / GroundSpeed;
+            }
+            if (GroundSpeed >= 1)
+            {
+                aPawn.WalkingPct = StrollSpeed / GroundSpeed;
+            }
+            aPawn.WaterSpeed = WaterSpeed;
+            //aPawn.bCanSwim = WaterSpeed > 0.00000000;
+            aPawn.JumpZ = JumpSpeed;
+            //aPawn.bCanJump = JumpSpeed > 0.00000000;
+            //aPawn.LadderSpeed = ClimbSpeed;
+            //aPawn.bCanClimbLadders = ClimbSpeed > 0.00000000;
+            aPawn.AccelRate = AccelRate;
+            aPawn.RotationRate.Yaw = (int)TurnSpeed;
+            aPawn.RotationRate.Pitch = (int)TurnSpeed;
+            aPawn.RotationRate.Roll = (int)TurnSpeed;
+            //aPawn.bAlignToFloor = bAlignToFloor;
+            //aPawn.bAlignToFloorRoll = bAlignToFloorRoll;
+            //aPawn.bAlignToFloorPitch = bAlignToFloorPitch;
+            //aPawn.bForceSkelUpdate = bForceAttachmentUpdates;
+            aPawn.SetCollisionSize(GetCollisionRadius(), GetCollisionHeight());
+            //aPawn.mMaxDamageFallSpeed = TerminalVelocity;
+            //aPawn.mMinDamageFallSpeed = TerminalVelocity * 0.75000000;
+            //if (Movement == Actor.EPhysics.PHYS_Flying)
+            //{
+            //    aPawn.bCanFly = true;
+            //}
         }
     }
 }
 /*
 final native function cl_CreateQuestsTopics(Game_NPCPawn aPawn);
-event InitializeStats(int aFameLevel,int aPePRank,out int oMaxHp,out int oLevelHp,out int oBody,out int oMind,out int oFocus,out float oRuneResistance,out float oSpiritResistance,out float oSoulResistance) {
-if (Stats != None) {                                                        
-oMaxHp = Stats.GetBaseHitpoints(aFameLevel);                              
-oLevelHp = Stats.GetHitpointsPerLevel(aFameLevel);                        
-oBody = Stats.GetBody(aFameLevel);                                        
-oMind = Stats.GetMind(aFameLevel);                                        
-oFocus = Stats.GetFocus(aFameLevel);                                      
-} else {                                                                    
-oMaxHp = 100;                                                             
-oLevelHp = 10;                                                            
-oBody = 7 + aFameLevel / 9;                                               
-oMind = 7 + aFameLevel / 9;                                               
-oFocus = 7 + aFameLevel / 9;                                              
-}
-}
-function NPC_Taxonomy GetFaction() {
-return TaxonomyFaction;                                                     
-}
 native function int GetClassRank();
 native function float CalcRequestedClassMatch(array<byte> ForbiddenClassTypes);
 native function bool CalcForbiddenClassMatch(array<byte> ForbiddenClassTypes);
@@ -250,82 +339,6 @@ return GetLongName();
 } else {                                                                  
 return Super.GetActiveText(aItem);                                      
 }
-}
-}
-native function float GetCollisionRadius();
-native function float GetCollisionHeight();
-function string GetLongName() {
-if (Len(LongName.Text) > 0) {                                               
-return LongName.Text;                                                     
-}
-return GetShortName();                                                      
-}
-function string GetShortName() {
-if (Len(ShortName.Text) > 0) {                                              
-return ShortName.Text;                                                    
-} else {                                                                    
-return "NPC";                                                             
-}
-}
-event cl_OnInit(Game_NPCPawn aPawn) {
-aPawn.Appearance.InstallBaseAppearance(self);                               
-if (Effects != None) {                                                      
-Effects.Apply(aPawn);                                                     
-}
-InitMovement(aPawn);                                                        
-}
-event sv_OnInit(Game_NPCPawn aPawn) {
-aPawn.Appearance.InstallBaseAppearance(self);                               
-aPawn.bInvulnerable = Invulnerable;                                         
-InitMovement(aPawn);                                                        
-if (SkillDeck != None) {                                                    
-Game_NPCSkills(aPawn.Skills).sv_SetSkilldeck(SkillDeck,Equipment);        
-}
-if (Inventory != None) {                                                    
-GiveItems(aPawn,Inventory);                                               
-}
-}
-event InitMovement(Game_Pawn aPawn) {
-aPawn.SetPhysics(Movement);                                                 
-aPawn.GroundSpeed = GroundSpeed;                                            
-aPawn.bCanWalk = GroundSpeed > 0.00000000;                                  
-aPawn.AirSpeed = AirSpeed;                                                  
-aPawn.bCanFly = AirSpeed > 0.00000000;                                      
-aPawn.MinFlySpeed = AirMinSpeed;                                            
-aPawn.AirControl = AirControl;                                              
-aPawn.bCanStrafe = CanStrafe;                                               
-aPawn.bCanRest = CanRest;                                                   
-aPawn.bCanWalkBackwards = CanWalkBackwards;                                 
-if (aPawn.bCanFly) {                                                        
-aPawn.CharacterStats.mBaseMovementSpeed = AirSpeed;                       
-} else {                                                                    
-aPawn.CharacterStats.mBaseMovementSpeed = GroundSpeed;                    
-}
-if (CombatSpeed >= 0.00000000) {                                            
-aPawn.CharacterStats.mMovementSpeedMultiplier[1] = CombatSpeed / GroundSpeed;
-}
-if (GroundSpeed >= 1.00000000) {                                            
-aPawn.WalkingPct = StrollSpeed / GroundSpeed;                             
-}
-aPawn.WaterSpeed = WaterSpeed;                                              
-aPawn.bCanSwim = WaterSpeed > 0.00000000;                                   
-aPawn.JumpZ = JumpSpeed;                                                    
-aPawn.bCanJump = JumpSpeed > 0.00000000;                                    
-aPawn.LadderSpeed = ClimbSpeed;                                             
-aPawn.bCanClimbLadders = ClimbSpeed > 0.00000000;                           
-aPawn.AccelRate = AccelRate;                                                
-aPawn.RotationRate.Yaw = TurnSpeed;                                         
-aPawn.RotationRate.Pitch = TurnSpeed;                                       
-aPawn.RotationRate.Roll = TurnSpeed;                                        
-aPawn.bAlignToFloor = bAlignToFloor;                                        
-aPawn.bAlignToFloorRoll = bAlignToFloorRoll;                                
-aPawn.bAlignToFloorPitch = bAlignToFloorPitch;                              
-aPawn.bForceSkelUpdate = bForceAttachmentUpdates;                           
-aPawn.SetCollisionSize(GetCollisionRadius(),GetCollisionHeight());          
-aPawn.mMaxDamageFallSpeed = TerminalVelocity;                               
-aPawn.mMinDamageFallSpeed = TerminalVelocity * 0.75000000;                  
-if (Movement == 4) {                                                        
-aPawn.bCanFly = True;                                                     
 }
 }
 native function sv_OnSpawn(Game_NPCPawn aPawn);

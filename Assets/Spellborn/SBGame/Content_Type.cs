@@ -6,14 +6,6 @@ namespace SBGame
 {
     [Serializable] public class Content_Type : Content_API
     {
-        [NonSerialized, HideInInspector]
-        [FieldTransient()]
-        public int ExCleanIndex;
-
-        //[TCosReborn.Framework.Attributes.System.NonSerializedAttribute()]
-        //[TCosReborn.Framework.Attributes.FieldTransientAttribute()]
-        //public int ResourceId;
-
         public enum EContentHook
         {
             ECH_None,
@@ -40,11 +32,24 @@ namespace SBGame
             throw new NotImplementedException();
         }
 
-        public int GetResourceId() { return ResourceID; }
+        public int GetResourceId()
+        {
+            return ResourceID;
+        }
+
+        public void sv_Attach(Game_Pawn aPawn)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void sv_Detach(Game_Pawn aPawn)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void sv_RemoveHooks(Game_Pawn aPawn)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
-/*
-final native function sv_RemoveHooks(Game_Pawn aPawn);
-final native function sv_Detach(Game_Pawn aPawn);
-final native function sv_Attach(Game_Pawn aPawn);
-*/

@@ -126,6 +126,12 @@ namespace SBGame
             UnityEngine.Assertions.Assert.IsTrue(mShiftedNPCType != null || mShiftedAppearance == null);
             UnityEngine.Assertions.Assert.IsTrue(mShiftedNPCType == null || mShiftedNPCTypeID == mShiftedNPCType.ResourceID);
         }
+
+        public void InstallBaseAppearance(NPC_Type aNPCType)
+        {
+            (Outer as Game_Pawn).BaseAppearance = aNPCType.Appearance.CreateAppearance((Outer as Game_Pawn), (Outer as Game_Pawn).BaseAppearance, false);
+            (Outer as Game_Pawn).BaseAppearance.Apply();
+        }
     }
 }
 /*
@@ -187,10 +193,6 @@ return;
 i++;                                                                      
 }
 mAppearanceListeners[mAppearanceListeners.Length] = aListener;              
-}
-function InstallBaseAppearance(export editinline NPC_Type aNPCType) {
-Outer.BaseAppearance = aNPCType.Appearance.CreateAppearance(Outer,Outer.BaseAppearance,False);
-Outer.BaseAppearance.Apply();                                               
 }
 function cl_OnShutdown() {
 if (mShiftedAppearance != None) {                                           

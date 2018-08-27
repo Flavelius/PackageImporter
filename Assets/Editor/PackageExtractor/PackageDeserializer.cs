@@ -548,7 +548,6 @@ namespace Framework.PackageExtractor
                     return GetName(fileReader.ReadIndex(out propValueBytesRead));
                 case PropertyType.StringProperty:
                 case PropertyType.StrProperty:
-                    //TODO catch type proxy
                     var stringSize = fileReader.ReadIndex(out readIndexBytes);
                     propValueBytesRead = readIndexBytes;
                     var stringBytes = fileReader.ReadBytes(stringSize);

@@ -13,8 +13,6 @@ namespace SBGame
 
         private List<Game_ItemContainerListener> mItemContainerListeners = new List<Game_ItemContainerListener>();
 
-        //public delegate<OnItemAdded> @__OnItemAdded__Delegate;
-
         [NonSerialized, HideInInspector]
         [FieldTransient()]
         private int mDBAddItems;
@@ -31,110 +29,80 @@ namespace SBGame
         [FieldTransient()]
         private int mDBRemoveItemCost;
 
-        public Game_PlayerItemManager()
-        {
-        }
-
         [Serializable] public struct sv2cl_Item
         {
             public int DBID;
-
             public int ItemTypeID;
-
             public int CharacterID;
-
             public int LocationSlot;
-
             public int LocationID;
-
             public int StackSize;
-
             public int Attuned;
-
             public byte Color1;
-
             public byte Color2;
-
             public byte LocationType;
-
             public byte Dummy;
         }
 
         public enum EItemAddRemoveType
         {
             IART_Shop,
-
             IART_Quest,
-
             IART_Cheat,
-
             IART_Breakdown,
         }
 
         public enum EItemChangeNotification
         {
             ICN_Added,
-
             ICN_Removed,
-
             ICN_RemovedByType,
-
             ICN_Moved,
-
             ICN_Swapped,
-
             ICN_Stacked,
-
             ICN_Used,
-
             ICN_Split,
-
             ICN_Painted,
-
             ICN_Attuned,
         }
 
         public enum EItemMoveError
         {
             IME_NoError,
-
             IME_InternalError,
-
             IME_InsufficientSpace,
-
             IME_MoveToSelf,
-
             IME_ItemIsAttuned,
-
             IME_NotEquipable,
-
             IME_CombatReady,
-
             IME_LevelTooLow,
-
             IME_EquipmentDataError,
-
             IME_UnequipShield,
-
             IME_UnequipMeleeWeapon,
-
             IME_NotABodySlot,
-
             IME_BodySlotDataError,
-
             IME_BodySlotWrongClass,
-
             IME_BodySlotFakeSkill,
-
             IME_NotASkillToken,
-
             IME_IllegalSkillToken,
-
             IME_DuplicateSkillToken,
-
             IME_CantMoveSigil,
-
             IME_MoveToMail,
+        }
+
+        public bool sv_UpdateMoney(int aAmount, Action callback = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool sv_QueueRemoveByType(Item_Type aItemType,int aAmount, int aCost = 0)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool sv_ExecuteRemoveByType(Action callback = null)
+        {
+            throw new NotImplementedException();
         }
     }
 }
@@ -161,13 +129,10 @@ protected native function sv2cl_RemoveItem_CallStub();
 private native event sv2cl_RemoveItem(byte aLocationType,int aLocationSlot,int aLocationID);
 protected native function sv2cl_SetItem_CallStub();
 private native event sv2cl_SetItem(sv2cl_Item aClientItem,byte aNotification);
-final native event bool sv_UpdateMoney(int aAmount,optional SBDBAsyncCallback aCallback);
 final native event bool sv_SplitItem(Game_Item aItem,int aAmount,int aTargetLocationSlot);
 final native event bool sv_UseItem(Game_Item aItem);
 final native event bool sv_MoveItem(Game_Item aItem,byte aTargetLocationType,int aTargetLocationSlot,int aTargetLocationID,optional int aCost,optional SBDBAsyncCallback aCallback);
 final native event bool sv_RemoveItems(array<Game_Item> aItems,byte aRemoveType,optional int aCost,optional SBDBAsyncCallback aCallback);
-final native event bool sv_ExecuteRemoveByType(optional SBDBAsyncCallback aCallback);
-final native event bool sv_QueueRemoveByType(export editinline Item_Type aItemType,int aAmount,optional int aCost);
 final native event bool sv_ExecuteAddItems(byte aAddType,optional SBDBAsyncCallback aCallback);
 final native event bool sv_QueueAddItem(export editinline Item_Type aItemType,int aAmount,int aTargetLocationSlot,byte aColour1,byte aColour2,optional int aCost);
 function cl_OnInit() {

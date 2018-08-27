@@ -7,6 +7,8 @@ namespace SBGame
     public class Content_API: UObject
     {
 
+        #region enums
+
         public enum EContentEmote
         {
             ECE_None = 0,
@@ -138,102 +140,59 @@ namespace SBGame
         public enum ENPCClassType
         {
             CT_HeavyMelee = 0,
-
             CT_HeavyRanged = 1,
-
             CT_ModerateMelee = 2,
-
             CT_ModerateRanged = 3,
-
             CT_LightMelee = 4,
-
             CT_LightRanged = 5,
-
             CT_DOT = 6,
-
             CT_Healer = 7,
-
             CT_Slower = 8,
-
             CT_Buffer = 9,
-
             CT_Alerter = 10,
-
             CT_Supporter = 11,
-
             CT_Rezzer = 12,
-
             CT_Debuffer = 13,
-
             CT_Blinder = 14,
         }
 
         public enum EContentClass
         {
             ECC_NoClass = 0,
-
             ECC_Rogue = 1,
-
             ECC_Warrior = 2,
-
             ECC_Spellcaster = 3,
-
             ECC_Trickster = 4,
-
             ECC_SkinShifter = 5,
-
             ECC_DeathHand = 6,
-
             ECC_Bloodwarrior = 7,
-
             ECC_FuryHammer = 8,
-
             ECC_WrathGuard = 9,
-
             ECC_RuneMage = 10,
-
             ECC_VoidSeer = 11,
-
             ECC_AncestralMage = 12,
-
             ECC_Gadgeteer = 13,
-
             ECC_Entertainer = 14,
-
             ECC_Assassin = 15,
-
             ECC_ShapeChanger = 16,
-
             ECC_Consumer = 17,
-
             ECC_Alchemist = 18,
-
             ECC_Bodyguard = 19,
-
             ECC_Flagellant = 20,
-
             ECC_Visionary = 21,
-
             ECC_MartialArtist = 22,
-
             ECC_PossessedOne = 23,
-
             ECC_FrontMan = 24,
-
             ECC_Nuker = 25,
-
             ECC_RuneMaster = 26,
-
             ECC_Priest = 27,
-
             ECC_AntiMage = 28,
-
             ECC_Summoner = 29,
-
             ECC_Infuser = 30,
-
             ECC_AnyClass = 31,
         }
+
+        #endregion
 
         public int GetPersistentVariable(Game_Pawn aPawn, int aId) { throw new NotImplementedException(); }
 
@@ -245,43 +204,86 @@ namespace SBGame
                 cont.sv_SetPersistentVariable(0, aId, aValue);
             }
         }
+
+        public bool LearnSkill(Game_Pawn aPawn, FSkill_Type aSkill)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool CanLearnSkill(Game_Pawn aPawn, FSkill_Type aSkill)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RemoveMoney(Game_Pawn aPawn, int aAmount)
+        {
+            Game_PlayerItemManager itemManager;
+            if (aPawn.itemManager != null && aAmount >= 0)
+            {
+                itemManager = (aPawn.itemManager as Game_PlayerItemManager);
+                if (itemManager != null
+                && itemManager.sv_UpdateMoney(-aAmount, null)) //callback
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool GiveMoney(Game_Pawn aPawn, int aAmount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetMoney(Game_Pawn aPawn)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RemoveItems(Game_Pawn aPawn, Content_Inventory aItems)
+        {
+            if (aPawn.itemManager != null && aItems != null
+            && !aItems.Empty())
+            {
+                return aItems.RemoveFromInventory(aPawn);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool GiveItems(Game_Pawn aPawn, Content_Inventory aItems)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ClaustroportPawn(Game_Pawn aPawn, Vector Location, Rotator Rotation)
+        {
+            aPawn.sv_TeleportTo(Location, Rotation);
+            return true;
+        }
+
+        public int CountItems(Game_Pawn aPawn, Item_Type aItem)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool HasCompletedTarget(Game_Pawn aPawn, Quest_Target aTarget)
+        {
+            Game_PlayerPawn playerPawn = (aPawn as Game_PlayerPawn);
+            if (playerPawn != null && aTarget != null)
+            {
+                if (aTarget.Check(playerPawn.questLog.GetTargetProgress(aTarget.GetQuest(), aTarget.GetIndex())))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
 /*
-final native function bool LearnSkill(Game_Pawn aPawn,export editinline FSkill_Type aSkill);
-final native function bool CanLearnSkill(Game_Pawn aPawn,export editinline FSkill_Type aSkill);
-function bool RemoveMoney(Game_Pawn aPawn,int aAmount) {
-local SBDBAsyncCallback callback;
-local export editinline Game_PlayerItemManager itemManager;
-if (aPawn.itemManager != None && aAmount >= 0) {                            
-itemManager = Game_PlayerItemManager(aPawn.itemManager);                  
-if (itemManager != None
-&& itemManager.sv_UpdateMoney(-aAmount,callback)) {
-ApiTrace("Attempted to remove" @ string(aAmount)
-@ "money from"
-@ GetCharacterName(aPawn));
-return True;                                                            
-}
-}
-ApiTrace("Couldn't remove" @ string(aAmount)
-@ "money from"
-@ GetCharacterName(aPawn));
-return False;                                                               
-}
-final native function bool GiveMoney(Game_Pawn aPawn,int aAmount);
-final native function int GetMoney(Game_Pawn aPawn);
-function bool RemoveItems(Game_Pawn aPawn,Content_Inventory aItems,optional SBDBAsyncCallback callback) {
-if (aPawn.itemManager != None && aItems != None
-&& !aItems.Empty()) { 
-return aItems.RemoveFromInventory(aPawn,callback);                        
-} else {                                                                    
-ApiTrace("Couldn't remove" @ aItems.Description()
-@ "from"
-@ GetCharacterName(aPawn));
-return False;                                                             
-}
-}
-final native function bool GiveItems(Game_Pawn aPawn,Content_Inventory aItems);
 event bool CanReceiveItems(Game_Pawn aPawn,Content_Inventory aItems) {
 local int inv;
 local int Count;
@@ -306,7 +308,6 @@ ApiTrace(GetCharacterName(aPawn) @ "has an"
 @ "items");
 return True;                                                                
 }
-final native function int CountItems(Game_Pawn aPawn,export editinline Item_Type aItem);
 function bool HasItems(Game_Pawn aPawn,Content_Inventory aItems) {
 if (aPawn.itemManager != None && !aItems.Empty()) {                         
 if (aItems.HasItemsInInventory(aPawn)) {                                  
@@ -329,20 +330,6 @@ return True;
 }
 }
 ApiTrace(GetCharacterName(aPawn) @ "hasn't failed target"
-@ string(aTarget));
-return False;                                                               
-}
-function bool HasCompletedTarget(Game_Pawn aPawn,export editinline Quest_Target aTarget) {
-local Game_PlayerPawn playerPawn;
-playerPawn = Game_PlayerPawn(aPawn);                                        
-if (playerPawn != None && aTarget != None) {                                
-if (aTarget.Check(playerPawn.questLog.GetTargetProgress(aTarget.GetQuest(),aTarget.GetIndex()))) {
-ApiTrace(GetCharacterName(aPawn) @ "has completed target"
-@ string(aTarget));
-return True;                                                            
-}
-}
-ApiTrace(GetCharacterName(aPawn) @ "hasn't completed target"
 @ string(aTarget));
 return False;                                                               
 }
@@ -394,20 +381,6 @@ ApiTrace("Didn't find NPC" @ string(aType)
 @ "of"
 @ GetCharacterName(aFrom));
 return None;                                                                
-}
-function bool ClaustroportPawn(Game_Pawn aPawn,Vector Location,Rotator Rotation) {
-local Game_PlayerController PlayerController;
-PlayerController = Game_PlayerController(aPawn.Controller);                 
-if (aPawn.sv_TeleportTo(Location,Rotation)) {                               
-ApiTrace("Teleporting" @ GetCharacterName(aPawn)
-@ "to location"
-@ string(Location));
-} else {                                                                    
-ApiTrace("Failed to teleport" @ GetCharacterName(aPawn)
-@ "to location"
-@ string(Location));
-}
-return True;                                                                
 }
 function bool TeleportPawn(Game_Pawn aPawn,int aWorld,bool Instance,string aStart) {
 local Game_PlayerController PlayerController;

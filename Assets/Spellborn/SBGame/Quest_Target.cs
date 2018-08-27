@@ -30,11 +30,25 @@ namespace SBGame
             throw new NotImplementedException();
         }
 
+        public bool Check(int aValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Quest_Type GetQuest()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetIndex()
+        {
+            throw new NotImplementedException();
+        }
+
         [Serializable]
         public struct QuestInventory
         {
             public Item_Type Item;
-
             public int Amount;
         }
     }
@@ -95,11 +109,8 @@ ei++;
 }
 return True;                                                                
 }
-final native function Quest_Type GetQuest();
-final native function int GetIndex();
 final native function bool NearlyDone(int aValue);
 final native function bool Failed(int aValue);
-final native function bool Check(int aValue);
 final native function int ComputeValue(Game_Pawn aPawn);
 final native function bool sv_CanAccept(Game_Pawn aPawn);
 */

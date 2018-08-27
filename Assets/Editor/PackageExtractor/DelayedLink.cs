@@ -34,6 +34,7 @@ namespace Framework.PackageExtractor
                 {
                     array.SetValue(obj, IndexReference);
                 }
+                TryMarkDirty();
             }
             else
             {
@@ -48,12 +49,14 @@ namespace Framework.PackageExtractor
                     {
                         list[IndexReference] = obj;
                     }
+                    TryMarkDirty();
                 }
                 else
                 {
                     try
                     {
                         FieldReference.SetValue(TargetReference, obj);
+                        TryMarkDirty();
                     }
                     catch (Exception e)
                     {
@@ -68,9 +71,11 @@ namespace Framework.PackageExtractor
                                     array.CopyTo(arrResized, 0);
                                     arrResized.SetValue(obj, IndexReference);
                                     FieldReference.SetValue(TargetReference, arrResized);
+                                    TryMarkDirty();
                                     return;
                                 }
                                 array.SetValue(obj, IndexReference);
+                                TryMarkDirty();
                                 return;
                             }
                             catch (Exception ae)
@@ -83,6 +88,15 @@ namespace Framework.PackageExtractor
                     }
                 }
             }
+        }
+
+        void TryMarkDirty() //just to be sure
+        {
+            #if UNITY_EDITOR
+            var unityObject = TargetReference as UnityEngine.Object;
+            if (unityObject != null) UnityEditor.EditorUtility.SetDirty(unityObject);
+            UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
+            #endif
         }
     }
 }

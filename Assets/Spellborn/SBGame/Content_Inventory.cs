@@ -4,24 +4,63 @@ using Sirenix.OdinInspector;
 
 namespace SBGame
 {
-    [Serializable] public class Content_Inventory : Content_API
+    [Serializable]
+    public class Content_Inventory: Content_API
     {
         [FoldoutGroup("Items")]
         public List<ContentItem> Items = new List<ContentItem>();
 
-        public Content_Inventory()
-        {
-        }
-
-        [Serializable] public struct ContentItem
+        [Serializable]
+        public struct ContentItem
         {
             public Item_Type Item;
-
             public int StackSize;
-
             public byte Color1;
-
             public byte Color2;
+        }
+
+        public bool Empty()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RemoveFromInventory(Game_Pawn aPawn, Action callback = null)
+        {
+            int i;
+            Item_Type Type;
+            int Amount;
+            Game_PlayerItemManager itemManager;
+            if (aPawn.itemManager == null)
+            {
+                return false;
+            }
+            itemManager = (aPawn.itemManager as Game_PlayerItemManager);
+            if (itemManager == null)
+            {
+                return false;
+            }
+            i = 0;
+            while (i < Items.Count)
+            {
+                Type = Items[i].Item;
+                if (Type != null)
+                {
+                    Amount = Items[i].StackSize;
+                    if (CountItems(aPawn, Type) < Amount)
+                    {
+                        return false;
+                    }
+                    if (!itemManager.sv_QueueRemoveByType(Type, Amount))
+                    {
+                        return false;
+                    }
+                }
+                i++;
+            }
+            if (itemManager.sv_ExecuteRemoveByType(callback))
+            {
+            }
+            return true;
         }
     }
 }
@@ -83,37 +122,6 @@ ii++;
 }
 return True;                                                                
 }
-function bool RemoveFromInventory(Game_Pawn aPawn,optional SBDBAsyncCallback callback) {
-local int i;
-local export editinline Item_Type Type;
-local int Amount;
-local export editinline Game_PlayerItemManager itemManager;
-if (aPawn.itemManager == None) {                                            
-return False;                                                             
-}
-itemManager = Game_PlayerItemManager(aPawn.itemManager);                    
-if (itemManager == None) {                                                  
-return False;                                                             
-}
-i = 0;                                                                      
-while (i < Items.Length) {                                                  
-Type = Items[i].Item;                                                     
-if (Type != None) {                                                       
-Amount = Items[i].StackSize;                                            
-if (CountItems(aPawn,Type) < Amount) {                                  
-return False;                                                         
-}
-if (!itemManager.sv_QueueRemoveByType(Type,Amount)) {                   
-return False;                                                         
-}
-}
-i++;                                                                      
-}
-if (itemManager.sv_ExecuteRemoveByType(callback)) {                         
-}
-return True;                                                                
-return False;                                                               
-}
 event AddToInventory(Game_Pawn aPawn) {
 local int i;
 local export editinline Item_Type Type;
@@ -159,6 +167,5 @@ newItem.Color2 = aColor2;
 Items[Items.Length] = newItem;                                              
 return True;                                                                
 }
-final native function bool Empty();
 final native function int Count();
 */
