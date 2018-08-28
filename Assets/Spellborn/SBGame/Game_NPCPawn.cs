@@ -45,12 +45,12 @@ namespace SBGame
 
         public override void Initialize()
         {
+            base.Initialize(); 
             NPCFameLevel = NPCType.FameLevel;
             NPCPePRank = NPCType.PePRank;
             NPCTypeId = NPCType.GetResourceId();
             NPCType.sv_OnInit(this);
-            mDefaultRotation = transform.rotation;
-            base.Initialize();                                                         
+            mDefaultRotation = transform.rotation;                                                        
         }
 
         public override void WriteAddStream(IPacketWriter writer)
@@ -62,11 +62,7 @@ namespace SBGame
             writer.WriteInt32(NPCFameLevel);
             writer.WriteInt32(NPCPePRank);
             writer.WriteInt32(NPCType.GetResourceId());
-            writer.WriteInt32(RelatedQuestsIds.Count);
-            for (int i = 0; i < RelatedQuestsIds.Count; i++)
-            {
-                writer.WriteInt32(RelatedQuestsIds[i]);
-            }
+            writer.Write(RelatedQuestsIds, writer.WriteInt32);
             writer.WriteVector3(transform.position);
             writer.WriteByte((byte)mMovementFlags);
             writer.WriteInt32(mNetFocus != null ? mNetFocus.GetRelevanceID() : -1);
@@ -75,6 +71,7 @@ namespace SBGame
             writer.WriteByte((byte)mCurrentState); //probably mNetState
             writer.WriteInt32(bInvulnerable ? 0 : 1);
             writer.WriteFloat(GroundSpeedModifier);
+            writer.WriteInt32(mDebugFilters);
             writer.WriteInt32(Visibility);
         }
 

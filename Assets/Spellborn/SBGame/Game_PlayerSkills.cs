@@ -25,7 +25,7 @@ namespace SBGame
             base.Initialize(outer);
             var fameLevel = (outer as Game_PlayerPawn).CharacterStats.GetFameLevel();
             mTiers = SBDBSync.GetCombatBarRows(fameLevel);
-            mTierSlots = /*SBDBSync.GetCombatBarColumns(fameLevel)*/6;
+            mTierSlots = /*SBDBSync.GetCombatBarColumns(fameLevel)*/5;
             Debug.Log("Tiers: " + mTiers + ", slots: " + mTierSlots+" TODO find out how those are calculated");
             //if islocalplayer ignored
             LoadTokens();

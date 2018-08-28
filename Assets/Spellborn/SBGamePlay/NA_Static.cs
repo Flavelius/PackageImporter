@@ -24,8 +24,19 @@ namespace SBGamePlay
         [FoldoutGroup("NA_Static")]
         public float SkillRadius;
 
-        public NA_Static()
+        protected override float GetSkillRadius()
         {
+            return SkillRadius;
+        }
+
+        protected override float GetCollisionHeight()
+        {
+            return CollisionHeight;
+        }
+
+        protected override float GetCollisionRadius()
+        {
+            return CollisionRadius;
         }
     }
 }

@@ -37,10 +37,31 @@ namespace SBGame
 
         public void sv_Despawn() { throw new NotImplementedException(); }
 
+        public override void Initialize()
+        {
+            Pawn.Initialize();
+        }
+
+        public override void BeginPlay()
+        {
+            base.BeginPlay();
+            Pawn.BeginPlay();
+            SetInitialState();
+        }
+
         public void sv_InitInternal() //TODO find out what this should do
         {
             GetNPCPawn().NPCType = NPCType;
             //Debug.LogWarning("sv_InitInternal is not implemented");
+        }
+
+        [ContextMenu("Test sync to player")]
+        void DevTestSyncToPlayer()
+        {
+            var player = FindObjectOfType<Game_PlayerController>();
+            if (player == null) return;
+            var session = ServiceContainer.GetService<ISessionHandler>().Get(player); //first should do it
+            session.S2C_NPC_ADD(this);
         }
     }
 }

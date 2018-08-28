@@ -31,7 +31,7 @@ namespace User
             Connection.SendMessage(msg);
         }
 
-        void S2C_NPC_ADD(Game_NPCController npc)
+        public void S2C_NPC_ADD(Game_NPCController npc)
         {
             var msg = GameHeader.S2C_NPC_ADD.CreatePacket();
             npc.WriteAddStream(msg);
@@ -45,7 +45,7 @@ namespace User
             Connection.SendMessage(msg);
         }
 
-        void S2C_PLAYER_ADD(Game_PlayerController pc)
+        public void S2C_PLAYER_ADD(Game_PlayerController pc)
         {
             var msg = GameHeader.S2C_PLAYER_ADD.CreatePacket();
             pc.WriteAddStream(msg);

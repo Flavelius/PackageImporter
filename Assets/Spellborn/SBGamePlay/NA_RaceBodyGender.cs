@@ -9,25 +9,23 @@ namespace SBGamePlay
     {
         [FoldoutGroup("Basics")]
         [FieldConst()]
-        public byte Gender;
+        public NPCGender Gender;
 
         [FoldoutGroup("Basics")]
         [FieldConst()]
-        public byte Race;
+        public NPCRace Race;
 
         [FoldoutGroup("Basics")]
         [FieldConst()]
-        public byte Bodytype;
+        public NPCBodytype Bodytype;
 
-        public NA_RaceBodyGender()
+        public override NPCGender GetGender()
         {
+            return Gender;
         }
     }
 }
 /*
-event byte GetGender() {
-return Gender;                                                              
-}
 event EditorVerify() {
 local bool CheckForFemaleHulky;
 local bool CheckForMaleHulky;

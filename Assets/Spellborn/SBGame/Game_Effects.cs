@@ -37,11 +37,7 @@ namespace SBGame
 
         public void WriteAddStream(IPacketWriter writer)
         {
-            writer.WriteInt32(mReplicatedEffects.Count);
-            for (int i = 0; i < mReplicatedEffects.Count; i++)
-            {
-                writer.WriteInt32(mReplicatedEffects[i]);
-            }
+            writer.Write(mReplicatedEffects, writer.WriteInt32);
         }
 
         [Serializable] public struct mTaggedEffect

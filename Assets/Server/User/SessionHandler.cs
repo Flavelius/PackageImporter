@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Network;
+using SBGame;
 using UnityEngine;
 
 namespace User
@@ -24,6 +25,16 @@ namespace User
                 if (sessions[i].Connection == connection) return sessions[i] as T;
             }
             return null;
+        }
+
+        public GameSession Get(Game_PlayerController controller)
+        {
+            for (int i = 0; i < sessions.Count; i++)
+            {
+                var gs = sessions[i] as GameSession;
+                if (gs != null && gs.ActiveController == controller) return gs;
+            }
+            throw new Exception("Session not found for controller: " + controller);
         }
 
         public int GetCount<T>() where T:PlayerSession

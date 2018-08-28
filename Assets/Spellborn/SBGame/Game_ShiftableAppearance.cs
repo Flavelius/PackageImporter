@@ -140,6 +140,7 @@ namespace SBGame
 
         public void InstallBaseAppearance(NPC_Type aNPCType)
         {
+            UnityEngine.Assertions.Assert.IsNotNull(aNPCType);
             (Outer as Game_Pawn).BaseAppearance = aNPCType.Appearance.CreateAppearance((Outer as Game_Pawn), (Outer as Game_Pawn).BaseAppearance, false);
             (Outer as Game_Pawn).BaseAppearance.Apply();
         }

@@ -89,9 +89,7 @@ namespace Network
 
         public void WriteVector3(Vector3 vec)
         {
-            WriteFloat(vec.x);
-            WriteFloat(vec.y);
-            WriteFloat(vec.z);
+            WriteVector(vec);
         }
 
         public void WriteRotator(Rotator rot)
@@ -110,7 +108,7 @@ namespace Network
 
         public void WriteQuaternion(Quaternion q)
         {
-            WriteRotator(UnitConversion.ToUnreal(q));
+            WriteRotator(q);
         }
 
         public void Write(IPacketWritable writable)
@@ -127,21 +125,21 @@ namespace Network
             }
         }
 
-        public void Write<T>(IList<T> items, Action<T> customWritehHandler)
+        public void Write<T>(IList<T> items, Action<T> customWriteHandler)
         {
             WriteInt32(items.Count);
             for (int i = 0; i < items.Count; i++)
             {
-                customWritehHandler(items[i]);
+                customWriteHandler(items[i]);
             }
         }
 
-        public void Write<T>(IList<T> items, Action<int, T> customWritehHandler)
+        public void Write<T>(IList<T> items, Action<int, T> customWriteHandler)
         {
             WriteInt32(items.Count);
             for (int i = 0; i < items.Count; i++)
             {
-                customWritehHandler(i, items[i]);
+                customWriteHandler(i, items[i]);
             }
         }
     }

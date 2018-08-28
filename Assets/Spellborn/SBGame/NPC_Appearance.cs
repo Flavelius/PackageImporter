@@ -1,5 +1,6 @@
 ﻿using System;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace SBGame
 {
@@ -71,9 +72,12 @@ namespace SBGame
                     case 9:
                         if (aAppearance.IsKid())
                         {
-                            if (aAppearance.GetGender() == 0) {
+                            if (aAppearance.GetGender() == 0)
+                            {
                                 aAppearance.SetVoice(Rand(1));
-                            } else {
+                            }
+                            else
+                            {
                                 aAppearance.SetVoice(Rand(2));
                             }
                         }
@@ -96,26 +100,36 @@ namespace SBGame
             return (byte)UnityEngine.Random.Range(0, max);
         }
 
-        float GetSkillRadius()
+        protected virtual float GetSkillRadius()
         {
-            throw new NotImplementedException();
+            Debug.LogWarning("GetSkillRadius is not implemented");
+            return 0f;
         }
 
-        float GetCollisionRadius()
+        protected virtual float GetCollisionRadius()
         {
-            throw new NotImplementedException();
+            Debug.LogWarning("GetCollisionRadius is not implemented");
+            return 0f;
         }
 
-        float GetCollisionHeight()
+        protected virtual float GetCollisionHeight()
         {
-            throw new NotImplementedException();
+            Debug.LogWarning("GetCollisionHeight is not implemented");
+            return 0f;
+        }
+
+        public virtual NPCGender GetGender()
+        {
+            return NPCGender.ENG_Neuter;
+        }
+
+        public virtual int GetHead()
+        {
+            return 0;
         }
     }
 }
 /*
-event byte GetGender() {
-return 2;                                                                   
-}
 protected function Game_Appearance ForceAppearanceClass(Game_Pawn aPawn,export editinline Game_Appearance aAppearance,class<Game_Appearance> AppearanceClass) {
 if (None == aAppearance
 || False == aPawn.ClassIsChildOf(aAppearance.Class,AppearanceClass)) {
@@ -124,9 +138,6 @@ aAppearance.OnConstruct();
 aAppearance.cl_OnInit();                                                  
 }
 return aAppearance;                                                         
-}
-event int GetHead() {
-return 0;                                                                   
 }
 event SetHead(int NewHead) {
 }
