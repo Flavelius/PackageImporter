@@ -188,11 +188,6 @@ namespace SBGame
         {
             throw new NotImplementedException();
         }
-
-        public int GetSkilldeckIndex(int aSkilldeckID)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
 /*

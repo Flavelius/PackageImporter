@@ -118,7 +118,7 @@ namespace Network
             writable.Write(this);
         }
 
-        public void Write<T>(List<T> writables) where T:IPacketWritable
+        public void Write<T>(IList<T> writables) where T:IPacketWritable
         {
             WriteInt32(writables.Count);
             for (int i = 0; i < writables.Count; i++)
@@ -127,7 +127,7 @@ namespace Network
             }
         }
 
-        public void Write<T>(List<T> items, Action<T> customWritehHandler)
+        public void Write<T>(IList<T> items, Action<T> customWritehHandler)
         {
             WriteInt32(items.Count);
             for (int i = 0; i < items.Count; i++)
@@ -136,7 +136,7 @@ namespace Network
             }
         }
 
-        public void Write<T>(List<T> items, Action<int, T> customWritehHandler)
+        public void Write<T>(IList<T> items, Action<int, T> customWritehHandler)
         {
             WriteInt32(items.Count);
             for (int i = 0; i < items.Count; i++)

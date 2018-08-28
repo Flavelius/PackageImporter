@@ -18,7 +18,7 @@ public interface IPacketWriter
     void WriteRotator(Rotator r);
     void WriteQuaternion(Quaternion q);
     void Write(IPacketWritable writable);
-    void Write<T>(List<T> writables) where T:IPacketWritable;
-    void Write<T>(List<T> items, System.Action<T> customWriteHandler);
-    void Write<T>(List<T> items, System.Action<int, T> customWriteHandler);
+    void Write<T>(IList<T> writables) where T:IPacketWritable;
+    void Write<T>(IList<T> items, System.Action<T> customWriteHandler);
+    void Write<T>(IList<T> items, System.Action<int, T> customWriteHandler);
 }

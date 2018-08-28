@@ -12,18 +12,21 @@ namespace SBGame
         public void WriteLoginStream(IPacketWriter writer) //TODO unpack db data and use that
         {
             Debug.LogWarning("TODO unpack db data and use that");
-            var controller = Outer as Game_PlayerController;
-            writer.Write(controller.DBCharacterSkills, (index, _) => //activeskilldeck
+            writer.Write(SkilldeckSkills, (index, skill) =>
             {
-                writer.WriteInt32(0);//skilldeck ID?
-                writer.WriteInt32(controller.DBCharacterSkills[index]);//resourceid
-                writer.WriteByte((byte)index);//deckslot
+                writer.WriteInt32(0); //skilldeck id?
+                writer.WriteInt32(skill != null ? skill.GetResourceId() : 0);
+                writer.WriteByte((byte)index); //deckslot
             });
         }
 
         public override void Initialize(Actor outer)
         {
             base.Initialize(outer);
+            var fameLevel = (outer as Game_PlayerPawn).CharacterStats.GetFameLevel();
+            mTiers = SBDBSync.GetCombatBarRows(fameLevel);
+            mTierSlots = /*SBDBSync.GetCombatBarColumns(fameLevel)*/6;
+            Debug.Log("Tiers: " + mTiers + ", slots: " + mTierSlots+" TODO find out how those are calculated");
             //if islocalplayer ignored
             LoadTokens();
             var controller = ((Outer as Game_Pawn).Controller as Game_PlayerController);
@@ -33,7 +36,13 @@ namespace SBGame
 
         void LoadTokens()
         {
-            throw new NotImplementedException();
+            Debug.LogWarning("LoadTokens not implemented");
+        }
+
+        public int GetSkilldeckIndex(int aSkilldeckID)
+        {
+            Debug.LogWarning("TODO investigate GetSkilldeckIndex, why was it located in Game_Skills?");
+            return 0;
         }
 
         void cl_SetSkills(List<int> aCharacterSkills, List<int> aSkilldeckSkills)
@@ -53,9 +62,9 @@ namespace SBGame
         void cl_UpdateSkilldeckSkills(List<int> aSkilldeckSkills)
         {
             SkilldeckSkills = new FSkill_Type[mTiers * mTierSlots];
-            for (var i = 0; i < aSkilldeckSkills.Count; ++i)
+            for (var i = 0; i < aSkilldeckSkills.Count; i++)
             {
-                if (i < aSkilldeckSkills.Count && aSkilldeckSkills[i] != 0)
+                if (aSkilldeckSkills[i] != 0)
                 {
                     SkilldeckSkills[i] = SBDBSync.GetResourceObject<FSkill_Type>(aSkilldeckSkills[i]);
                 }
