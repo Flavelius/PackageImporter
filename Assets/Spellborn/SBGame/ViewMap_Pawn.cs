@@ -8,8 +8,9 @@ namespace SBGame
 
         public bool GodMode;
 
-        public ViewMap_Pawn()
+        public override void WriteAddStream(IPacketWriter writer)
         {
+            throw new NotImplementedException();
         }
     }
 }

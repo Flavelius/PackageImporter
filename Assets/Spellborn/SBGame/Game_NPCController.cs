@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace SBGame
 {
@@ -11,9 +12,12 @@ namespace SBGame
 
         public bool BreakAI;
 
-        public override void WriteLoginStream(IPacketWriter packetWriter)
+        public override void WriteAddStream(IPacketWriter writer)
         {
-            throw new NotImplementedException();
+            writer.WriteInt32(GetRelevanceID());
+            writer.WriteInt32(NPCType.GetResourceId());
+            writer.WriteInt32(Owner != null ? Owner.GetRelevanceID() : -1);
+            writer.WriteVector3(transform.position);
         }
 
         public Game_NPCPawn GetNPCPawn()
@@ -21,7 +25,10 @@ namespace SBGame
             return Pawn as Game_NPCPawn;
         }
 
-        public void sv_OnSpawn(int aFameLevel, int aPePRank, NPC_Taxonomy aFaction) { throw new NotImplementedException(); }
+        public void sv_OnSpawn(int aFameLevel, int aPePRank, NPC_Taxonomy aFaction)
+        {
+            //TODO find out what this does actually
+        }
 
         public LootTable sv_GetLootTable()
         {
@@ -30,9 +37,10 @@ namespace SBGame
 
         public void sv_Despawn() { throw new NotImplementedException(); }
 
-        public void sv_InitInternal()
+        public void sv_InitInternal() //TODO find out what this should do
         {
-            throw new NotImplementedException();
+            GetNPCPawn().NPCType = NPCType;
+            //Debug.LogWarning("sv_InitInternal is not implemented");
         }
     }
 }

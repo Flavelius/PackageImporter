@@ -31,8 +31,9 @@ namespace SBGame
 
         public string StatueDescription = string.Empty;
 
-        public Game_StatuePawn()
+        public override void WriteAddStream(IPacketWriter writer)
         {
+            throw new NotImplementedException();
         }
     }
 }

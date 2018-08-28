@@ -8,7 +8,7 @@ namespace SBGame
 #pragma warning disable 414   
 
     [Serializable]
-    public class Game_Appearance: Base_Component
+    public abstract class Game_Appearance: Base_Component, IActorAddStream
     {
         [NonSerialized] public Content_API.NPCRace mRace;
         [NonSerialized] public Content_API.NPCGender mGender;
@@ -115,7 +115,7 @@ namespace SBGame
 
         public bool IsPlayer()
         {
-            return (Outer is Game_PlayerPawn) || (Outer is Character_Pawn);
+            return (Outer is Game_PlayerPawn);
         }
 
         public bool IsKid()
@@ -135,5 +135,10 @@ namespace SBGame
         }
 
         public virtual bool ApplyToPawn(Game_Pawn aPawn) { throw new NotImplementedException(); }
+
+        public virtual void WriteAddStream(IPacketWriter writer)
+        {
+            throw new NotImplementedException(); //only playerAppearance should implement this
+        }
     }
 }

@@ -6,14 +6,24 @@ using UnityEngine;
 namespace SBGame
 {
     [Serializable]
-    public class Game_PlayerStats: Game_CharacterStats
+    public class Game_PlayerStats: Game_CharacterStats, IActorLoginStream
     {
         [NonSerialized] public int mFamePoints;
         [NonSerialized] public int mPePPoints;
         [NonSerialized] public bool mMayChooseClass;
         [NonSerialized] public byte mAvailableAttributePoints;
 
-        public override void WriteLoginStream(IPacketWriter writer)
+        public override int GetFameLevel()
+        {
+            return mFamePoints;
+        }
+
+        public override int GetPePRank()
+        {
+            return mPePPoints;
+        }
+
+        public void WriteLoginStream(IPacketWriter writer)
         {
             writer.WriteFloat(mFamePoints);
             writer.WriteFloat(mPePPoints);

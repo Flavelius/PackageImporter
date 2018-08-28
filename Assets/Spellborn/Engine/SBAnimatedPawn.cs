@@ -6,7 +6,7 @@ namespace Engine
 {
 #pragma warning disable 414   
 
-    [Serializable] public class SBAnimatedPawn : Pawn
+    [Serializable] public abstract class SBAnimatedPawn : Pawn
     {
         [NonSerialized, HideInInspector]
         [FieldTransient()]

@@ -12,9 +12,11 @@ namespace SBGame
 
         [NonSerialized] public EventNotification mMoneyChanged;
 
-        public override void WriteLoginStream(IPacketWriter writer)
+        public override void WriteAddStream(IPacketWriter writer)
         {
-            //writer.Write()
+            writer.WriteString(mName);
+            writer.WriteString(mGuildName);
+            writer.WriteInt32(mFactionId);
         }
     }
 }

@@ -44,6 +44,11 @@ namespace SBGame
             throw new NotImplementedException();
         }
 
+        public bool sv_AcceptQuest(Quest_Type aQuest)
+        {
+            throw new NotImplementedException();
+        }
+
         [Serializable]
         public struct CompleteQuest
         {
@@ -89,7 +94,6 @@ final native function bool FailedQuest(export editinline Quest_Type aQuest);
 final native function bool CompletedQuest(export editinline Quest_Type aQuest,optional bool aNearly);
 final native function bool sv_AbandonQuest(export editinline Quest_Type aQuest);
 final native function bool sv_FinishQuest(export editinline Quest_Type aQuest);
-final native function bool sv_AcceptQuest(export editinline Quest_Type aQuest);
 delegate OnFinishQuest(int aQuestID);
 delegate OnAcceptQuest(int aQuestID);
 delegate OnQuestItemsAdded(export editinline Item_Type aItemType,int aAmount);

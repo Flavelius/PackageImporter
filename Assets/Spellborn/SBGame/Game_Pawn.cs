@@ -7,35 +7,8 @@ using UnityEngine;
 namespace SBGame
 {
     [Serializable]
-    public class Game_Pawn: Base_Pawn
+    public abstract class Game_Pawn: Base_Pawn, IActorAddStream
     {
-
-        [TypeProxyDefinition(TypeName = "Game_Appearance")]
-        public TypeDescription BaseAppearanceClass;
-        [TypeProxyDefinition(TypeName = "Game_Character")]
-        public TypeDescription CharacterClass;
-        [TypeProxyDefinition(TypeName = "Game_CharacterStats")]
-        public TypeDescription CharacterStatsClass;
-        [TypeProxyDefinition(TypeName = "Game_CombatState")]
-        public TypeDescription CombatStateClass;
-        [TypeProxyDefinition(TypeName = "Game_CombatStats")]
-        public TypeDescription CombatStatsClass;
-        [TypeProxyDefinition(TypeName = "Game_ItemManager")]
-        public TypeDescription ItemManagerClass;
-        [TypeProxyDefinition(TypeName = "Game_ShiftableAppearance")]
-        public TypeDescription ShiftableAppearanceClass;
-        [TypeProxyDefinition(TypeName = "Game_Skills")]
-        public TypeDescription SkillsClass;
-        [TypeProxyDefinition(TypeName = "Game_Effects")]
-        public TypeDescription EffectsClass;
-        [TypeProxyDefinition(TypeName = "Game_Emotes")]
-        public TypeDescription EmotesClass;
-        [TypeProxyDefinition(TypeName = "Game_Looting")]
-        public TypeDescription LootingClass;
-        [TypeProxyDefinition(TypeName = "Game_Trading")]
-        public TypeDescription TradingClass;
-        [TypeProxyDefinition(TypeName = "Game_BodySlots")]
-        public TypeDescription BodySlotsClass;
 
         public Game_ShiftableAppearance Appearance;
         public Game_Appearance BaseAppearance;
@@ -362,6 +335,8 @@ namespace SBGame
         {
             throw new NotImplementedException();
         }
+
+        public abstract void WriteAddStream(IPacketWriter writer);
     }
 }
 /*

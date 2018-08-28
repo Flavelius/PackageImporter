@@ -4,7 +4,7 @@ using UnityEngine;
 namespace SBGame
 {
     [Serializable]
-    public class Game_PersistentPawn: Game_Pawn
+    public abstract class Game_PersistentPawn: Game_Pawn
     {
         [NonSerialized, HideInInspector]
         public Game_PersistentData mPersistentData;

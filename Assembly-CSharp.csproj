@@ -76,7 +76,6 @@
     <Compile Include="Assets\Server\Network\NetworkPacket.cs" />
     <Compile Include="Assets\Server\Network\NetworkPacket.Read.cs" />
     <Compile Include="Assets\Server\Network\NetworkPacket.Write.cs" />
-    <Compile Include="Assets\Server\Network\NetworkPacket.WriteExtensions.cs" />
     <Compile Include="Assets\Server\Network\PacketDispatcher.cs" />
     <Compile Include="Assets\Server\Network\PacketExtensions.cs" />
     <Compile Include="Assets\Server\Network\PacketIDs.cs" />
@@ -84,6 +83,7 @@
     <Compile Include="Assets\Server\UniverseInfo.cs" />
     <Compile Include="Assets\Server\User\GameSession.CharacterCreation.cs" />
     <Compile Include="Assets\Server\User\GameSession.cs" />
+    <Compile Include="Assets\Server\User\GameSession.Out.cs" />
     <Compile Include="Assets\Server\User\LoginServer.cs" />
     <Compile Include="Assets\Server\User\LoginSession.cs" />
     <Compile Include="Assets\Server\User\PlayerSession.cs" />
@@ -447,7 +447,6 @@
     <Compile Include="Assets\Spellborn\SBGame\Appearance_Tattoo.cs" />
     <Compile Include="Assets\Spellborn\SBGame\Arena_GameInfo.cs" />
     <Compile Include="Assets\Spellborn\SBGame\Character_GameInfo.cs" />
-    <Compile Include="Assets\Spellborn\SBGame\Character_Pawn.cs" />
     <Compile Include="Assets\Spellborn\SBGame\Character_PlayerController.cs" />
     <Compile Include="Assets\Spellborn\SBGame\Content_API.cs" />
     <Compile Include="Assets\Spellborn\SBGame\Content_Event.cs" />
@@ -546,7 +545,6 @@
     <Compile Include="Assets\Spellborn\SBGame\Game_Conversation.cs" />
     <Compile Include="Assets\Spellborn\SBGame\Game_ConversationState.cs" />
     <Compile Include="Assets\Spellborn\SBGame\Game_DebugUtils.cs" />
-    <Compile Include="Assets\Spellborn\SBGame\Game_EditorPawn.cs" />
     <Compile Include="Assets\Spellborn\SBGame\Game_Effects.cs" />
     <Compile Include="Assets\Spellborn\SBGame\Game_Emote.cs" />
     <Compile Include="Assets\Spellborn\SBGame\Game_EmoteRotate.cs" />
@@ -595,7 +593,6 @@
     <Compile Include="Assets\Spellborn\SBGame\Game_PlayerStats.cs" />
     <Compile Include="Assets\Spellborn\SBGame\Game_PlayerTeams.cs" />
     <Compile Include="Assets\Spellborn\SBGame\Game_Portal.cs" />
-    <Compile Include="Assets\Spellborn\SBGame\Game_PreviewAppearance.cs" />
     <Compile Include="Assets\Spellborn\SBGame\Game_PropertyEditor.cs" />
     <Compile Include="Assets\Spellborn\SBGame\Game_QuestLog.cs" />
     <Compile Include="Assets\Spellborn\SBGame\Game_RadialMenuOptions.cs" />
@@ -643,7 +640,6 @@
     <Compile Include="Assets\Spellborn\SBGame\Item_Type.cs" />
     <Compile Include="Assets\Spellborn\SBGame\Item_TypeFilter.cs" />
     <Compile Include="Assets\Spellborn\SBGame\LevelAreaVolume.cs" />
-    <Compile Include="Assets\Spellborn\SBGame\Login_PlayerController.cs" />
     <Compile Include="Assets\Spellborn\SBGame\Loot_Manager.cs" />
     <Compile Include="Assets\Spellborn\SBGame\Loot_Transaction.cs" />
     <Compile Include="Assets\Spellborn\SBGame\LootTable.cs" />

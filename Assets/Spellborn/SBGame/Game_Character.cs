@@ -3,13 +3,93 @@ using SBBase;
 
 namespace SBGame
 {
-    [Serializable] public class Game_Character : Base_Component, IActorPacketStream
+    [Serializable]
+    public abstract class Game_Character: Base_Component, IActorAddStream
     {
         [NonSerialized] public NPC_Taxonomy mFaction;
         [NonSerialized] public int mFactionId;
         [NonSerialized] public NPC_Taxonomy mOldFaction;
 
-        public virtual void WriteLoginStream(IPacketWriter writer) { throw new NotImplementedException(); }
+        public abstract void WriteAddStream(IPacketWriter writer);
+
+        public virtual string GetGuildName()
+        {
+            return string.Empty;
+        }
+
+        public virtual string sv_GetName()
+        {
+            return "<Unknown>";
+        }
+
+        public virtual int GetMoney()
+        {
+            return 0;
+        }
+
+        public bool ShiftFaction(NPC_Taxonomy newFaction)
+        {
+            if (mFaction == newFaction)
+            {
+                return false;
+            }
+            UnshiftFaction();
+            mOldFaction = mFaction;
+            mFaction = newFaction;
+            return true;
+        }
+
+        public bool UnshiftFaction()
+        {
+            if (IsShifted())
+            {
+                mFaction = mOldFaction;
+                mOldFaction = null;
+                return true;
+            }
+            return false;
+        }
+
+        public bool IsShifted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public NPC_Taxonomy GetFaction()
+        {
+            return mFaction;
+        }
+
+        public void sv_SetFaction(NPC_Taxonomy aFaction)
+        {
+            mFaction = aFaction;
+            if (mFaction != null)
+            {
+                mFactionId = aFaction.GetResourceId();
+            }
+            else
+            {
+                mFactionId = 0;
+            }
+            //sv2clrel_SetFaction_CallStub(mFactionId);                                   
+        }
+
+        public string cl_GetFullName()
+        {
+            if ((Outer as Game_Pawn).Appearance.IsShifted())
+            {
+                return (Outer as Game_Pawn).Appearance.GetShiftedNPCType().GetLongName();
+            }
+            else
+            {
+                return cl_GetBaseFullName();
+            }
+        }
+
+        string cl_GetBaseFullName()
+        {
+            return "<Unspecified character>";
+        }
     }
 }
 /*
@@ -21,47 +101,9 @@ mFaction = NPC_Taxonomy(Class'SBDBSync'.GetResourceObject(aFactionId));
 mFaction = None;                                                          
 }
 }
-event bool UnshiftFaction() {
-if (IsShifted()) {                                                          
-mFaction = mOldFaction;                                                   
-mOldFaction = None;                                                       
-return True;                                                              
-}
-return False;                                                               
-}
-event bool ShiftFaction(export editinline NPC_Taxonomy newFaction) {
-if (mFaction == newFaction) {                                               
-return False;                                                             
-}
-UnshiftFaction();                                                           
-mOldFaction = mFaction;                                                     
-mFaction = newFaction;                                                      
-return True;                                                                
-}
-native function bool IsShifted();
-event NPC_Taxonomy GetFaction() {
-return mFaction;                                                            
-}
 protected native function sv2clrel_SetFaction_CallStub();
 protected event sv2clrel_SetFaction(int aFactionId) {
 cl_SetFaction(aFactionId);                                                  
-}
-event sv_SetFaction(export editinline NPC_Taxonomy aFaction) {
-mFaction = aFaction;                                                        
-if (mFaction != None) {                                                     
-mFactionId = aFaction.GetResourceId();                                    
-} else {                                                                    
-mFactionId = 0;                                                           
-}
-sv2clrel_SetFaction_CallStub(mFactionId);                                   
-}
-final native function string sv_GetName();
-final event string cl_GetFullName() {
-if (Outer.Appearance.IsShifted()) {                                         
-return Outer.Appearance.GetShiftedNPCType().GetLongName();                
-} else {                                                                    
-return cl_GetBaseFullName();                                              
-}
 }
 final event string cl_GetName() {
 if (Outer.Appearance.IsShifted()) {                                         
@@ -70,16 +112,10 @@ return Outer.Appearance.GetShiftedNPCType().GetShortName();
 return cl_GetBaseName();                                                  
 }
 }
-function string cl_GetBaseFullName() {
-return "<Unspecified character>";                                           
-}
 event string cl_GetBaseName() {
 return "<Unknown>";                                                         
 }
-function string GetGuildName() {
-return "";                                                                  
-}
-final native function int GetMoney();
+
 function cl_OnInit() {
 Super.cl_OnInit();                                                          
 if (mFaction == None) {                                                     

@@ -4,12 +4,27 @@ using UnityEngine;
 
 namespace SBGame
 {
-    [Serializable] public class Game_PlayerQuestLog : Game_QuestLog
+    [Serializable] public class Game_PlayerQuestLog : Game_QuestLog, IActorLoginStream
     {
         public override void Initialize(Actor outer)
         {
             base.Initialize(outer);
             Debug.LogWarning("TODO retrieve quest data");
+        }
+
+        public void WriteLoginStream(IPacketWriter writer)
+        {
+            writer.Write(CompletedQuests, q => writer.WriteInt32(q.quest.GetResourceId()));
+            writer.Write(Quests, (index, item) => //TODO should this be QuestTimerProgress[]?
+            {
+                for (int i = 0; i < item.Targets.Count; i++)
+                {
+                    writer.WriteInt32(0);
+                    writer.WriteInt32(0);
+                    writer.WriteInt32(item.Targets[i].ResourceID);
+                    writer.WriteInt32(targetProgress[index]);
+                }
+            });
         }
     }
 }

@@ -6,24 +6,11 @@ using UnityEngine;
 namespace SBGame
 {
     [Serializable]
-    public class Game_PlayerController: Game_Controller
+    public class Game_PlayerController: Game_Controller, IActorLoginStream
     {
         public const string MUTE_GLOBAL = "\"global\"";
         public const string MUTE_ALL = "\"all\"";
         public const float SERVER_SYNC_TIME = 1F;
-
-        [TypeProxyDefinition(TypeName = "Game_Chat")]
-        public TypeDescription ChatClass;
-        [TypeProxyDefinition(TypeName = "Game_Travel")]
-        public TypeDescription TravelClass;
-        [TypeProxyDefinition(TypeName = "Game_Mail")]
-        public TypeDescription MailClass;
-        [TypeProxyDefinition(TypeName = "Game_PlayerFriends")]
-        public TypeDescription mGroupingFriendsClass;
-        [TypeProxyDefinition(TypeName = "Game_PlayerTeams")]
-        public TypeDescription mGroupingTeamsClass;
-        [TypeProxyDefinition(TypeName = "Game_PlayerGuilds")]
-        public TypeDescription mGroupingGuildsClass;
 
         public Game_Chat Chat;
         public Game_Travel Travel;
@@ -109,39 +96,17 @@ namespace SBGame
             SetInitialState();
         }
 
-        public override void WriteLoginStream(IPacketWriter writer)
+        public void WriteLoginStream(IPacketWriter writer)
         {
             writer.WriteInt32(GetRelevanceID());
             writer.WriteFloat(Time.realtimeSinceStartup);
             writer.WriteByte((byte)mNetState);
-            Pawn.WriteLoginStream(writer);
-            writer.Write(DBCharacter);
-            writer.Write(DBCharacterSheet);
-            writer.Write(DBItems);
-            writer.Write(DBSkilldecks);
-            writer.Write(DBSkillTokens);
-            writer.Write(DBCharacterSkills, (index, _) => //activeskilldeck
-            {
-                writer.WriteInt32(0);//skilldeck ID?
-                writer.WriteInt32(DBCharacterSkills[index]);//resourceid
-                writer.WriteByte((byte)index);//deckslot
-            });
-            writer.Write(DBFinishedQuests, writer.WriteInt32);
-            var qLog = (Pawn as Game_PlayerPawn).questLog;
-            writer.Write(qLog.Quests, (index, item) =>
-            {
-                for (int i = 0; i < item.Targets.Count; i++)
-                {
-                    writer.WriteInt32(0);
-                    writer.WriteInt32(0);
-                    writer.WriteInt32(item.Targets[i].ResourceID);
-                    writer.WriteInt32(qLog.targetProgress[index]);
-                }
-            });
-            writer.WriteInt32(0);//num persistentVars
-            //foreach var int32:contextID, int32:varID, int32:value
+        }
 
-            writer.WriteInt32(2/*GetAuthorityLevel()*/);
+        public override void WriteAddStream(IPacketWriter writer)
+        {
+            writer.WriteInt32(GetRelevanceID());
+            writer.WriteInt32(((Rotator)transform.rotation).Yaw);
         }
 
         public virtual int GetAuthorityLevel() { return 0; }

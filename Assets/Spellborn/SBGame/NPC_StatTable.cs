@@ -44,17 +44,17 @@ namespace SBGame
 
         public int GetFocus(int aLevel)
         {
-            return 0;
+            return aLevel; //guessed
         }
 
         public int GetMind(int aLevel)
         {
-            return 0;
+            return aLevel; //guessed
         }
 
         public int GetBody(int aLevel)
         {
-            return 0;
+            return aLevel; //guessed
         }
 
         public int GetHitpointsPerLevel(int aLevel)

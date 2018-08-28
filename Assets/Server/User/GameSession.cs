@@ -127,10 +127,7 @@ namespace User
                     Connection.Disconnect();//character must exist
                     return;
                 }
-                var msg = GameHeader.S2C_WORLD_LOGIN.CreatePacket();
-                msg.WriteInt32((int)PacketStatusCode.NO_ERROR);
-                msg.WriteLoginStream(ActiveController);
-                Connection.SendMessage(msg);
+                S2C_WORLD_LOGIN();
             }
         }
 
@@ -189,4 +186,7 @@ namespace User
         }
         #endregion
     }
+
+
+
 }

@@ -45,6 +45,11 @@ namespace SBGame
             throw new NotImplementedException();
         }
 
+        public bool Failed(int aValue)
+        {
+            throw new NotImplementedException();
+        }
+
         [Serializable]
         public struct QuestInventory
         {
@@ -110,7 +115,6 @@ ei++;
 return True;                                                                
 }
 final native function bool NearlyDone(int aValue);
-final native function bool Failed(int aValue);
 final native function int ComputeValue(Game_Pawn aPawn);
 final native function bool sv_CanAccept(Game_Pawn aPawn);
 */

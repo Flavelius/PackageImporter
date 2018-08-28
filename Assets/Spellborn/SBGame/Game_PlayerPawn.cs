@@ -9,7 +9,7 @@ namespace SBGame
 #pragma warning disable 414   
 
     [Serializable]
-    public class Game_PlayerPawn: Game_PersistentPawn
+    public class Game_PlayerPawn: Game_PersistentPawn, IActorLoginStream
     {
         public const float PVP_SETTINGS_UPDATE_TIME = 1F;
         public const float LEVEL_AREA_UPDATE_TIME = 1F;
@@ -80,7 +80,7 @@ namespace SBGame
             Debug.LogWarning("mUpdateInterval is currently unused");
         }
 
-        public override void WriteLoginStream(IPacketWriter writer)
+        public void WriteLoginStream(IPacketWriter writer)
         {
             writer.WriteVector(Velocity);
             writer.WriteVector3(transform.position);
@@ -91,8 +91,20 @@ namespace SBGame
             writer.WriteFloat(GroundSpeedModifier);
             writer.WriteInt32(mDebugFilters);
             writer.WriteInt32(Visibility);
-            CharacterStats.WriteLoginStream(writer);
-            Effects.WriteLoginStream(writer);
+        }
+
+        public override void WriteAddStream(IPacketWriter writer)
+        {
+            writer.WriteVector(Velocity);
+            writer.WriteVector3(transform.position);
+            writer.WriteByte((byte)Physics);
+            writer.WriteByte(mMoveFrameID);
+            writer.WriteFloat(mPvPTimer);
+            writer.WriteByte((byte)GetState());
+            writer.WriteInt32(bInvulnerable ? 1 : 0);
+            writer.WriteFloat(GroundSpeedModifier);
+            writer.WriteInt32(mDebugFilters);
+            writer.WriteInt32(Visibility); //bitfield hasPet invisible jumpedfromladder?
         }
 
         public override void Initialize()

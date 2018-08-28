@@ -37,6 +37,14 @@ namespace SBGame
         {
             Debug.LogWarning("RepackLodDataAll is not implemented");
         }
+
+        public override void WriteAddStream(IPacketWriter writer)
+        {
+            writer.WriteByteArray(mLODData0);
+            writer.WriteByteArray(mLODData1);
+            writer.WriteByteArray(mLODData2);
+            writer.WriteByteArray(mLODData3);
+        }
     }
 }
 /*

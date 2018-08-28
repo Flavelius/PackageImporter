@@ -7,7 +7,7 @@ using UnityEngine;
 namespace SBGame
 {
     [Serializable]
-    public abstract class Game_Controller: Base_Controller
+    public abstract class Game_Controller: Base_Controller, IActorAddStream
     {
 
         public Game_DebugUtils DebugUtils;
@@ -229,6 +229,7 @@ namespace SBGame
             return mCurrentState == EControllerStates.CPS_PAWN_DEAD;
         }
 
+        public abstract void WriteAddStream(IPacketWriter writer);
     }
 }
 /*

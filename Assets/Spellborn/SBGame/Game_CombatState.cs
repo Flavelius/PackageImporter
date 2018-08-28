@@ -43,6 +43,13 @@ namespace SBGame
                 outer.CharacterStats.IncreaseMagicResistanceDelta(-0.05f);
             }
         }
+
+        public void WriteAddStream(IPacketWriter writer)
+        {
+            writer.WriteByte((byte)mCombatMode);
+            writer.WriteInt32(mMainWeapon);
+            writer.WriteInt32(mOffhandWeapon);
+        }
     }
 }
 /*

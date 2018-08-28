@@ -56,7 +56,7 @@ namespace SBGame
             {
                 R = GetCollisionRadius();
                 H = GetCollisionHeight();
-                if (R >= 0.00000000 && H >= 0.00000000)
+                if (R >= 0 && H >= 0)
                 {
                     aPawn.SetCollisionSize(R, H);
                 }

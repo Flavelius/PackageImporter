@@ -1,5 +1,6 @@
 ﻿using System;
 using Engine;
+using UnityEngine;
 
 namespace SBGame
 {
@@ -19,7 +20,7 @@ namespace SBGame
 
         public void sv_SetSkilldeck(NPC_SkillDeck aSkilldeck,NPC_Equipment aEquipment)
         {
-            throw new NotImplementedException();
+            Debug.LogWarning("sv_SetSkillDeck is not implemented", this);
         }
 
     }

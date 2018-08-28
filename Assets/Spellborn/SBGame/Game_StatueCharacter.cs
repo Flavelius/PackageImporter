@@ -4,8 +4,9 @@ namespace SBGame
 {
     [Serializable] public class Game_StatueCharacter : Game_Character
     {
-        public Game_StatueCharacter()
+        public override void WriteAddStream(IPacketWriter writer)
         {
+            throw new NotImplementedException();
         }
     }
 }

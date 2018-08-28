@@ -13,6 +13,7 @@ namespace World
 
         Dictionary<MapIDs, GameMap> loadedMaps = new Dictionary<MapIDs, GameMap>();
         Dictionary<Scene, GameMap> loadedScenes = new Dictionary<Scene, GameMap>();
+        List<GameMap> activeMaps = new List<GameMap>();
 
         HashSet<int> instanceIDs = new HashSet<int>();
 
@@ -54,6 +55,7 @@ namespace World
             var map = new GameMap(scene, mapID, world, AllocateInstanceID());
             loadedMaps.Add(map.ID, map);
             loadedScenes.Add(scene, map);
+            activeMaps.Add(map);
             AwakeMap(map);
             return map;
         }
@@ -70,12 +72,16 @@ namespace World
             Debug.Log(string.Format("Map unloaded: {0}", scene.name));
             var map = (MapIDs) Enum.Parse(typeof(MapIDs), scene.name, true);
             loadedMaps.Remove(map);
+            activeMaps.Remove(loadedMaps[map]);
             loadedScenes.Remove(scene);
         }
 
         public void Update()
         {
-
+            for (int i = 0; i < activeMaps.Count; i++)
+            {
+                activeMaps[i].Update();
+            }
         }
 
         void AwakeMap(GameMap map)

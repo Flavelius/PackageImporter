@@ -7,7 +7,7 @@ namespace SBGame
 {
 #pragma warning disable 414   
 
-    [Serializable] public class Game_Skills : Base_Component
+    [Serializable] public abstract class Game_Skills : Base_Component
     {
         public const int MAX_TOKEN_SLOTS = 3;
         public const int MAX_STACK_COUNT = 10;
@@ -24,7 +24,7 @@ namespace SBGame
         [NonSerialized] public int mCurrentTier;
         [NonSerialized] public int mLastSkillIndex;
         [NonSerialized] public List<FSkill_Type> CharacterSkills = new List<FSkill_Type>();
-        [NonSerialized] public List<FSkill_Type> SkilldeckSkills = new List<FSkill_Type>();
+        [NonSerialized] public FSkill_Type[] SkilldeckSkills = new FSkill_Type[0];
         [NonSerialized] public RunningSkillData LastSkill;
         private int NextNotifyIndex;
         private List<RunningSkillData> ActiveSkills = new List<RunningSkillData>();
@@ -64,137 +64,101 @@ namespace SBGame
         [Serializable] public struct ReturnReflectData
         {
             public int Id;
-
             public FSkill_EffectClass_DuffReturnReflect effect;
-
             public float EarliestEffectTime;
-
             public int NumUses;
-
             public FSkill_Event Event;
         }
 
         [Serializable] public struct ShareApplicantData
         {
             public Game_Pawn Target;
-
             public FSkill_EffectClass_DuffShare effect;
         }
 
         [Serializable] public struct ShareData
         {
             public int Id;
-
             public FSkill_EffectClass_DuffShare effect;
-
             public Game_Pawn Target;
-
             public float EarliestEffectTime;
-
             public int NumUses;
-
             public FSkill_Event Event;
         }
 
         [Serializable] public struct AlterEffectData
         {
             public int Id;
-
             public FSkill_EffectClass_DuffAlterEffectInOutput effect;
-
             public float Value;
-
             public float EarliestEffectTime;
-
             public int NumUses;
         }
 
         [Serializable] public struct DisableSkillUseData
         {
             public int Id;
-
             public FSkill_EffectClass_DuffDisableSkillUse effect;
         }
 
         [Serializable] public struct ImmuneData
         {
             public int Id;
-
             public FSkill_EffectClass_DuffImmunity effect;
         }
 
         [Serializable] public struct ClientDuffStackData
         {
             public FSkill_Event_Duff OriginalDuff;
-
             public int ActualStackCount;
-
             public float ApplyTime;
-
             public float Duration;
         }
 
         [Serializable] public struct TransferDuffStackData
         {
             public int OriginalDuffID;
-
             public int ActualStackCount;
-
             public float ApplyTime;
-
             public float Duration;
         }
 
         [Serializable] public struct DuffStackData
         {
             public float ApplyTime;
-
             public FSkill_Event_Duff OriginalDuff;
-
             public FSkill_Event_Duff[] Duffs;
-
             public int ActualStackCount;
         }
 
         [Serializable] public struct SpecialDuffEffect
         {
             public FSkill_EffectClass_Duff Duff;
-
             public float UndoTime;
-
             public List<FSkill_EffectClass_Duff.DuffRestoreData> UndoData;
-
             public int Identifier;
         }
 
         [Serializable] public struct ComboStringData
         {
             public FSkill_Type Skill;
-
             public float ApplyTime;
         }
 
         [Serializable] public struct RunningSkillData
         {
             public float StartTime;
-
             public float Duration;
-
             public float EndTime;
-
             public float SkillSpeed;
-
             public FSkill_Type Skill;
-
             public bool LockedMovement;
-
             public bool LockedRotation;
-
             public bool ComboRelevant;
-
             public Game_Pawn SpecificTarget;
         }
         #endregion
+
         public enum ESkillStartFailure
         {
             SSF_ALLOWED,
@@ -221,6 +185,11 @@ namespace SBGame
         }
 
         public void ResetAttacking()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetSkilldeckIndex(int aSkilldeckID)
         {
             throw new NotImplementedException();
         }
@@ -521,7 +490,6 @@ protected native function cl2sv_LearnSkill_CallStub();
 native event cl2sv_LearnSkill(int ResourceId);
 final native function bool cl_CharacterHasSkill(export editinline FSkill_Type aSkill);
 final native function bool sv_CharacterHasSkill(export editinline FSkill_Type aSkill);
-final native function int GetSkilldeckIndex(int aSkilldeckID);
 native event cl_OnShutdown();
 native function cl_OnFrame(float aDeltaTime);
 delegate OnSkillReceivedTokenSlot(export editinline FSkill_Type aSkill,int aNewSlotCount);

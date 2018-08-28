@@ -1,10 +1,71 @@
 ﻿using System;
+using System.Collections.Generic;
+using Engine;
+using SBBase;
+using UnityEngine;
 
 namespace SBGame
 {
-    [Serializable] public class Game_PlayerSkills : Game_Skills
+    [Serializable]
+    public class Game_PlayerSkills: Game_Skills, IActorLoginStream
     {
-        
+        public void WriteLoginStream(IPacketWriter writer) //TODO unpack db data and use that
+        {
+            Debug.LogWarning("TODO unpack db data and use that");
+            var controller = Outer as Game_PlayerController;
+            writer.Write(controller.DBCharacterSkills, (index, _) => //activeskilldeck
+            {
+                writer.WriteInt32(0);//skilldeck ID?
+                writer.WriteInt32(controller.DBCharacterSkills[index]);//resourceid
+                writer.WriteByte((byte)index);//deckslot
+            });
+        }
+
+        public override void Initialize(Actor outer)
+        {
+            base.Initialize(outer);
+            //if islocalplayer ignored
+            LoadTokens();
+            var controller = ((Outer as Game_Pawn).Controller as Game_PlayerController);
+            var index = GetSkilldeckIndex(controller.DBCharacterSheet.SelectedSkilldeckID);
+            cl_SetSkills(controller.DBCharacterSkills, controller.DBSkilldecks[index].mSkills);
+        }
+
+        void LoadTokens()
+        {
+            throw new NotImplementedException();
+        }
+
+        void cl_SetSkills(List<int> aCharacterSkills, List<int> aSkilldeckSkills)
+        {
+            var i = 0;
+            while (i < aCharacterSkills.Count)
+            {
+                var skillResource = SBDBSync.GetResourceObject<FSkill_Type>(aCharacterSkills[i]);
+                if (skillResource == null) throw new Exception("Skill not found: " + aCharacterSkills[i]);
+                CharacterSkills.Add(skillResource);
+                ++i;
+            }
+            cl_UpdateSkilldeckSkills(aSkilldeckSkills);
+            //OnCharacterSkillsChanged();
+        }
+
+        void cl_UpdateSkilldeckSkills(List<int> aSkilldeckSkills)
+        {
+            SkilldeckSkills = new FSkill_Type[mTiers * mTierSlots];
+            for (var i = 0; i < aSkilldeckSkills.Count; ++i)
+            {
+                if (i < aSkilldeckSkills.Count && aSkilldeckSkills[i] != 0)
+                {
+                    SkilldeckSkills[i] = SBDBSync.GetResourceObject<FSkill_Type>(aSkilldeckSkills[i]);
+                }
+                else
+                {
+                    SkilldeckSkills[i] = null;
+                }
+            }
+            //OnSkilldeckChanged();
+        }
     }
 }
 /*
@@ -60,20 +121,6 @@ Class'SBDBAsync'.SetCharacterSkilldeckSkills(Outer,gc.DBCharacter.Id,gc.DBCharac
 gc.DBSkilldecks[i].mSkills = aNewSkilldeckSkills;                           
 sv_UpdateSkilldeckSkills();                                                 
 }
-protected function cl_UpdateSkilldeckSkills(array<int> aSkilldeckSkills) {
-local int i;
-SkilldeckSkills.Length = mTiers * mTierSlots;                               
-i = 0;                                                                      
-while (i < aSkilldeckSkills.Length) {                                       
-if (i < aSkilldeckSkills.Length && aSkilldeckSkills[i] != 0) {            
-SkilldeckSkills[i] = FSkill_Type(Class'SBDBSync'.GetResourceObject(aSkilldeckSkills[i]));
-} else {                                                                  
-SkilldeckSkills[i] = None;                                              
-}
-++i;                                                                      
-}
-OnSkilldeckChanged();                                                       
-}
 protected native event sv_UpdateSkilldeckSkills();
 protected function cl_AddActiveSkill(int aSkillID,float aStartTime,float aDuration,float aSkillSpeed,bool aFreezeMovement,bool aFreezeRotation,int aTokenItemID,int AnimVarNr,Vector aLocation,Rotator aRotation) {
 Super.cl_AddActiveSkill(aSkillID,aStartTime,aDuration,aSkillSpeed,aFreezeMovement,aFreezeRotation,aTokenItemID,AnimVarNr,aLocation,aRotation);
@@ -86,34 +133,9 @@ Outer.CharacterStats.FreezeRotation(True);
 }
 cl_StartSkillTracers(LastSkill.Skill,Item_Type(Class'SBDBSync'.GetResourceObject(aTokenItemID)),AnimVarNr);
 }
-final native function LoadTokens();
-final function cl_SetSkills(array<int> aCharacterSkills,array<int> aSkilldeckSkills) {
-local Object skillResource;
-local int i;
-CharacterSkills.Length = aCharacterSkills.Length;                           
-i = 0;                                                                      
-while (i < aCharacterSkills.Length) {                                       
-skillResource = Class'SBDBSync'.GetResourceObject(aCharacterSkills[i]);   
-CharacterSkills[i] = FSkill_Type(skillResource);                          
-++i;                                                                      
-}
-cl_UpdateSkilldeckSkills(aSkilldeckSkills);                                 
-OnCharacterSkillsChanged();                                                 
-}
 protected native function sv2cl_SetSkills_CallStub();
 final event sv2cl_SetSkills(array<int> aCharacterSkills,array<int> aSkilldeckSkills) {
 cl_SetSkills(aCharacterSkills,aSkilldeckSkills);                            
-}
-function cl_OnInit() {
-local Game_PlayerController Controller;
-local int Index;
-Super.cl_OnInit();                                                          
-if (Outer.IsLocalPlayer()) {                                                
-LoadTokens();                                                             
-Controller = Game_PlayerController(Outer.Controller);                     
-Index = GetSkilldeckIndex(Controller.DBCharacterSheet.SelectedSkilldeckID);
-cl_SetSkills(Controller.DBCharacterSkills,Controller.DBSkilldecks[Index].mSkills);
-}
 }
 native function ReportError(export editinline FSkill_Type aSkillType,byte ssf);
 */

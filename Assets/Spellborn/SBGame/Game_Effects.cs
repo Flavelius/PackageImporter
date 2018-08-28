@@ -7,7 +7,7 @@ namespace SBGame
 {
 #pragma warning disable 414     
 
-    [Serializable] public class Game_Effects : Base_Component, IActorPacketStream
+    [Serializable] public class Game_Effects : Base_Component, IActorLoginStream
     {
         public const int MAX_NUM_REPLICATED_EFFECTS = 5;
         public const int USE_VALUE_FROM_START = -1073741824;
@@ -27,6 +27,15 @@ namespace SBGame
         private byte mWantedTargetInteractionEffect;
 
         public void WriteLoginStream(IPacketWriter writer)
+        {
+            writer.WriteInt32(mReplicatedEffects.Count);
+            for (int i = 0; i < mReplicatedEffects.Count; i++)
+            {
+                writer.WriteInt32(mReplicatedEffects[i]);
+            }
+        }
+
+        public void WriteAddStream(IPacketWriter writer)
         {
             writer.WriteInt32(mReplicatedEffects.Count);
             for (int i = 0; i < mReplicatedEffects.Count; i++)

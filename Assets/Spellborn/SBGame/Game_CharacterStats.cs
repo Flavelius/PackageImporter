@@ -9,7 +9,7 @@ namespace SBGame
 #pragma warning disable 414   
 
     [Serializable]
-    public class Game_CharacterStats: Base_Component, IActorPacketStream
+    public abstract class Game_CharacterStats: Base_Component, IActorAddStream
     {
         public const int EFF_Stats = 8;
         public const int EFF_Animation = 4;
@@ -19,10 +19,12 @@ namespace SBGame
         [NonSerialized] public int mBaseBody;
         [NonSerialized] public int mBaseMind;
         [NonSerialized] public int mBaseFocus;
-        [NonSerialized] public int mBaseMaxHealth;
+        [NonSerialized] public int mBaseMaxHealth = 100;
         [NonSerialized] public float mBaseRuneAffinity;
         [NonSerialized] public float mBaseSpiritAffinity;
         [NonSerialized] public float mBaseSoulAffinity;
+        [NonSerialized] public int mBaseMovementSpeed = 200;
+
         [NonSerialized] public int mExtraBodyPoints;
         [NonSerialized] public int mExtraMindPoints;
         [NonSerialized] public int mExtraFocusPoints;
@@ -33,7 +35,6 @@ namespace SBGame
         [NonSerialized] public int mFreezeRotationCount;
         [NonSerialized] public int mFreezeAnimationCount;
         [NonSerialized] public int mFreezeStatsCount;
-        [NonSerialized] public int mBaseMovementSpeed;
         [NonSerialized] public int mMovementSpeed;
         [NonSerialized] public float mRearDamageIncrease;
         [NonSerialized] public float mFrontDamageIncrease;
@@ -92,10 +93,10 @@ namespace SBGame
         [FieldConfig()]
         public float[] mDamageBonus = new float[5];
         [FieldConfig()]
-        public int mMovementSpeedDefault;
+        public int mMovementSpeedDefault = 200;
 
         [NonSerialized] public float mRegenerationEpoch;
-        [NonSerialized] public int mMaxHealthBonusPerFameLevel;
+        [NonSerialized] public int mMaxHealthBonusPerFameLevel = 10;
         [NonSerialized] public float mMeleeResistanceModifier;
         [NonSerialized] public float mRangedResistanceModifier;
         [NonSerialized] public float mMagicResistanceModifier;
@@ -108,12 +109,18 @@ namespace SBGame
         [FieldConfig()]
         public float[] mDamagePepLvlBonus = new float[6];
 
-        private List<FreezeData> mMovementFreezeTimers = new List<FreezeData>();
-        private List<FreezeData> mRotationFreezeTimers = new List<FreezeData>();
-        private List<FreezeData> mAnimationFreezeTimers = new List<FreezeData>();
-        private List<FreezeData> mStatsFreezeTimers = new List<FreezeData>();
+        List<FreezeData> mMovementFreezeTimers = new List<FreezeData>();
+        List<FreezeData> mRotationFreezeTimers = new List<FreezeData>();
+        List<FreezeData> mAnimationFreezeTimers = new List<FreezeData>();
+        List<FreezeData> mStatsFreezeTimers = new List<FreezeData>();
 
-        public virtual void WriteLoginStream(IPacketWriter writer) { throw new NotImplementedException(); }
+        public void WriteAddStream(IPacketWriter writer)
+        {
+            writer.WriteFloat(mHealth);
+            writer.WriteByte(mFrozenFlags);
+            writer.WriteInt32(mMovementSpeed);
+            writer.WriteInt32(mStateRankShift);
+        }
 
         [Serializable]
         public struct FreezeData
@@ -196,10 +203,10 @@ namespace SBGame
         public override void Initialize(Actor outer)
         {
             base.Initialize(outer);
-            mMovementSpeed = mMovementSpeedDefault;
-            mBaseMovementSpeed = mMovementSpeedDefault;
-            mBaseMaxHealth = mMaxHealthDefaults[GetFameLevel()];
+            mMovementSpeed = mBaseMovementSpeed;
             mRecord.MaxHealth = mBaseMaxHealth;
+            mHealth = mBaseMaxHealth;
+            mRecord.CopyHealth = mHealth;
             Debug.LogWarning("TODO Calculate stats correctly");
             //Outer.PauseAnim(IsAnimationFrozen());                                       
         }
@@ -249,15 +256,9 @@ namespace SBGame
             throw new NotImplementedException();
         }
 
-        public virtual int GetPePRank()
-        {
-            return mRecord.PePRank;
-        }
+        public abstract int GetPePRank();
 
-        public virtual int GetFameLevel()
-        {
-            return mRecord.FameLevel;
-        }
+        public abstract int GetFameLevel();
 
         public int GetPrevFameLevelPoints(int aCurrentLevel)
         {

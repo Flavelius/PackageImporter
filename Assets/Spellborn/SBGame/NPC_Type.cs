@@ -212,35 +212,35 @@ namespace SBGame
             ENPC_Boss,
         }
 
-        public void InitializeStats(int aFameLevel, int aPePRank, out int oMaxHp, out int oLevelHp, out int oBody, out int oMind, out int oFocus, ref float oRuneResistance, ref float oSpiritResistance, ref float oSoulResistance)
+        public void InitializeStats(int aFameLevel, int aPePRank, out int baseMaxHP, out int hpPerLevel, out int oBody, out int oMind, out int oFocus, ref float oRuneResistance, ref float oSpiritResistance, ref float oSoulResistance)
         {
             if (Stats != null)
             {
-                oMaxHp = Stats.GetBaseHitpoints(aFameLevel);
-                oLevelHp = Stats.GetHitpointsPerLevel(aFameLevel);
+                baseMaxHP = Stats.GetBaseHitpoints(aFameLevel);
+                hpPerLevel = Stats.GetHitpointsPerLevel(aFameLevel);
                 oBody = Stats.GetBody(aFameLevel);
                 oMind = Stats.GetMind(aFameLevel);
                 oFocus = Stats.GetFocus(aFameLevel);
             }
             else
-            {
-                oMaxHp = 100;
-                oLevelHp = 10;
+            { //TODO investigate this to apply it to other places
+                baseMaxHP = 100;
+                hpPerLevel = 10;
                 oBody = 7 + aFameLevel / 9;
                 oMind = 7 + aFameLevel / 9;
                 oFocus = 7 + aFameLevel / 9;
             }
         }
 
-        public void cl_OnInit(Game_NPCPawn aPawn)
-        {
-            aPawn.Appearance.InstallBaseAppearance(this);
-            if (Effects != null)
-            {
-                Effects.Apply(aPawn);
-            }
-            InitMovement(aPawn);
-        }
+        //public void cl_OnInit(Game_NPCPawn aPawn)
+        //{
+        //    aPawn.Appearance.InstallBaseAppearance(this);
+        //    if (Effects != null)
+        //    {
+        //        Effects.Apply(aPawn);
+        //    }
+        //    InitMovement(aPawn);
+        //}
 
         public void sv_OnInit(Game_NPCPawn aPawn)
         {
@@ -257,7 +257,7 @@ namespace SBGame
             }
         }
 
-        NPC_Taxonomy GetFaction()
+        public NPC_Taxonomy GetFaction()
         {
             return TaxonomyFaction;
         }
@@ -323,6 +323,17 @@ namespace SBGame
             //    aPawn.bCanFly = true;
             //}
         }
+
+        public void sv_OnSpawn(Game_NPCPawn aPawn)
+        {
+            Debug.LogWarning("sv_OnSpawn is not implemented");
+        }
+
+        public string GetLongName()
+        {
+            Debug.LogWarning("GetLongName() (from LocalizedString) is not implemented");
+            return "NPC";
+        }
     }
 }
 /*
@@ -341,5 +352,4 @@ return Super.GetActiveText(aItem);
 }
 }
 }
-native function sv_OnSpawn(Game_NPCPawn aPawn);
 */

@@ -22,5 +22,10 @@ namespace Engine
         {
             return Utilities.UnitConversion.ToUnity(rot);
         }
+
+        public static implicit operator Rotator(Quaternion quat)
+        {
+            return Utilities.UnitConversion.ToUnreal(quat);
+        }
     }
 }

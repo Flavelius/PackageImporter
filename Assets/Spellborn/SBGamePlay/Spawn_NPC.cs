@@ -34,5 +34,27 @@ namespace SBGamePlay
                 Spawns.Clear();
             }
         }
+
+        public override void PostBeginPlay() //added
+        {
+            if (TriggeredSpawn) return;
+            sv_TriggeredSpawn(this);
+        }
+
+        protected override void sv_TriggeredSpawn(Actor aTriggerer)
+        {
+            //added TODO find out how to really spawn an npc
+            if (NPCType == null) return;
+            var instance = Level.GameMap.Spawn(GameResources.Instance.NPCPrefab, Location, Rotation, InitializeSpawnedNPC);
+            instance.sv_OnSpawn(NPCType.FameLevel, NPCType.PePRank, NPCType.TaxonomyFaction);
+            Spawns.Add(instance);
+        }
+
+        void InitializeSpawnedNPC(Game_NPCController controller)
+        {
+            controller.NPCType = NPCType;
+            controller.sv_InitInternal();
+            controller.Sv_OnInit();
+        }
     }
 }

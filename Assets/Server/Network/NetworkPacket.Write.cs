@@ -33,6 +33,12 @@ namespace Network
             position += b.Length;
         }
 
+        //TODO inefficient
+        public void WriteByteArray(List<byte> b)
+        {
+            WriteByteArray(b.ToArray());
+        }
+
         public void WriteByteArrayWithoutLength(byte[] b)
         {
             EnsureBuffersize(b.Length);

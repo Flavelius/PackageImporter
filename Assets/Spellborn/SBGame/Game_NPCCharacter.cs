@@ -4,8 +4,9 @@ namespace SBGame
 {
     [Serializable] public class Game_NPCCharacter : Game_Character
     {
-        public Game_NPCCharacter()
+        public override void WriteAddStream(IPacketWriter writer)
         {
+            writer.WriteInt32(mFactionId);
         }
     }
 }

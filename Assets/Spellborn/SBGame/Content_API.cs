@@ -1,5 +1,6 @@
 ﻿using System;
 using Engine;
+using UnityEngine;
 
 namespace SBGame
 {
@@ -255,7 +256,8 @@ namespace SBGame
 
         public bool GiveItems(Game_Pawn aPawn, Content_Inventory aItems)
         {
-            throw new NotImplementedException();
+            Debug.LogWarning("GiveItems is not implemented", this);
+            return false;
         }
 
         public bool ClaustroportPawn(Game_Pawn aPawn, Vector Location, Rotator Rotation)
@@ -281,92 +283,115 @@ namespace SBGame
             }
             return false;
         }
+
+        public bool CanReceiveItems(Game_Pawn aPawn, Content_Inventory aItems)
+        {
+            int inv;
+            int Count;
+            if (aPawn.itemManager == null)
+            {
+                return false;
+            }
+            Count = aItems.SlotCount();
+            inv = aPawn.itemManager.GetFreeSlots(Game_Item.EItemLocationType.ILT_Inventory);
+            if (Count > inv)
+            {
+                //ApiTrace(GetCharacterName(aPawn) @ "has only"
+                //@ string(inv)
+                //@ "inventory slots available for"
+                //@ string(Count)
+                //@ "items");
+                return false;
+            }
+            //ApiTrace(GetCharacterName(aPawn) @ "has an"
+            //@ string(inv)
+            //@ "inventory slots available for"
+            //@ string(Count)
+            //@ "items");
+            return true;
+        }
+
+        public bool HasItems(Game_Pawn aPawn, Content_Inventory aItems)
+        {
+            if (aPawn.itemManager != null && !aItems.Empty())
+            {
+                if (aItems.HasItemsInInventory(aPawn))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool HasTargetActive(Game_Pawn aPawn, Quest_Target aTarget)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool HasFailedTarget(Game_Pawn aPawn, Quest_Target aTarget)
+        {
+            Game_PlayerPawn playerPawn = aPawn as Game_PlayerPawn;
+            return playerPawn != null && aTarget != null && aTarget.Failed(playerPawn.questLog.GetTargetProgress(aTarget.GetQuest(), aTarget.GetIndex()));
+        }
+
+        public bool ObtainQuest(Game_Pawn aPawn, Quest_Type aQuest)
+        {
+            Game_PlayerPawn playerPawn = (aPawn as Game_PlayerPawn);
+            if (playerPawn != null && aQuest != null && playerPawn.questLog != null)
+            {
+                return playerPawn.questLog.sv_AcceptQuest(aQuest);
+            }
+            return false;
+        }
+
+        public bool TeleportPawn(Game_Pawn aPawn, int aWorld, bool Instance, string aStart)
+        {
+            throw new NotImplementedException();
+            //Game_PlayerController PlayerController = (aPawn.Controller as Game_PlayerController);
+            //Game_GameServer Engine;
+            //Engine = Game_GameServer(Class'Actor'.static.GetGameEngine());
+            //if (PlayerController != null)
+            //{
+                //ApiTrace("Teleporting" @ GetCharacterName(aPawn)
+                //@ "to world"
+                //@ string(aWorld)
+                //@ "at"
+                //@ aStart);
+                //Engine.LoginToWorldByID(aWorld, PlayerController.CharacterID, aStart, "");
+            //    return true;
+            //}
+            //else
+            //{
+                //ApiTrace("Not teleporting non-player controlled"
+                //@ GetCharacterName(aPawn));
+                //return false;
+            //}
+        }
+
+        public virtual int GetLevel(Game_Pawn aPawn)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual int GetPeP(Game_Pawn aPawn)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 /*
-event bool CanReceiveItems(Game_Pawn aPawn,Content_Inventory aItems) {
-local int inv;
-local int Count;
-if (aPawn.itemManager == None) {                                            
-ApiTrace(GetCharacterName(aPawn) @ "has no ItemManager");                 
-return False;                                                             
-}
-Count = aItems.SlotCount();                                                 
-inv = aPawn.itemManager.GetFreeSlots(1);                                    
-if (Count > inv) {                                                          
-ApiTrace(GetCharacterName(aPawn) @ "has only"
-@ string(inv)
-@ "inventory slots available for"
-@ string(Count)
-@ "items");
-return False;                                                             
-}
-ApiTrace(GetCharacterName(aPawn) @ "has an"
-@ string(inv)
-@ "inventory slots available for"
-@ string(Count)
-@ "items");
-return True;                                                                
-}
-function bool HasItems(Game_Pawn aPawn,Content_Inventory aItems) {
-if (aPawn.itemManager != None && !aItems.Empty()) {                         
-if (aItems.HasItemsInInventory(aPawn)) {                                  
-return True;                                                            
-}
-}
-ApiTrace(GetCharacterName(aPawn) @ "doesn't have"
-@ aItems.Description());
-return False;                                                               
-}
-final native function bool HasTargetActive(Game_Pawn aPawn,export editinline Quest_Target aTarget);
-function bool HasFailedTarget(Game_Pawn aPawn,export editinline Quest_Target aTarget) {
-local Game_PlayerPawn playerPawn;
-playerPawn = Game_PlayerPawn(aPawn);                                        
-if (playerPawn != None && aTarget != None) {                                
-if (aTarget.Failed(playerPawn.questLog.GetTargetProgress(aTarget.GetQuest(),aTarget.GetIndex()))) {
-ApiTrace(GetCharacterName(aPawn) @ "has failed target"
-@ string(aTarget));
-return True;                                                            
-}
-}
-ApiTrace(GetCharacterName(aPawn) @ "hasn't failed target"
-@ string(aTarget));
-return False;                                                               
-}
 final native function int TimesQuestFinished(Game_Pawn aPawn,export editinline Quest_Type aQuest);
 final native function bool FinishQuest(Game_Pawn aPawn,export editinline Quest_Type aQuest);
 final native function bool HasFailedQuest(Game_Pawn aPawn,export editinline Quest_Type aQuest);
 final native function bool HasCompletedQuest(Game_Pawn aPawn,export editinline Quest_Type aQuest,optional bool aNearly);
 final native function bool HasQuest(Game_Pawn aPawn,export editinline Quest_Type aQuest);
-function bool ObtainQuest(Game_Pawn aPawn,export editinline Quest_Type aQuest) {
-local Game_PlayerPawn playerPawn;
-playerPawn = Game_PlayerPawn(aPawn);                                        
-if (playerPawn != None && aQuest != None
-&& playerPawn.questLog != None) {
-if (playerPawn.questLog.sv_AcceptQuest(aQuest)) {                         
-ApiTrace(GetCharacterName(aPawn) @ "got quest"
-@ string(aQuest));
-return True;                                                            
-} else {                                                                  
-ApiTrace(GetCharacterName(aPawn) @ "couldn't accept quest"
-@ string(aQuest));
-return False;                                                           
-}
-} else {                                                                    
-ApiTrace(GetCharacterName(aPawn) @ "didn't get quest"
-@ string(aQuest));
-return False;                                                             
-}
-}
 final native function bool MeetsRequirementsQuest(Game_Pawn aPawn,export editinline Quest_Type aQuest);
-final native function int GetPeP(Game_Pawn aPawn);
-final native function int GetLevel(Game_Pawn aPawn);
 function Game_NPCPawn FindNPC(Game_Pawn aFrom,export editinline NPC_Type aType,float aRadius) {
 local Game_Pawn foundPawn;
 local Game_NPCPawn foundNPC;
 foreach aFrom.RadiusActors(Class'Game_Pawn',foundPawn,aRadius) {            
 foundNPC = Game_NPCPawn(foundPawn);                                       
-if (foundNPC != None && foundNPC.NPCType == aType) {                      
+if (foundNPC != null && foundNPC.NPCType == aType) {                      
 ApiTrace("Found NPC" @ string(aType) @ string(foundNPC)
 @ "within"
 @ string(aRadius)
@@ -380,26 +405,7 @@ ApiTrace("Didn't find NPC" @ string(aType)
 @ string(aRadius)
 @ "of"
 @ GetCharacterName(aFrom));
-return None;                                                                
-}
-function bool TeleportPawn(Game_Pawn aPawn,int aWorld,bool Instance,string aStart) {
-local Game_PlayerController PlayerController;
-local Game_GameServer Engine;
-PlayerController = Game_PlayerController(aPawn.Controller);                 
-Engine = Game_GameServer(Class'Actor'.static.GetGameEngine());              
-if (PlayerController != None) {                                             
-ApiTrace("Teleporting" @ GetCharacterName(aPawn)
-@ "to world"
-@ string(aWorld)
-@ "at"
-@ aStart);
-Engine.LoginToWorldByID(aWorld,PlayerController.CharacterID,aStart,"");   
-return True;                                                              
-} else {                                                                    
-ApiTrace("Not teleporting non-player controlled"
-@ GetCharacterName(aPawn));
-return False;                                                             
-}
+return null;                                                                
 }
 function FindRadiusActors(class<Actor> aClass,Actor aOrigin,float aRange,name aTag,out array<Actor> oActors) {
 local Actor someActor;
@@ -411,7 +417,7 @@ $ "' within"
 $ "uu of "
 @ string(aOrigin));
 foreach aOrigin.RadiusActors(aClass,someActor,aRange) {                     
-if (string(aTag) == "None" || someActor.Tag == aTag) {                    
+if (string(aTag) == "null" || someActor.Tag == aTag) {                    
 oActors[oActors.Length] = someActor;                                    
 }
 }
@@ -427,9 +433,9 @@ $ string(aTag)
 $ "' closest to"
 @ string(aOrigin));
 foreach aOrigin.AllActors(aClass,someActor) {                               
-if (string(aTag) == "None" || someActor.Tag == aTag) {                    
+if (string(aTag) == "null" || someActor.Tag == aTag) {                    
 Distance = VSize(aOrigin.Location - someActor.Location);                
-if (closestActor == None || Distance < closestDistance) {               
+if (closestActor == null || Distance < closestDistance) {               
 closestDistance = Distance;                                           
 closestActor = someActor;                                             
 }
@@ -443,101 +449,7 @@ static native function bool ValidLocation(Actor RefActor,Vector aLocation,Vector
 static native function Vector ProjectLocationOnGround(Actor aActor,Vector aOrigin,optional Vector aExtent);
 final native function int GetWorld(Game_Pawn aPawn);
 final native function bool Compare(int aValue,byte aOp,int aTarget);
-function string OperatorToString(byte aOp) {
-switch (aOp) {                                                              
-case 0 :                                                                  
-return "==";                                                            
-case 1 :                                                                  
-return "!=";                                                            
-case 2 :                                                                  
-return "<";                                                             
-case 3 :                                                                  
-return ">";                                                             
-case 4 :                                                                  
-return "<=";                                                            
-case 5 :                                                                  
-return ">=";                                                            
-case 6 :                                                                  
-return "&";                                                             
-case 7 :                                                                  
-return "!&";                                                            
-default:                                                                  
-return "INVALID";                                                       
-}
-}
-}
-function string GetTimeText(int aSeconds) {
-local string ret;
-if (Abs(aSeconds) > 60) {                                                   
-ret = string(aSeconds / 60)
-@ Class'StringReferences'.default.minStr.Text;
-} else {                                                                    
-ret = string(aSeconds)
-@ Class'StringReferences'.default.sec.Text;
-}
-return ret;                                                                 
-}
-function string GetMoneyText(int aMoney) {
-local int coins0;
-local int coins1;
-local int coins2;
-local string ret;
-coins0 = aMoney % 100;                                                      
-coins1 = aMoney / 100 % 100;                                                
-coins2 = aMoney / 10000;                                                    
-if (aMoney > 0) {                                                           
-if (coins0 > 1) {                                                         
-ret = string(coins0) @ GetCoinName(0,True)
-@ ret;             
-} else {                                                                  
-if (coins0 == 1) {                                                      
-ret = string(coins0) @ GetCoinName(0,False)
-@ ret;        
-}
-}
-if (coins1 > 1) {                                                         
-ret = string(coins1) @ GetCoinName(1,True)
-@ ret;             
-} else {                                                                  
-if (coins1 == 1) {                                                      
-ret = string(coins1) @ GetCoinName(1,False)
-@ ret;        
-}
-}
-if (coins2 > 1) {                                                         
-ret = string(coins2) @ GetCoinName(2,True)
-@ ret;             
-} else {                                                                  
-if (coins2 == 1) {                                                      
-ret = string(coins2) @ GetCoinName(2,False)
-@ ret;        
-}
-}
-} else {                                                                    
-ret = "0" @ GetCoinName(0,True);                                          
-}
-return ret;                                                                 
-}
 native function string GetCoinName(int aLevel,bool aPlural);
-function string ParseText(string aActiveText,Object aSpeaker,Object aSubject,Object aTarget) {
-local Game_Controller PlayerController;
-PlayerController = GetPlayer();                                             
-if (PlayerController.SBRole == 4) {                                         
-return Game_PlayerController(PlayerController).TextParser.Parse(aActiveText,aSpeaker,aSubject,aTarget,0);
-} else {                                                                    
-return aActiveText;                                                       
-}
-}
+
 native function Game_Controller GetPlayer();
-event string GetActiveText(Game_ActiveTextItem aItem) {
-return "???";                                                               
-}
-final native function string GetCharacterName(Game_Pawn aPawn);
-function ApiTrace(string aText) {
-if (ApiTracing()) {                                                         
-}
-}
-function bool ApiTracing() {
-return False;                                                               
-}
 */

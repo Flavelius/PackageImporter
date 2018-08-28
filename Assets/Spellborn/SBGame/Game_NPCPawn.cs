@@ -8,313 +8,206 @@ namespace SBGame
     [Serializable] public class Game_NPCPawn : Game_TransientPawn
     {
         public NPC_Type NPCType;
-
         public int NPCFameLevel;
-
         public int NPCPePRank;
-
         public int NPCTypeId;
-
         public List<int> RelatedQuestsIds = new List<int>();
-
         public Vector mNetDestination;
-
         public ENPCMovementFlags mMovementFlags;
-
         public Game_Pawn mNetFocus;
-
         public Vector mNetFocusLocation;
-
         public Rotator mDefaultRotation;
-
         public List<NetMovement> mNetPath = new List<NetMovement>();
-
         [NonSerialized, HideInInspector]
         public Game_Pawn ClientFocus;
-
         public int MovingTurnLimit;
-
         public float timerMain;
-
         public float bannerTimer;
-
         public Conversation_Topic Topic;
-
         public Actor TopicEmitter;
-
         public float LootTimeout;
-
         public float RotTimer;
-
         [NonSerialized, HideInInspector]
         [FieldTransient()]
         public Game_Pawn mScavenger;
 
-        [Serializable] public struct NetMovement
+        [Serializable] public struct NetMovement: IPacketWritable
         {
             public Vector Destination;
+            public ENPCMovementFlags flags;
 
-            public byte flags;
+            public void Write(IPacketWriter writer)
+            {
+                writer.WriteVector(Destination);
+                writer.WriteByte((byte)flags);
+            }
         }
 
-        public enum ENPCMovementFlags
+        public override void Initialize()
+        {
+            NPCFameLevel = NPCType.FameLevel;
+            NPCPePRank = NPCType.PePRank;
+            NPCTypeId = NPCType.GetResourceId();
+            NPCType.sv_OnInit(this);
+            mDefaultRotation = transform.rotation;
+            base.Initialize();                                                         
+        }
+
+        public override void WriteAddStream(IPacketWriter writer)
+        {
+            writer.WriteInt32(CharacterStats.mRecord.MaxHealth);
+            writer.WriteFloat(CharacterStats.mRecord.Physique);
+            writer.WriteFloat(CharacterStats.mRecord.Morale);
+            writer.WriteFloat(CharacterStats.mRecord.Concentration);
+            writer.WriteInt32(NPCFameLevel);
+            writer.WriteInt32(NPCPePRank);
+            writer.WriteInt32(NPCType.GetResourceId());
+            writer.WriteInt32(RelatedQuestsIds.Count);
+            for (int i = 0; i < RelatedQuestsIds.Count; i++)
+            {
+                writer.WriteInt32(RelatedQuestsIds[i]);
+            }
+            writer.WriteVector3(transform.position);
+            writer.WriteByte((byte)mMovementFlags);
+            writer.WriteInt32(mNetFocus != null ? mNetFocus.GetRelevanceID() : -1);
+            writer.WriteVector(mNetFocusLocation);
+            writer.WriteRotator(mDefaultRotation);
+            writer.WriteByte((byte)mCurrentState); //probably mNetState
+            writer.WriteInt32(bInvulnerable ? 0 : 1);
+            writer.WriteFloat(GroundSpeedModifier);
+            writer.WriteInt32(Visibility);
+        }
+
+        public enum ENPCMovementFlags: byte
         {
             ENMF_Normal,
-
             ENMF_Walking,
-
             ENMF_Backwards,
-
             ENPCMovementFlags_RESERVED_3,
-
             ENMF_Strafing,
-
             ENPCMovementFlags_RESERVED_5,
-
             ENPCMovementFlags_RESERVED_6,
-
             ENPCMovementFlags_RESERVED_7,
-
             ENMF_Jumping,
-
             ENPCMovementFlags_RESERVED_9,
-
             ENPCMovementFlags_RESERVED_10,
-
             ENPCMovementFlags_RESERVED_11,
-
             ENPCMovementFlags_RESERVED_12,
-
             ENPCMovementFlags_RESERVED_13,
-
             ENPCMovementFlags_RESERVED_14,
-
             ENPCMovementFlags_RESERVED_15,
-
             ENMF_Crouching,
-
             ENPCMovementFlags_RESERVED_17,
-
             ENPCMovementFlags_RESERVED_18,
-
             ENPCMovementFlags_RESERVED_19,
-
             ENPCMovementFlags_RESERVED_20,
-
             ENPCMovementFlags_RESERVED_21,
-
             ENPCMovementFlags_RESERVED_22,
-
             ENPCMovementFlags_RESERVED_23,
-
             ENPCMovementFlags_RESERVED_24,
-
             ENPCMovementFlags_RESERVED_25,
-
             ENPCMovementFlags_RESERVED_26,
-
             ENPCMovementFlags_RESERVED_27,
-
             ENPCMovementFlags_RESERVED_28,
-
             ENPCMovementFlags_RESERVED_29,
-
             ENPCMovementFlags_RESERVED_30,
-
             ENPCMovementFlags_RESERVED_31,
-
             ENMF_Sitting,
-
             ENPCMovementFlags_RESERVED_33,
-
             ENPCMovementFlags_RESERVED_34,
-
             ENPCMovementFlags_RESERVED_35,
-
             ENPCMovementFlags_RESERVED_36,
-
             ENPCMovementFlags_RESERVED_37,
-
             ENPCMovementFlags_RESERVED_38,
-
             ENPCMovementFlags_RESERVED_39,
-
             ENPCMovementFlags_RESERVED_40,
-
             ENPCMovementFlags_RESERVED_41,
-
             ENPCMovementFlags_RESERVED_42,
-
             ENPCMovementFlags_RESERVED_43,
-
             ENPCMovementFlags_RESERVED_44,
-
             ENPCMovementFlags_RESERVED_45,
-
             ENPCMovementFlags_RESERVED_46,
-
             ENPCMovementFlags_RESERVED_47,
-
             ENPCMovementFlags_RESERVED_48,
-
             ENPCMovementFlags_RESERVED_49,
-
             ENPCMovementFlags_RESERVED_50,
-
             ENPCMovementFlags_RESERVED_51,
-
             ENPCMovementFlags_RESERVED_52,
-
             ENPCMovementFlags_RESERVED_53,
-
             ENPCMovementFlags_RESERVED_54,
-
             ENPCMovementFlags_RESERVED_55,
-
             ENPCMovementFlags_RESERVED_56,
-
             ENPCMovementFlags_RESERVED_57,
-
             ENPCMovementFlags_RESERVED_58,
-
             ENPCMovementFlags_RESERVED_59,
-
             ENPCMovementFlags_RESERVED_60,
-
             ENPCMovementFlags_RESERVED_61,
-
             ENPCMovementFlags_RESERVED_62,
-
             ENPCMovementFlags_RESERVED_63,
-
             ENMF_MovingTurn,
-
             ENPCMovementFlags_RESERVED_65,
-
             ENPCMovementFlags_RESERVED_66,
-
             ENPCMovementFlags_RESERVED_67,
-
             ENPCMovementFlags_RESERVED_68,
-
             ENPCMovementFlags_RESERVED_69,
-
             ENPCMovementFlags_RESERVED_70,
-
             ENPCMovementFlags_RESERVED_71,
-
             ENPCMovementFlags_RESERVED_72,
-
             ENPCMovementFlags_RESERVED_73,
-
             ENPCMovementFlags_RESERVED_74,
-
             ENPCMovementFlags_RESERVED_75,
-
             ENPCMovementFlags_RESERVED_76,
-
             ENPCMovementFlags_RESERVED_77,
-
             ENPCMovementFlags_RESERVED_78,
-
             ENPCMovementFlags_RESERVED_79,
-
             ENPCMovementFlags_RESERVED_80,
-
             ENPCMovementFlags_RESERVED_81,
-
             ENPCMovementFlags_RESERVED_82,
-
             ENPCMovementFlags_RESERVED_83,
-
             ENPCMovementFlags_RESERVED_84,
-
             ENPCMovementFlags_RESERVED_85,
-
             ENPCMovementFlags_RESERVED_86,
-
             ENPCMovementFlags_RESERVED_87,
-
             ENPCMovementFlags_RESERVED_88,
-
             ENPCMovementFlags_RESERVED_89,
-
             ENPCMovementFlags_RESERVED_90,
-
             ENPCMovementFlags_RESERVED_91,
-
             ENPCMovementFlags_RESERVED_92,
-
             ENPCMovementFlags_RESERVED_93,
-
             ENPCMovementFlags_RESERVED_94,
-
             ENPCMovementFlags_RESERVED_95,
-
             ENPCMovementFlags_RESERVED_96,
-
             ENPCMovementFlags_RESERVED_97,
-
             ENPCMovementFlags_RESERVED_98,
-
             ENPCMovementFlags_RESERVED_99,
-
             ENPCMovementFlags_RESERVED_100,
-
             ENPCMovementFlags_RESERVED_101,
-
             ENPCMovementFlags_RESERVED_102,
-
             ENPCMovementFlags_RESERVED_103,
-
             ENPCMovementFlags_RESERVED_104,
-
             ENPCMovementFlags_RESERVED_105,
-
             ENPCMovementFlags_RESERVED_106,
-
             ENPCMovementFlags_RESERVED_107,
-
             ENPCMovementFlags_RESERVED_108,
-
             ENPCMovementFlags_RESERVED_109,
-
             ENPCMovementFlags_RESERVED_110,
-
             ENPCMovementFlags_RESERVED_111,
-
             ENPCMovementFlags_RESERVED_112,
-
             ENPCMovementFlags_RESERVED_113,
-
             ENPCMovementFlags_RESERVED_114,
-
             ENPCMovementFlags_RESERVED_115,
-
             ENPCMovementFlags_RESERVED_116,
-
             ENPCMovementFlags_RESERVED_117,
-
             ENPCMovementFlags_RESERVED_118,
-
             ENPCMovementFlags_RESERVED_119,
-
             ENPCMovementFlags_RESERVED_120,
-
             ENPCMovementFlags_RESERVED_121,
-
             ENPCMovementFlags_RESERVED_122,
-
             ENPCMovementFlags_RESERVED_123,
-
             ENPCMovementFlags_RESERVED_124,
-
             ENPCMovementFlags_RESERVED_125,
-
             ENPCMovementFlags_RESERVED_126,
-
             ENPCMovementFlags_RESERVED_127,
-
             ENMF_Submerged,
         }
     }
@@ -557,10 +450,6 @@ ClientFocus = None;
 }
 }
 Super.cl_OnFrame(DeltaTime);                                                
-}
-event cl_OnInit() {
-NPCType.cl_OnInit(self);                                                    
-Super.cl_OnInit();                                                          
 }
 event cl_OnBaseline() {
 NPCType = NPC_Type(Class'SBDBSync'.GetResourceObject(NPCTypeId));           

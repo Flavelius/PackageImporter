@@ -8,7 +8,6 @@ namespace Engine
     public abstract class Actor: UObject
     {
         public const float MINFLOORZ = 0.7F;
-
         public const float MAXSTEPHEIGHT = 25F;
 
         [HideInInspector]

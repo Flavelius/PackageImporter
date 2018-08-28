@@ -7,7 +7,7 @@ using UnityEngine;
 namespace SBGame
 {
     [Serializable]
-    public class Game_ShiftableAppearance: Base_Component
+    public class Game_ShiftableAppearance: Base_Component, IActorLoginStream
     {
         [NonSerialized, HideInInspector]
         private PhysicState mSavedPhysics;
@@ -113,9 +113,20 @@ namespace SBGame
             return ShiftAppearance(null);
         }
 
+        public bool IsShifted()
+        {
+            Debug.LogWarning("TODO investigate if IsShifted check is correct");
+            return mShiftedNPCType != null;
+        }
+
         Game_Appearance GetCurrent()
         {
             return mShiftedAppearance != null ? mShiftedAppearance : (Outer as Game_Pawn).BaseAppearance;
+        }
+
+        public NPC_Type GetShiftedNPCType()
+        {
+            return mShiftedNPCType;
         }
 
         void TestInvariant()
@@ -131,6 +142,16 @@ namespace SBGame
         {
             (Outer as Game_Pawn).BaseAppearance = aNPCType.Appearance.CreateAppearance((Outer as Game_Pawn), (Outer as Game_Pawn).BaseAppearance, false);
             (Outer as Game_Pawn).BaseAppearance.Apply();
+        }
+
+        public void WriteLoginStream(IPacketWriter writer)
+        {
+            Debug.LogWarning("TODO investigate loginstream for shiftableAppearance");
+        }
+
+        public void WriteAddStream(IPacketWriter writer)
+        {
+            writer.WriteInt32(mShiftedNPCTypeID);
         }
     }
 }
@@ -219,16 +240,12 @@ mInvalidatedDressup = True;
 event bool sv_UnshiftAppearance() {
 return sv_ShiftAppearance(None);                                            
 }
-event NPC_Type GetShiftedNPCType() {
-return mShiftedNPCType;                                                     
-}
 event bool sv_ShiftAppearance(export editinline NPC_Type aOtherNPCType) {
 ShiftAppearance(aOtherNPCType);                                             
 sv2clrel_ShiftAppearance_CallStub(mShiftedNPCTypeID);                       
 return True;                                                                
 }
 native function bool IsFeminine();
-native function bool IsShifted();
 event Game_Appearance GetBase() {
 return Outer.BaseAppearance;                                                
 }

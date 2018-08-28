@@ -13,6 +13,7 @@ namespace World
     {
         Scene scene;
         List<Actor> actors = new List<Actor>();
+        List<Game_PlayerController> players = new List<Game_PlayerController>();
 
         public MapIDs ID { get; private set; }
         public int InstanceID { get; private set; }
@@ -45,16 +46,18 @@ namespace World
 
         public void Add<T>(T actor) where T : Actor
         {
-            if (!actors.Contains(actor))
+            if (actors.Contains(actor))
             {
                 throw new Exception(string.Format("Actor {0} is already added to map {1}", actor, ID));
             }
             actors.Add(actor);
+            if (typeof(T) == typeof(Game_PlayerController)) players.Add(actor as Game_PlayerController);
             actor.Level = LevelInfo;
         }
 
         public bool Remove<T>(T actor) where T : Actor
         {
+            if (typeof(T) == typeof(Game_PlayerController)) players.Remove(actor as Game_PlayerController);
             return actors.Remove(actor);
         }
 
@@ -93,6 +96,11 @@ namespace World
                 var t = actors[i] as T;
                 if (t != null) yield return t;
             }
+        }
+
+        public void Update()
+        {
+
         }
     }
 }

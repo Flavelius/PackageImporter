@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Engine
 {
-    [Serializable] public class Pawn : Actor, IActorPacketStream
+    [Serializable] public abstract class Pawn : Actor
     {
         public Controller Controller;
 
@@ -81,8 +81,6 @@ namespace Engine
 
         [NonSerialized, HideInInspector]
         public float MaxRotation;
-
-        public virtual void WriteLoginStream(IPacketWriter writer) { throw new NotImplementedException(); }
 
     }
 }

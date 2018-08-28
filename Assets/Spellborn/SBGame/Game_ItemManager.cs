@@ -11,15 +11,19 @@ namespace SBGame
         [FieldTransient()]
         public int mItems;
 
-        public Game_ItemManager()
+        public int GetFreeSlots(Game_Item.EItemLocationType aLocationType,int aLocationID = 0)
         {
+            throw new NotImplementedException();
+        }
+
+        public int CountItems(Item_Type aItemType, Game_Item.EItemLocationType aLocationType = Game_Item.EItemLocationType.ILT_Unknown)
+        {
+            throw new NotImplementedException();
         }
     }
 }
 /*
-native event int GetFreeSlots(byte aLocationType,optional int aLocationID);
 final native function int CountItemsByType(byte aType,optional byte aLocationType);
-final native function int CountItems(export editinline Item_Type aItemType,optional byte aLocationType);
 native function bool IsValidSlot(byte aLocationType,int aLocationSlot,int aLocationID);
 native function Game_Item GetItemByID(int aDBID);
 native function Game_Item GetItem(byte aLocationType,int aLocationSlot,optional int aLocationID);

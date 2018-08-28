@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Engine
 {
-    public abstract class Controller : Actor, IActorPacketStream
+    public abstract class Controller : Actor
     {
         public const int LATENT_MOVETOWARD = 503;
 
@@ -36,7 +36,6 @@ namespace Engine
         [ArraySizeForExtraction(Size = 2)]
         public AvoidMarker[] FearSpots = new AvoidMarker[0];
 
-        public virtual void WriteLoginStream(IPacketWriter writer) { throw new NotImplementedException(); }
     }
 }
 /*

@@ -6,6 +6,7 @@ public interface IPacketWriter
 {
     void WriteByte(byte b);
     void WriteByteArray(byte[] b);
+    void WriteByteArray(List<byte> b);
     void WriteByteArrayWithoutLength(byte[] b);
     void WriteUint16(ushort s);
     void WriteUint32(uint i);
