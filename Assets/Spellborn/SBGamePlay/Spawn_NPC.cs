@@ -45,7 +45,7 @@ namespace SBGamePlay
         {
             //added TODO find out how to really spawn an npc
             if (NPCType == null) return;
-            var instance = Level.GameMap.Spawn(GameResources.Instance.NPCPrefab, Location, Rotation, InitializeSpawnedNPC);
+            var instance = Spawn(GameResources.Instance.NPCPrefab, Location, Rotation, InitializeSpawnedNPC, Level.GameMap);
             instance.sv_OnSpawn(NPCType.FameLevel, NPCType.PePRank, NPCType.TaxonomyFaction);
             Spawns.Add(instance);
         }

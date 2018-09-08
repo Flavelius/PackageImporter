@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Engine;
+using Grids;
 using SBBase;
 using UnityEngine;
 
 namespace SBGame
 {
     [Serializable]
-    public abstract class Game_Controller: Base_Controller, IActorAddStream
+    public abstract class Game_Controller: Base_Controller, IActorAddStream, IUpdatableGridEntity
     {
 
         public Game_DebugUtils DebugUtils;

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Grids;
+using SBGame;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using World;
 
 namespace Engine
 {
-    public abstract class Actor: UObject
+    public abstract class Actor: UObject, IGridEntity
     {
         public const float MINFLOORZ = 0.7F;
         public const float MAXSTEPHEIGHT = 25F;
@@ -16,6 +19,8 @@ namespace Engine
         [FoldoutGroup("Advanced")]
         [HideInInspector]
         public bool bHidden;
+
+        public bool bStatic;
 
         [FoldoutGroup("Movement")]
         [FieldConst()]
@@ -68,6 +73,11 @@ namespace Engine
 
         [ArraySizeForExtraction(Size = 10)]
         public string[] StatsGroups = new string[0];
+
+        public Vector3 Position
+        {
+            get { return transform.position; }
+        }
 
         #region Unity Events
 
@@ -278,6 +288,23 @@ namespace Engine
         {
             Debug.LogWarning("SetCollisionSize not implemented");
             return true;
+        }
+
+        /// <summary>
+        /// Supply this method with one of the prefabs (PlayerPrefab, NPCPrefab etc) from GameResources
+        /// </summary>
+        public static T Spawn<T>(T prefab, Vector3 location, Quaternion rotation, Action<T> preSpawnInitCallback = null, GameMap map = null, Actor owner = null, string spawnTag = "") where T : Game_Controller
+        {
+            var t = Instantiate(prefab);
+            t.transform.SetPositionAndRotation(location, rotation);
+            if (preSpawnInitCallback != null) preSpawnInitCallback(t);
+            if (map != null) map.Add(t);
+            if (owner != null) t.SetOwner(owner);
+            t.Initialize();
+            t.Tag = spawnTag;
+            t.BeginPlay();
+            t.PostBeginPlay();
+            return t;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Engine;
+using Grids;
 using SBBase;
 using SBGame;
 using UnityEngine;
@@ -11,9 +11,15 @@ namespace World
 {
     public class GameMap
     {
+
+        public const int CellSize = 50;
+
         Scene scene;
         List<Actor> actors = new List<Actor>();
-        List<Game_PlayerController> players = new List<Game_PlayerController>();
+
+        MapGrid<Actor> grid;
+
+        public IEnumerable<Actor> AllActors { get { return actors; } }
 
         public MapIDs ID { get; private set; }
         public int InstanceID { get; private set; }
@@ -26,6 +32,7 @@ namespace World
             ID = id;
             InstanceID = instanceID;
             SBWorld = sbWorld;
+            grid = new MapGrid<Actor>(CellSize);
             foreach (var rootObject in scene.GetRootGameObjects())
             {
                 actors.AddRange(rootObject.GetComponentsInChildren<Actor>(true));
@@ -35,7 +42,12 @@ namespace World
             LevelInfo.GameMap = this;
         }
 
-        public IEnumerator<T> Actors<T>() where T : Actor
+        public void Update()
+        {
+            grid.Update();
+        }
+
+        public IEnumerable<T> Actors<T>() where T : Actor
         {
             foreach (var rootObject in actors)
             {
@@ -44,39 +56,26 @@ namespace World
             }
         }
 
-        public void Add<T>(T actor) where T : Actor
+        public void Add(Actor actor)
         {
             if (actors.Contains(actor))
             {
                 throw new Exception(string.Format("Actor {0} is already added to map {1}", actor, ID));
             }
+            SceneManager.MoveGameObjectToScene(actor.gameObject, scene);
             actors.Add(actor);
-            if (typeof(T) == typeof(Game_PlayerController)) players.Add(actor as Game_PlayerController);
+            grid.Add(actor);
             actor.Level = LevelInfo;
         }
 
-        public bool Remove<T>(T actor) where T : Actor
+        public bool Remove(Actor actor)
         {
-            if (typeof(T) == typeof(Game_PlayerController)) players.Remove(actor as Game_PlayerController);
-            return actors.Remove(actor);
-        }
-
-        /// <summary>
-        /// Supply this method with one of the prefabs (PlayerPrefab, NPCPrefab etc) from GameResources
-        /// </summary>
-        public T Spawn<T>(T prefab, Vector3 location, Quaternion rotation, Action<T> preSpawnInitCallback = null, Actor owner=null, string spawnTag="") where T:Game_Controller
-        {
-            var t = UnityEngine.Object.Instantiate(prefab);
-            t.transform.SetPositionAndRotation(location, rotation);
-            if (preSpawnInitCallback != null) preSpawnInitCallback(t);
-            SceneManager.MoveGameObjectToScene(t.gameObject, scene);
-            Add(t);
-            if (owner != null) t.SetOwner(owner);
-            t.Initialize();
-            t.Tag = spawnTag;
-            t.BeginPlay();
-            t.PostBeginPlay();
-            return t;
+            var ga = actor as Game_Actor;
+            if (ga != null) grid.Remove(ga);
+            var removed = actors.Remove(actor);
+            if (!removed) return false;
+            actor.Level = null;
+            return true;
         }
 
         public T Find<T>(Predicate<T> predicate) where T:Actor
@@ -98,9 +97,9 @@ namespace World
             }
         }
 
-        public void Update()
+        public void OverlapActorsSquare<T>(Vector3 point, float extend, List<T> result) where T:Actor
         {
-
+            grid.OverlapSquare(point, extend, result);
         }
     }
 }

@@ -6,7 +6,6 @@ using UnityEngine;
 using System.Linq;
 using World;
 using SBBase;
-using Engine;
 
 namespace User
 {
@@ -83,6 +82,7 @@ namespace User
                 ActiveCharacterMap = null;
                 GameObject.Destroy(ActiveController.gameObject);
                 ActiveController = null;
+                ActivePawn = null;
             }
             Log("Ended");
         }
@@ -129,6 +129,12 @@ namespace User
                 }
                 S2C_WORLD_LOGIN();
             }
+        }
+
+        [HandlesPacket(GameHeader.C2S_WORLD_LOGIN_ACK)]
+        void C2S_WORLD_LOGIN_ACK(NetworkPacket packet)
+        {
+            ActiveCharacterMap.Add(ActiveController);
         }
 
         #region Movement

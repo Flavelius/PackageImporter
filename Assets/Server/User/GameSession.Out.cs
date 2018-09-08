@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Network;
+﻿using Network;
+using SBBase;
 using SBGame;
 
 namespace User
@@ -57,6 +54,13 @@ namespace User
             pawn.CharacterStats.WriteAddStream(msg);
             pawn.combatState.WriteAddStream(msg);
             pawn.Effects.WriteAddStream(msg);
+            Connection.SendMessage(msg);
+        }
+
+        public void S2C_BASE_PAWN_REMOVE(Base_Pawn pawn)
+        {
+            var msg = GameHeader.S2C_BASE_PAWN_REMOVE.CreatePacket();
+            msg.WriteInt32(pawn.GetRelevanceID());
             Connection.SendMessage(msg);
         }
     }

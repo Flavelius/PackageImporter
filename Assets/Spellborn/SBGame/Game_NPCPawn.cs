@@ -50,7 +50,8 @@ namespace SBGame
             NPCPePRank = NPCType.PePRank;
             NPCTypeId = NPCType.GetResourceId();
             NPCType.sv_OnInit(this);
-            mDefaultRotation = transform.rotation;                                                        
+            mDefaultRotation = transform.rotation;
+            mNetFocusLocation = transform.position + transform.forward;
         }
 
         public override void WriteAddStream(IPacketWriter writer)

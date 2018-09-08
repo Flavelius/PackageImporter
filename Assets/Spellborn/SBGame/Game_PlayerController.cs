@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Engine;
 using UnityEngine;
+using User;
 
 namespace SBGame
 {
@@ -18,6 +19,10 @@ namespace SBGame
         public Game_PlayerFriends GroupingFriends;
         public Game_PlayerTeams GroupingTeams;
         public Game_PlayerGuilds GroupingGuilds;
+
+        //added 
+        public GameSession ActiveSession;
+        RelevanceHandler relevance = new RelevanceHandler();
 
         [NonSerialized, HideInInspector]
         public float mUnstuckTime;
@@ -114,6 +119,12 @@ namespace SBGame
         public void TickMovement(float aDeltaTime)
         {
 
+        }
+
+        public override void Tick(float deltaTime)
+        {
+            base.Tick(deltaTime);
+            relevance.Update(this);
         }
 
         public virtual void OnSitDown(bool aSitDown) { throw new NotImplementedException(); }

@@ -226,8 +226,9 @@ namespace User
             else
             {
                 ActiveCharacterMap = ServiceContainer.GetService<IMapLoader>().GetPersistentMap((MapIDs)character.worldID); //TODO change to instanceID / handle instances when needed
-                ActiveController = ActiveCharacterMap.Spawn(GameResources.Instance.PlayerPrefab, character.Location, character.Rotation, controller => 
+                ActiveController = Actor.Spawn(GameResources.Instance.PlayerPrefab, character.Location, character.Rotation, controller => 
                 {
+                    controller.ActiveSession = this;
                     controller.AccountID = Account.UID;
                     controller.DBCharacter = character;
                     controller.DBCharacterSheet = db.GetSheet(character.Id);

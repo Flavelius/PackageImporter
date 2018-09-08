@@ -16,11 +16,19 @@ public class GameServer : MonoBehaviour
     public static readonly UniverseInfo UniverseInfo = new UniverseInfo("TCoSReborn", "Any", "PVE");
     static SessionHandler sessionHandler;
     static MapLoader mapHandler;
+    [SerializeField] bool capFramerate = true;
+    [SerializeField] int framerateCap = 30;
 
     WorldServer worldServer;
     LoginServer loginServer;
 
     [SerializeField] TransientDatabase database;
+
+    void OnValidate()
+    {
+        if (!Application.isPlaying) return;
+        Application.targetFrameRate = capFramerate ? framerateCap : -1;
+    }
 
     void Awake()
     {
@@ -36,6 +44,7 @@ public class GameServer : MonoBehaviour
 
     void Start()
     {
+        if (capFramerate) Application.targetFrameRate = framerateCap;
         LoadPersistentWorlds();
         worldServer.Start();
         loginServer.Start();
@@ -47,14 +56,6 @@ public class GameServer : MonoBehaviour
         loginServer.Stop();
         worldServer.Stop();
     }
-
-    #if UNITY_EDITOR
-    [Button(ButtonSizes.Small, Expanded = false)]
-    void LaunchClient()
-    {
-        Process.Start(@"C:\Program Files (x86)\The Chronicles of Spellborn\bin\client\Sb_client.exe", "--show_console --packet_log --world 1");
-    }
-#endif
 
     [SerializeField] bool devLoadHawksmouthOnly = true;
     void LoadPersistentWorlds()
