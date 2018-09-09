@@ -4,9 +4,7 @@ namespace SBGame
 {
     [Serializable] public class Game_NPCItemManager : Game_ItemManager
     {
-        public Game_NPCItemManager()
-        {
-        }
+        public new Game_NPCPawn Outer { get { return base.Outer as Game_NPCPawn; } }
     }
 }
 /*

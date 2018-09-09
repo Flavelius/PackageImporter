@@ -6,14 +6,16 @@ namespace SBGame
 {
     [Serializable] public class Game_NPCSkills : Game_Skills
     {
+        public new Game_Pawn Outer { get { return base.Outer as Game_Pawn; } }
+
         public NPC_SkillDeck CurrentNPCSkillDeck;
         public float LongestAttack;
         public float LongestDebuff;
         public float LongestBuff;
         public bool CanHeal;
         public bool mQueueSkillAnimation;
-        private Vector mSkillLocation;
-        private Rotator mSkillRotation;
+        Vector mSkillLocation;
+        Rotator mSkillRotation;
         public int mQueueAnimVariation;
         public Item_Type mQueueTracerItem;
         public float mQueueTime;

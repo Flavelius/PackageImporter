@@ -7,6 +7,8 @@ namespace SBGame
     [Serializable]
     public class Game_Travel: Base_Component
     {
+        public new Game_PlayerController Outer { get { return base.Outer as Game_PlayerController; } }
+
         [NonSerialized] public int mTravelTimeOut;
 
         [Serializable]

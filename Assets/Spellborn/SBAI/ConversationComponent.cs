@@ -6,14 +6,54 @@ namespace SBAI
 {
     [Serializable] public class ConversationComponent : Game_Conversation
     {
+
+        public new Game_AIController Outer { get { return base.Outer as Game_AIController; } }
+
         public bool mEnabled;
-
         public List<Game_ConversationState> mConversations = new List<Game_ConversationState>();
-
         public List<Game_Pawn> mQueuedConversations = new List<Game_Pawn>();
 
-        public ConversationComponent()
+        protected override void OnInteraction(Game_Pawn aSource)
         {
+            if (!(Outer).MetaControllerMessage(15, aSource))
+            {
+                if (CanConverse(aSource))
+                {
+                    Outer.StateSignal(16);
+                    if (mEnabled)
+                    {
+                        StartConversation(aSource);
+                    }
+                    else
+                    {
+                        QueueConversation(aSource);
+                    }
+                }
+                base.OnInteraction(aSource);
+            }
+        }
+
+        public void StartConversation(Game_Pawn aPawn)
+        {
+            Conversation_Topic bestTopic;
+            (aPawn.Controller as Game_Controller).sv_FireHook((Content_Type.EContentHook)4, Outer.Pawn, 0);
+            bestTopic = ChooseTopic(aPawn);
+            if (bestTopic != null)
+            {
+                bestTopic.sv_Start(GetPawn(), aPawn);
+            }
+        }
+
+        protected void QueueConversation(Game_Pawn aPawn)
+        {
+            for (var qi = 0; qi < mQueuedConversations.Count; qi++)
+            {
+                if (mQueuedConversations[qi] == aPawn)
+                {
+                    return;
+                }
+            }
+            mQueuedConversations.Add(aPawn);
         }
     }
 }
@@ -156,19 +196,6 @@ Super.Converse(convState.partner,convState.CurrentTopic,convState.CurrentState);
 EndConversation(aPartner);                                                
 }
 }
-event OnInteraction(Game_Pawn aSource) {
-if (!Outer.MetaControllerMessage(15,aSource,)) {                            
-if (CanConverse(aSource)) {                                               
-Outer.StateSignal(16);                                                  
-if (mEnabled) {                                                         
-StartConversation(aSource);                                           
-} else {                                                                
-QueueConversation(aSource);                                           
-}
-}
-Super.OnInteraction(aSource);                                             
-}
-}
 event OnReact(Game_Pawn aSource) {
 local Game_Controller partnerController;
 local export editinline Conversation_Topic bestTopic;
@@ -183,25 +210,6 @@ Super.OnReact(aSource);
 }
 protected event StopConversation(Game_Pawn aPawn) {
 EndConversation(aPawn);                                                     
-}
-protected event StartConversation(Game_Pawn aPawn) {
-local export editinline Conversation_Topic bestTopic;
-Game_Controller(aPawn.Controller).sv_FireHook(Class'Content_Type'.4,Outer.Pawn,0);
-bestTopic = ChooseTopic(aPawn);                                             
-if (bestTopic != None) {                                                    
-bestTopic.sv_Start(GetPawn(),aPawn);                                      
-}
-}
-protected function QueueConversation(Game_Pawn aPawn) {
-local int qi;
-qi = 0;                                                                     
-while (qi < mQueuedConversations.Length) {                                  
-if (mQueuedConversations[qi] == aPawn) {                                  
-return;                                                                 
-}
-qi++;                                                                     
-}
-mQueuedConversations[mQueuedConversations.Length] = aPawn;                  
 }
 function int FindConversationIndex(Game_Pawn aPartner) {
 local int confFound;

@@ -61,26 +61,36 @@ namespace SBGame
         public enum EConversationType
         {
             ECT_None,
-
             ECT_Free,
-
             ECT_Greeting,
-
             ECT_Provide,
-
             ECT_Mid,
-
             ECT_Finish,
-
             ECT_Talk,
-
             ECT_LastWords,
-
             ECT_Victory,
-
             ECT_Thanks,
-
             ECT_Deliver,
+        }
+
+        public void sv_Start(Game_Pawn aSpeaker, Game_Pawn aPartner)
+        {
+            Conversation_Node bestConv;
+            sv_OnStart(aSpeaker, aPartner);
+            bestConv = GetConversationNode(aSpeaker, aPartner);
+            if (bestConv != null)
+            {
+                (aSpeaker.Controller as Game_Controller).ConversationControl.Converse(aPartner, this, bestConv);
+            }
+        }
+
+        protected virtual void sv_OnStart(Game_Pawn aSpeaker, Game_Pawn aPartner)
+        {
+        }
+
+        protected Conversation_Node GetConversationNode(Game_Pawn aSpeaker, Game_Pawn aPartner)
+        {
+            throw new NotImplementedException();
         }
     }
 }
@@ -96,15 +106,6 @@ if (!aOther.PublicTopic) {
 return False;                                                             
 }
 return True;                                                                
-}
-function sv_Start(Game_Pawn aSpeaker,Game_Pawn aPartner) {
-local export editinline Conversation_Node bestConv;
-sv_OnStart(aSpeaker,aPartner);                                              
-bestConv = GetConversationNode(aSpeaker,aPartner);                          
-if (bestConv != None) {                                                     
-Game_Controller(aSpeaker.Controller).ConversationControl.Converse(aPartner,self,bestConv);
-goto jl0065;                                                              
-}
 }
 event bool sv_OnFinish(Game_Pawn aSpeaker,Game_Pawn aPartner) {
 local int eventI;
@@ -123,10 +124,7 @@ eventI++;
 }
 return True;                                                                
 }
-event sv_OnStart(Game_Pawn aSpeaker,Game_Pawn aPartner) {
-}
 protected final native function bool CheckPawn(Game_Pawn aSpeaker,Game_Pawn aPartner);
-protected final native function Conversation_Node GetConversationNode(Game_Pawn aSpeaker,Game_Pawn aPartner);
 final native function Conversation_Node CheckConversation(Game_Pawn aSpeaker,Game_Pawn aPartner);
 function string GetText() {
 return TopicText.Text;                                                      

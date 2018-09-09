@@ -8,6 +8,8 @@ namespace SBGame
 
     [Serializable] public class Game_TradeManager : Base_Component
     {
+        public new Game_GameInfo Outer { get { return base.Outer as Game_GameInfo; } }
+
         private List<Trade_Transaction> mTransactions = new List<Trade_Transaction>();
 
         public Game_TradeManager()

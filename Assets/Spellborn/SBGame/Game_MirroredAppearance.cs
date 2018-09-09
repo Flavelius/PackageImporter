@@ -4,13 +4,9 @@ namespace SBGame
 {
     [Serializable] public class Game_MirroredAppearance : Game_ShiftableAppearance
     {
-        private Game_Pawn mReferencedPawn;
+        Game_Pawn mReferencedPawn;
+        Game_AppearanceListener mListener;
 
-        private Game_AppearanceListener mListener;
-
-        public Game_MirroredAppearance()
-        {
-        }
     }
 }
 /*

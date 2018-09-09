@@ -7,6 +7,9 @@ namespace SBGame
 {
     [Serializable] public class Game_CombatStats : Base_Component
     {
+
+        public new Actor Outer { get { return base.Outer as Actor; } }
+
         public Game_Pawn mScriptedClaim;
         public bool mInCombat;
         public float mCombatDuration;

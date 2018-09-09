@@ -5,6 +5,9 @@ namespace SBGame
 {
     [Serializable] public class Game_MiniGameProxy : Base_Component
     {
+
+        public new Game_Pawn Outer { get { return base.Outer as Game_Pawn; } }
+
         public void sv_PlayerDied() { }
     }
 }

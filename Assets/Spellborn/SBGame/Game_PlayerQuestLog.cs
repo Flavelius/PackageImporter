@@ -6,6 +6,8 @@ namespace SBGame
 {
     [Serializable] public class Game_PlayerQuestLog : Game_QuestLog, IActorLoginStream
     {
+        public new Game_PlayerPawn Outer { get { return base.Outer as Game_PlayerPawn; } }
+
         public override void Initialize(Actor outer)
         {
             base.Initialize(outer);

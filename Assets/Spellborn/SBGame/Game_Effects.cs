@@ -9,22 +9,25 @@ namespace SBGame
 
     [Serializable] public class Game_Effects : Base_Component, IActorLoginStream
     {
+
+        public new Actor Outer { get { return base.Outer as Actor; } }
+
         public const int MAX_NUM_REPLICATED_EFFECTS = 5;
         public const int USE_VALUE_FROM_START = -1073741824;
         public const int USE_VALUE_FROM_EFFECT_CLASS = -1073741824;
 
         [NonSerialized] public bool PulsatingSelection;
         [NonSerialized] public List<int> mReplicatedEffects = new List<int>();
-        private List<mTaggedEffect> mTaggedEffects = new List<mTaggedEffect>();
-        private int mCurrentInteractionEffectHandle;
-        private FSkill_EffectClass_AudioVisual mSelectionGlowEffectClass;
-        private FSkill_EffectClass_AudioVisual mSelectionPulsatingGlowEffectClass;
-        private byte mCurrentInteractionEffect;
-        private byte mWantedInteractionEffect;
-        private int mCurrentTargetInteractionEffectHandle;
-        private FSkill_EffectClass_AudioVisual mTargetGlowEffectClass;
-        private byte mCurrentTargetInteractionEffect;
-        private byte mWantedTargetInteractionEffect;
+        List<mTaggedEffect> mTaggedEffects = new List<mTaggedEffect>();
+        int mCurrentInteractionEffectHandle;
+        FSkill_EffectClass_AudioVisual mSelectionGlowEffectClass;
+        FSkill_EffectClass_AudioVisual mSelectionPulsatingGlowEffectClass;
+        byte mCurrentInteractionEffect;
+        byte mWantedInteractionEffect;
+        int mCurrentTargetInteractionEffectHandle;
+        FSkill_EffectClass_AudioVisual mTargetGlowEffectClass;
+        byte mCurrentTargetInteractionEffect;
+        byte mWantedTargetInteractionEffect;
 
         public void WriteLoginStream(IPacketWriter writer)
         {

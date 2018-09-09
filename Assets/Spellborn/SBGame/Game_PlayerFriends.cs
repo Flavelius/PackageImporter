@@ -8,6 +8,8 @@ namespace SBGame
 {
     [Serializable] public class Game_PlayerFriends : Base_Component
     {
+        public new Game_Controller Outer { get { return base.Outer as Game_Controller; } }
+
         [NonSerialized] public List<SBFriendsMember> FriendsMembers = new List<SBFriendsMember>();
 
         public enum eFriendsResultCode

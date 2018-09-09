@@ -9,6 +9,8 @@ namespace SBGame
 
     [Serializable] public abstract class Game_Skills : Base_Component
     {
+        public new Game_Pawn Outer { get { return base.Outer as Game_Pawn; } }
+
         public const int MAX_TOKEN_SLOTS = 3;
         public const int MAX_STACK_COUNT = 10;
         public const float MAX_AIMING_DESYNC = 1F;

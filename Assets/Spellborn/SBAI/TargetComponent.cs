@@ -9,6 +9,9 @@ namespace SBAI
 {
     [Serializable] public class TargetComponent : Base_Component
     {
+
+        public new Game_AIController Outer { get { return base.Outer as Game_AIController; } }
+
         public bool Initialized;
         public byte Mode;
         public Vector TargetLocation;
@@ -107,74 +110,126 @@ namespace SBAI
         public enum EPrecitionMethod
         {
             EPM_Unknown,
-
             EPM_Dead,
-
             EPM_Path,
-
             EPM_Destination,
-
             EPM_Now,
-
             EPM_History,
-
             EPM_Velocity,
         }
 
         public enum EFilterResult
         {
             EFR_None,
-
             EFR_Ok,
-
             EFR_Precondition,
-
             EFR_Invalid,
-
             EFR_Dead,
-
             EFR_Class,
-
             EFR_Filtered,
-
             EFR_Unreachable,
-
             EFR_OutOfRange,
-
             EFR_Invulnerable,
-
             EFR_Deselected,
         }
 
         public enum ETargettingMode
         {
             ETM_None,
-
             ETM_Location,
-
             ETM_Fixed,
-
             ETM_Nearest,
-
             ETM_Random,
-
             ETM_Combat,
+        }
+
+        public float SetDistanceSlack(float aNewSlack)
+        {
+            float ret = DistanceSlack;
+            DistanceSlack = aNewSlack;
+            return ret;
+        }
+
+        public float SetTargetSlack(float aNewSlack)
+        {
+            float ret = RetargetSlack;
+            RetargetSlack = aNewSlack;
+            return ret;
+        }
+
+        public bool DetectingAllies()
+        {
+            return Allies > 0;
+        }
+
+        public bool DetectingEnemies()
+        {
+            return Enemies > 0;
+        }
+
+        public bool IsDetecting()
+        {
+            return Detection;
+        }
+
+        public Actor GetTarget()
+        {
+            return Target;
+        }
+
+        public Game_Pawn GetPawn()
+        {
+            return GetTarget() as Game_Pawn;
+        }
+
+        public Vector GetTargetLocation()
+        {
+            return Location;
+        }
+
+        public void GetAllies(List<Game_Pawn> oEnemies)
+        {
+            oEnemies.Clear();
+            for (int i = 0; i < Detected.Count; i++)
+            {
+                if (Detected[i].Ally)
+                {
+                    var gp = Detected[i].Detected as Game_Pawn;
+                    if (gp != null) oEnemies.Add(gp);
+                }
+            }
+        }
+
+        public void GetEnemies(List<Game_Pawn> oEnemies)
+        {
+            oEnemies.Clear();
+            for (int i = 0; i < Detected.Count; i++)
+            {
+                if (Detected[i].Enemy)
+                {
+                    var gp = Detected[i].Detected as Game_Pawn;
+                    if (gp != null) oEnemies.Add(gp);
+                }
+            }
+        }
+
+        public void GetDetected(List<Game_Pawn> oDetected)
+        {
+            oDetected.Clear();
+            for (int i = 0; i < Detected.Count; i++)
+            {
+                var gp = Detected[i].Detected as Game_Pawn;
+                if (gp != null) oDetected.Add(gp);
+            }
+        }
+
+        public void GetCandidates(List<Game_Pawn> oEnemies)
+        {
+            throw new NotImplementedException();
         }
     }
 }
 /*
-function float SetDistanceSlack(float aNewSlack) {
-local float ret;
-ret = DistanceSlack;                                                        
-DistanceSlack = aNewSlack;                                                  
-return ret;                                                                 
-}
-function float SetTargetSlack(float aNewSlack) {
-local float ret;
-ret = RetargetSlack;                                                        
-RetargetSlack = aNewSlack;                                                  
-return ret;                                                                 
-}
 native function SetLineOfSight(float aLineOfSightRange);
 native function SetVisualRange(float aVisualRange);
 native function SetDetection(bool aOn);
@@ -187,27 +242,5 @@ native function SetPawn(Game_Pawn aPawn);
 native function SetActor(Actor aActor);
 native function SetLocation(Vector aLocation);
 native function SetDisabled();
-function bool DetectingAllies() {
-return Allies > 0;                                                          
-}
-function bool DetectingEnemies() {
-return Enemies > 0;                                                         
-}
-function bool IsDetecting() {
-return Detection;                                                           
-}
-native function GetAllies(out array<Game_Pawn> oEnemies);
-native function GetEnemies(out array<Game_Pawn> oEnemies);
-native function GetCandidates(out array<Game_Pawn> oEnemies);
-native function GetDetected(out array<Game_Pawn> oDetected);
-function Game_Pawn GetPawn() {
-return Game_Pawn(GetTarget());                                              
-}
-function Actor GetTarget() {
-return Target;                                                              
-}
-function Vector GetTargetLocation() {
-return Location;                                                            
-}
 delegate byte FilterTarget(Actor aActor);
 */

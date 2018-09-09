@@ -5,6 +5,9 @@ namespace SBGame
 {
     [Serializable] public class Game_PlayerCombatStats : Game_CombatStats
     {
+
+        public new Game_PlayerPawn Outer { get { return base.Outer as Game_PlayerPawn; } }
+
         public float mPvPTimer;
 
         [FieldConfig()]
@@ -14,10 +17,6 @@ namespace SBGame
 
         [FieldConfig()]
         public float CombatIdleTimeOut;
-
-        public Game_PlayerCombatStats()
-        {
-        }
     }
 }
 /*

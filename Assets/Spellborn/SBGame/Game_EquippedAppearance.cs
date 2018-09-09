@@ -1,12 +1,11 @@
 ﻿using System;
-using Engine;
-using UnityEngine;
 
 namespace SBGame
 {
     [Serializable]
     public class Game_EquippedAppearance: Game_Appearance
     {
+
         [NonSerialized] public byte mHead;
         [NonSerialized] public int mChestClothes;
         [NonSerialized] public byte mLeftGlove;

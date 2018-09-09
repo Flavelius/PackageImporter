@@ -5,38 +5,25 @@ namespace SBGame
 {
     [Serializable] public class Game_GameMasterUtils : Game_DebugUtils
     {
+
+        public new Game_Controller Outer { get { return base.Outer as Game_Controller; } }
+
         public const string Concentration = "\"c\"";
-
         public const string Physique = "\"p\"";
-
         public const string Morale = "\"m\"";
-
         public const string DISGUISE = "\"disguise\"";
-
         public const string INVIS = "\"invis\"";
-
         public const string OFF = "\"off\"";
-
         public const string On = "\"on\"";
-
         public List<CommandInfo> mCommandInfos = new List<CommandInfo>();
-
         public Game_GameMasterController mGameMaster;
-
-        public Game_GameMasterUtils()
-        {
-        }
 
         [Serializable] public struct CommandInfo
         {
             public int MinLevel;
-
             public int selfLevel;
-
             public string Command;
-
             public string help;
-
             public string example;
         }
     }

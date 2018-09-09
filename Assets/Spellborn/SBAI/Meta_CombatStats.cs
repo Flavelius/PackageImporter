@@ -5,9 +5,7 @@ namespace SBAI
 {
     [Serializable] public class Meta_CombatStats : Game_CombatStats
     {
-        public Meta_CombatStats()
-        {
-        }
+        public new Game_AIController Outer { get { return base.Outer as Game_AIController; } }
     }
 }
 /*

@@ -230,6 +230,11 @@ namespace SBGame
             return mCurrentState == EControllerStates.CPS_PAWN_DEAD;
         }
 
+        protected virtual bool sv_OnDamage(Game_Pawn aEnemy, int aDamage)
+        {
+            return false;
+        }
+
         public abstract void WriteAddStream(IPacketWriter writer);
     }
 }
@@ -277,9 +282,6 @@ return False;
 event sv_OnOwnerAttack(bool WasNegativeEffect);
 event sv_OnOwnerAggression();
 event sv_OnSkillTarget(Game_Pawn aInstigator,export editinline FSkill_Type aType);
-event bool sv_OnDamage(Game_Pawn aEnemy,int aDamage) {
-return False;                                                               
-}
 event cl_OnShutdown() {
 if (DebugUtils != None) {                                                   
 DebugUtils.cl_OnShutdown();                                               

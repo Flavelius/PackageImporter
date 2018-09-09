@@ -4,6 +4,8 @@ namespace SBGame
 {
     [Serializable] public class Game_PlayerConversation : Game_Conversation
     {
+        public new Game_PlayerController Outer { get { return base.Outer as Game_PlayerController; } }
+
         public Game_ConversationState Conversation;
     }
 }

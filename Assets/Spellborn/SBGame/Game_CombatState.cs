@@ -7,6 +7,9 @@ namespace SBGame
     [Serializable]
     public class Game_CombatState: Base_Component
     {
+
+        public new Game_Pawn Outer { get { return base.Outer as Game_Pawn; } }
+
         [NonSerialized] public ECombatMode mCombatMode;
         [NonSerialized] public int mMainWeapon;
         [NonSerialized] public int mOffhandWeapon;
@@ -37,10 +40,9 @@ namespace SBGame
             if (mPreparedBonusGiven)
             {
                 mPreparedBonusGiven = false;
-                var outer = Outer as Game_Pawn;
-                outer.CharacterStats.IncreaseMeleeResistanceDelta(-0.05f);
-                outer.CharacterStats.IncreaseRangedResistanceDelta(-0.05f);
-                outer.CharacterStats.IncreaseMagicResistanceDelta(-0.05f);
+                Outer.CharacterStats.IncreaseMeleeResistanceDelta(-0.05f);
+                Outer.CharacterStats.IncreaseRangedResistanceDelta(-0.05f);
+                Outer.CharacterStats.IncreaseMagicResistanceDelta(-0.05f);
             }
         }
 

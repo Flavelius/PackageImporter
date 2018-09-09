@@ -17,57 +17,31 @@ namespace SBMiniGames
     
     [System.Serializable] public class MGame_MiniGameProxy : Game_MiniGameProxy
     {
-        
         public const bool QUICKSTART = false;
-        
         public const int MINIGAME_INVITATION_TIMEOUT = 30;
-        
         public const int MINIGAME_IGNORED_ME = 3;
-        
         public const int MINIGAME_BUSY = 2;
-        
         public const int MINIGAME_DECLINE = 1;
-        
         public const int MINIGAME_ACCEPT = 0;
-        
         public const int MINIGAME_STATUS_DIED = 4;
-        
         public const int MINIGAME_STATUS_TIMEOUT = 3;
-        
         public const int MINIGAME_STATUS_DRAW = 2;
-        
         public const int MINIGAME_STATUS_WIN = 1;
-        
         public const int MINIGAME_STATUS_UNDECIDED = 0;
-        
         public const int MINIGAME_COUNT = 2;
-        
         public const int MINIGAME_DRAUGHTS = 1;
-        
         public const int MINIGAME_CHESS = 0;
-        
         public MGame_MiniGameManager mMiniGameManager;
-        
         public int mGroupID;
-        
         public int mMiniGameID;
-        
         public bool mSettingsAccepted;
-        
         public bool mOfferDrawAccepted;
-        
         public MGame_MiniGame mMiniGame;
-        
         private bool mInviting;
-        
         public Game_Pawn mInvitingPlayer;
-        
         public float mInvitationTimeLeft;
-        
         private float mThinkTime;
-        
         private int mPreviousThinkTime;
-        
         public bool mGameStarted;
         
         //public delegate<OnPlayerAvailable> @__OnPlayerAvailable__Delegate;
@@ -103,10 +77,7 @@ namespace SBMiniGames
         //public delegate<OnOfferDraw> @__OnOfferDraw__Delegate;
         
         //public delegate<OnOfferDrawAccepted> @__OnOfferDrawAccepted__Delegate;
-        
-        public MGame_MiniGameProxy()
-        {
-        }
+
     }
 }
 /*

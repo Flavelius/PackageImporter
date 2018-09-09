@@ -6,6 +6,9 @@ namespace SBGame
     [Serializable]
     public abstract class Game_Character: Base_Component, IActorAddStream
     {
+
+        public new Game_Pawn Outer { get { return base.Outer as Game_Pawn; } }
+
         [NonSerialized] public NPC_Taxonomy mFaction;
         [NonSerialized] public int mFactionId;
         [NonSerialized] public NPC_Taxonomy mOldFaction;
@@ -76,14 +79,11 @@ namespace SBGame
 
         public string cl_GetFullName()
         {
-            if ((Outer as Game_Pawn).Appearance.IsShifted())
+            if (Outer.Appearance.IsShifted())
             {
-                return (Outer as Game_Pawn).Appearance.GetShiftedNPCType().GetLongName();
+                return Outer.Appearance.GetShiftedNPCType().GetLongName();
             }
-            else
-            {
-                return cl_GetBaseFullName();
-            }
+            return cl_GetBaseFullName();
         }
 
         string cl_GetBaseFullName()

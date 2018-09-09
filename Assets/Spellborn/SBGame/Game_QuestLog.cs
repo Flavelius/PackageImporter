@@ -9,6 +9,8 @@ namespace SBGame
     [Serializable]
     public class Game_QuestLog: Base_Component
     {
+        public new Game_Pawn Outer { get { return base.Outer as Game_Pawn; } }
+
         [NonSerialized] public List<int> targetProgress = new List<int>();
         [NonSerialized, HideInInspector] public List<Quest_Type> Quests = new List<Quest_Type>();
         [NonSerialized] public List<int> TargetActivation = new List<int>();
@@ -27,7 +29,7 @@ namespace SBGame
                     {
                         if (GetTargetActivation(Quests[qi], ti) && Quests[qi].Targets[ti].Active(targetProgress[TargetIndex]))
                         {
-                            Quests[qi].Targets[ti].RadialMenuCollect(Outer as Game_Pawn, aObject, aMainOption, out aSubOptions);
+                            Quests[qi].Targets[ti].RadialMenuCollect(Outer, aObject, aMainOption, out aSubOptions);
                         }
                     }
                 }

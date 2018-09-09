@@ -47,7 +47,7 @@ namespace SBGame
         public override void Initialize(Actor outer)
         {
             base.Initialize(outer);
-            var pawn = outer as Game_Pawn;
+            var pawn = Outer;
             var controller = pawn.Controller as Game_Controller;
             SetCharacterClass((Content_API.EContentClass)(controller.DBCharacterSheet.ClassId + 1));
             mFamePoints = (int)controller.DBCharacterSheet.FamePoints;
@@ -66,10 +66,10 @@ namespace SBGame
             SetCharacterClass(aClass);
             sv_UpdateStats();
             sv2cl_SetClass_CallStub(aClass);
-            SBDBAsync.SetCharacterClass((Outer as Game_Pawn), (Outer as Game_Pawn).GetCharacterID(), (byte)aClass - 1);
-            if ((Outer as Game_Pawn).BodySlots != null)
+            SBDBAsync.SetCharacterClass(Outer, Outer.GetCharacterID(), (byte)aClass - 1);
+            if (Outer.BodySlots != null)
             {
-                (Outer as Game_Pawn).BodySlots.sv_SetMode((Outer as Game_Pawn).BodySlots.GetBodySlotModeByClass());
+                Outer.BodySlots.sv_SetMode(Outer.BodySlots.GetBodySlotModeByClass());
             }
             SetClassToUniverse(aClass);
         }
@@ -138,7 +138,7 @@ namespace SBGame
             mRecord.FameLevel = aNewLevel;
             if (levelUp)
             {
-                (Outer as Game_Pawn).cl_PlayPawnEffect(0);
+                Outer.cl_PlayPawnEffect(0);
                 //if (Outer.IsLocalPlayer())
                 //{
                 //    Controller = Game_PlayerController(Outer.Controller);
@@ -152,7 +152,7 @@ namespace SBGame
         {
             if (aNewPePRank > mRecord.PePRank)
             {
-                (Outer as Game_Pawn).cl_PlayPawnEffect((Game_Pawn.EPawnEffectType)1);
+                Outer.cl_PlayPawnEffect((Game_Pawn.EPawnEffectType)1);
             }
             mRecord.PePRank = aNewPePRank;
         }

@@ -10,6 +10,9 @@ namespace SBGame
     [Serializable]
     public abstract class Game_Appearance: Base_Component, IActorAddStream
     {
+
+        public new Game_Pawn Outer { get { return base.Outer as Game_Pawn; } }
+
         [NonSerialized] public Content_API.NPCRace mRace;
         [NonSerialized] public Content_API.NPCGender mGender;
         [NonSerialized] public Content_API.NPCBodytype mBody;

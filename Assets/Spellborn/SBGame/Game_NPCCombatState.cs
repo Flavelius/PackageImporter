@@ -4,9 +4,7 @@ namespace SBGame
 {
     [Serializable] public class Game_NPCCombatState : Game_CombatState
     {
-        public Game_NPCCombatState()
-        {
-        }
+        public new Game_NPCPawn Outer { get { return base.Outer as Game_NPCPawn; } }
     }
 }
 /*

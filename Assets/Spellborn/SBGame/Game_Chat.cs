@@ -7,6 +7,8 @@ namespace SBGame
     [Serializable]
     public class Game_Chat: Base_Component
     {
+        public new Game_PlayerController Outer { get { return base.Outer as Game_PlayerController; } }
+
         public const int MAX_CHAT_MESSAGE_LENGTH = 256;
 
         public enum EGameChatRanges
@@ -25,7 +27,7 @@ namespace SBGame
         public void cl2sv_SendMessage(byte aRange, string aReceiver, string aMessage)
         {
             //Game_PlayerController PlayerController;
-            if (((Outer as Game_Controller).Pawn as Game_Pawn).IsMuted((EGameChatRanges)aRange))
+            if ((Outer.Pawn as Game_Pawn).IsMuted((EGameChatRanges)aRange))
             {
                 //sv2cl_OnMessage_CallStub("", "You are muted on this channel!", 0);
                 return;

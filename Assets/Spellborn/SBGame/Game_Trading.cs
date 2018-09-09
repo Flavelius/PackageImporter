@@ -10,15 +10,17 @@ namespace SBGame
     [Serializable]
     public class Game_Trading: Base_Component
     {
+        public new Game_Pawn Outer { get { return base.Outer as Game_Pawn; } }
+
         public const int MAX_TRADE_ITEMS = 16;
 
-        private byte mTradeState;
-        private int mMoney;
-        private string mPartnerName = string.Empty;
+        EClientTradeStates mTradeState;
+        int mMoney;
+        string mPartnerName = string.Empty;
         [NonSerialized, HideInInspector]
-        private Shop_Base mShop;
+        Shop_Base mShop;
         [NonSerialized, HideInInspector]
-        private byte mShopOption;
+        byte mShopOption;
 
         [Serializable]
         public struct PaintItem

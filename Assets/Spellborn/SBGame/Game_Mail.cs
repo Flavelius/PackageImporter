@@ -6,6 +6,9 @@ namespace SBGame
 {
     [Serializable] public class Game_Mail : Base_Component
     {
+
+        public new Game_PlayerController Outer { get { return base.Outer as Game_PlayerController; } }
+
         public const int MAIL_CHECK_TIME = 300;
         public const int MAIL_MAX_ITEMS = 4;
         public const int MES_ATT3_REMOVED = 1024;

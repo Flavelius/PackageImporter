@@ -11,6 +11,9 @@ namespace SBGame
     [Serializable]
     public abstract class Game_CharacterStats: Base_Component, IActorAddStream
     {
+
+        public new Game_Pawn Outer { get { return base.Outer as Game_Pawn; } }
+
         public const int EFF_Stats = 8;
         public const int EFF_Animation = 4;
         public const int EFF_Rotation = 2;
@@ -126,7 +129,6 @@ namespace SBGame
         public struct FreezeData
         {
             public float Start;
-
             public float Duration;
         }
 

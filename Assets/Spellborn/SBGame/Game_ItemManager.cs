@@ -7,6 +7,9 @@ namespace SBGame
 {
     [Serializable] public class Game_ItemManager : Base_Component
     {
+
+        public new Game_Pawn Outer { get { return base.Outer as Game_Pawn; } }
+
         [NonSerialized, HideInInspector]
         [FieldTransient()]
         public int mItems;

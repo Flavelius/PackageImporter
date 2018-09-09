@@ -8,6 +8,9 @@ namespace SBGame
     [Serializable]
     public class Game_Emotes: Base_Component
     {
+
+        public new Game_Pawn Outer { get { return base.Outer as Game_Pawn; } }
+
         public List<Game_Emote> EmoteMappings = new List<Game_Emote>();
 
         [Serializable]
@@ -20,19 +23,19 @@ namespace SBGame
 
         public void cl2sv_Emote(byte aEmote)
         {
-            if ((Outer as Game_Pawn).IsDead()) return;
+            if (Outer.IsDead()) return;
             //sv2rel_Emote_CallStub(aEmote);
             sv_Emote(aEmote);
         }
 
         void sv_Emote(byte aEmote)
         {
-            if ((Outer as Game_Pawn).IsDead()) return;
+            if (Outer.IsDead()) return;
             if (EmoteMappings.Count < aEmote)
             {
                 Debug.LogWarning("Emote mappings not initialized correctly, TODO find out how");
             }
-            EmoteMappings[aEmote].OnServerExecute(Outer as Game_Pawn);
+            EmoteMappings[aEmote].OnServerExecute(Outer);
         }
     }
 }

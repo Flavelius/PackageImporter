@@ -8,8 +8,9 @@ namespace SBGame
 {
     [Serializable] public class Game_Looting : Base_Component
     {
-        public const int LOOT_ITEM_REJECTED_INVENTORY_FULL = 1;
+        public new Game_Pawn Outer { get { return base.Outer as Game_Pawn; } }
 
+        public const int LOOT_ITEM_REJECTED_INVENTORY_FULL = 1;
         public const int LOOT_ITEM_REJECTED_ALREADY_TAKEN = 0;
 
         [NonSerialized, HideInInspector]
@@ -24,45 +25,32 @@ namespace SBGame
         [FieldTransient()]
         public List<ClientLootInfo> ClientLoot = new List<ClientLootInfo>();
 
-        public Game_Looting()
-        {
-        }
-
         [Serializable] public struct LootItem
         {
             public Game_Item GameItem;
-
             public bool Chosen;
         }
 
         [Serializable] public struct ReplicatedLootItem
         {
             public int ResourceId;
-
             public int LootItemID;
-
             public int Quantity;
         }
 
         [Serializable] public struct ServerLootInfo
         {
             public Loot_Transaction Transaction;
-
             public List<ReplicatedLootItem> lootItems;
         }
 
         [Serializable] public struct ClientLootInfo
         {
             public int TransactionID;
-
             public byte LootMode;
-
             public float Timer;
-
             public List<ReplicatedLootItem> lootItems;
-
             public List<LootItem> Items;
-
             public List<int> EligibleMembers;
         }
     }

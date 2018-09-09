@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SBBase;
+using SBGame;
 
 namespace SBAI
 {
@@ -8,31 +9,53 @@ namespace SBAI
 
     [Serializable] public class MetaControllerManagerComponent : Base_Component
     {
-        private List<AI_MetaController> mMetaControllers = new List<AI_MetaController>();
+
+        public new Game_AIController Outer { get { return base.Outer as Game_AIController; } }
+
+        List<AI_MetaController> mMetaControllers = new List<AI_MetaController>();
 
         public int mControllerMessageMask1;
 
         public int mControllerMessageMask2;
 
-        public MetaControllerManagerComponent()
+        public bool HasMetaController(NPC_AI aController)
         {
+            for (var i = 0; i < mMetaControllers.Count; i++)
+            {
+                if (aController == mMetaControllers[i])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void RemoveMetaController(AI_MetaController aMetaController)
+        {
+            for (int i = 0; i < mMetaControllers.Count; i++)
+            {
+                if (mMetaControllers[i] == aMetaController)
+                {
+                    mMetaControllers.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+
+        public AI_MetaController AddMetaController(AI_MetaController aMetaController)
+        {
+            if (!mMetaControllers.Contains(aMetaController)) mMetaControllers.Add(aMetaController);
+            return aMetaController;
+        }
+
+        protected void RecomputeControllerMask()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool WantMetaControllerMessage(byte aMessage)
+        {
+            throw new NotImplementedException();
         }
     }
 }
-/*
-protected final native function RecomputeControllerMask();
-final native function bool WantMetaControllerMessage(byte aMessage);
-function bool HasMetaController(NPC_AI aController) {
-local int i;
-i = 0;                                                                      
-while (i < mMetaControllers.Length) {                                       
-if (aController == mMetaControllers[i]) {                                 
-return True;                                                            
-}
-i++;                                                                      
-}
-return False;                                                               
-}
-native function RemoveMetaController(AI_MetaController aMetaController);
-native function AI_MetaController AddMetaController(AI_MetaController aMetaController);
-*/

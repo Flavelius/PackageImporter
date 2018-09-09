@@ -9,6 +9,7 @@ namespace SBGame
     [Serializable]
     public class Game_PlayerSkills: Game_Skills, IActorLoginStream
     {
+
         public void WriteLoginStream(IPacketWriter writer) //TODO unpack db data and use that
         {
             Debug.LogWarning("TODO unpack db data and use that");
@@ -23,13 +24,13 @@ namespace SBGame
         public override void Initialize(Actor outer)
         {
             base.Initialize(outer);
-            var fameLevel = (outer as Game_PlayerPawn).CharacterStats.GetFameLevel();
+            var fameLevel = Outer.CharacterStats.GetFameLevel();
             mTiers = SBDBSync.GetCombatBarRows(fameLevel);
             mTierSlots = /*SBDBSync.GetCombatBarColumns(fameLevel)*/5;
             Debug.Log("Tiers: " + mTiers + ", slots: " + mTierSlots+" TODO find out how those are calculated");
             //if islocalplayer ignored
             LoadTokens();
-            var controller = ((Outer as Game_Pawn).Controller as Game_PlayerController);
+            var controller = (Outer.Controller as Game_PlayerController);
             var index = GetSkilldeckIndex(controller.DBCharacterSheet.SelectedSkilldeckID);
             cl_SetSkills(controller.DBCharacterSkills, controller.DBSkilldecks[index].mSkills);
         }

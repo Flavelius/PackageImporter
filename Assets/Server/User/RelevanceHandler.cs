@@ -15,7 +15,7 @@ namespace User
         List<Game_Controller> oldEntities = new List<Game_Controller>(16);
 
         List<Game_Controller> newEntities = new List<Game_Controller>(16);
-        public void Update(Game_PlayerController player)
+        public void Update(Game_PlayerController player) //TODO should probably do removal with hysteresis (viewdistance +1)
         {
             player.Level.GameMap.OverlapActorsSquare(player.transform.position, ViewDistance, newEntities);
             for (int i = newEntities.Count; i-->0;)

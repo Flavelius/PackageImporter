@@ -8,6 +8,9 @@ namespace SBGame
 {
     [Serializable] public class Game_PlayerGuilds : Base_Component
     {
+
+        public new Game_PlayerController Outer { get { return base.Outer as Game_PlayerController; } }
+
         public const int GRR_GUILD_TOURNAMENTS_SIGN_UP = 524288;
         public const int GRR_ACCEPT_GUILD_QUESTS = 262144;
         public const int GRR_ACCESS_GUILD_VAULT = 131072;

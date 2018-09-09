@@ -11,6 +11,9 @@ namespace SBGame
     [Serializable]
     public class Game_PlayerTeams: Base_Component
     {
+
+        public new Game_PlayerController Outer { get { return base.Outer as Game_PlayerController; } }
+
         public const int NOTIFY_HUD_CLOSE_ALL = 0;
         public const int NOTIFY_HUD_DISBAND = 3;
         public const int NOTIFY_HUD_KICK = 2;
@@ -147,7 +150,7 @@ namespace SBGame
             }
             else
             {
-                oTeam = new List<Game_Pawn>() { Outer as Game_Pawn };
+                oTeam = new List<Game_Pawn> { Outer.Pawn as Game_Pawn };
             }
         }
 

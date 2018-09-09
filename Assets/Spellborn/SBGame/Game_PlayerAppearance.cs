@@ -6,6 +6,7 @@ namespace SBGame
 {
     [Serializable] public class Game_PlayerAppearance : Game_EquippedAppearance
     {
+
         [NonSerialized] public List<byte> mLODData0 = new List<byte>();
         [NonSerialized] public List<byte> mLODData1 = new List<byte>();
         [NonSerialized] public List<byte> mLODData2 = new List<byte>();

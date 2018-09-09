@@ -9,6 +9,8 @@ namespace SBGame
     [Serializable]
     public class Game_ShiftableAppearance: Base_Component, IActorLoginStream
     {
+        public new Game_Pawn Outer { get { return base.Outer as Game_Pawn; } }
+
         [NonSerialized, HideInInspector]
         private PhysicState mSavedPhysics;
         [NonSerialized] public int mShiftedNPCTypeID;
@@ -51,8 +53,7 @@ namespace SBGame
         {
             base.Initialize(outer);
             int aShiftedNPCTypeID;
-            var gp = outer as Game_Pawn;
-            gp.BaseAppearance.Initialize(outer);
+            Outer.BaseAppearance.Initialize(Outer);
             if (mShiftedNPCTypeID != 0)
             {
                 aShiftedNPCTypeID = mShiftedNPCTypeID;
@@ -96,7 +97,7 @@ namespace SBGame
             {
                 mShiftedNPCType = aOtherNPCType;
                 mShiftedNPCTypeID = mShiftedNPCType.GetResourceId();
-                mShiftedAppearance = aOtherNPCType.Appearance.CreateAppearance((Outer as Game_Pawn), mShiftedAppearance, true);
+                mShiftedAppearance = aOtherNPCType.Appearance.CreateAppearance(Outer, mShiftedAppearance, true);
             }
             if (mShiftedAppearance != null
             && mShiftedNPCType.Equipment != null)
@@ -121,7 +122,7 @@ namespace SBGame
 
         Game_Appearance GetCurrent()
         {
-            return mShiftedAppearance != null ? mShiftedAppearance : (Outer as Game_Pawn).BaseAppearance;
+            return mShiftedAppearance != null ? mShiftedAppearance : Outer.BaseAppearance;
         }
 
         public NPC_Type GetShiftedNPCType()
@@ -131,7 +132,7 @@ namespace SBGame
 
         void TestInvariant()
         {
-            var outer = Outer as Game_Pawn;
+            var outer = Outer;
             UnityEngine.Assertions.Assert.IsTrue(outer.BaseAppearance != null);
             UnityEngine.Assertions.Assert.IsTrue(mShiftedNPCType == null || mShiftedAppearance != null);
             UnityEngine.Assertions.Assert.IsTrue(mShiftedNPCType != null || mShiftedAppearance == null);
@@ -141,8 +142,8 @@ namespace SBGame
         public void InstallBaseAppearance(NPC_Type aNPCType)
         {
             UnityEngine.Assertions.Assert.IsNotNull(aNPCType);
-            (Outer as Game_Pawn).BaseAppearance = aNPCType.Appearance.CreateAppearance((Outer as Game_Pawn), (Outer as Game_Pawn).BaseAppearance, false);
-            (Outer as Game_Pawn).BaseAppearance.Apply();
+            Outer.BaseAppearance = aNPCType.Appearance.CreateAppearance(Outer, Outer.BaseAppearance, false);
+            Outer.BaseAppearance.Apply();
         }
 
         public void WriteLoginStream(IPacketWriter writer)

@@ -6,6 +6,8 @@ namespace SBGame
     [Serializable]
     public class Game_BodySlots: Base_Component
     {
+        public new Game_Pawn Outer { get { return base.Outer as Game_Pawn; } }
+
         public const int MAX_BODYSLOT_ITEMS = 5;
 
         [NonSerialized] public EBodySlotMode Mode;
@@ -33,7 +35,7 @@ namespace SBGame
 
         public EBodySlotMode GetBodySlotModeByClass()
         {
-            switch ((Outer as Game_Pawn).CharacterStats.GetCharacterClass())
+            switch (Outer.CharacterStats.GetCharacterClass())
             {
                 case 0:
                 case (Content_API.EContentClass)2:
